@@ -14,6 +14,27 @@ City
 Address
  ├── street, area, zipCode
  └── cityId → City
+
+PhoneNumber
+ └── countryCode, number
+
+Hotel
+ ├── address → Address
+ ├── phoneNumber → PhoneNumber
+ ├── rating (derived from reviews)
+ ├── status → HotelStatus
+ ├── amenities → List<Amenity>
+ └── List<RoomType>
+       ├── capacity: int
+       ├── totalRooms: int
+       └── List<RatePolicy>     (date-range → price per night)
+
+Booking
+ ├── roomTypeId → RoomType
+ ├── hotelId → Hotel
+ ├── guestCount: int
+ ├── checkIn: LocalDate
+ └── checkOut: LocalDate
 ```
 
 ---
@@ -60,7 +81,63 @@ public record City(
 **Validation rules (service layer):**
 - `timezone` — valid IANA timezone string
 - `coordinates` — must not be null
-- `countryId` — must reference an existing Country
+- `countryId` — must reference an existing `Country`
+
+---
+
+### `Hotel`
+
+Represents a property. Holds metadata and a list of `RoomType`s.
+Hotels do not hold bookings — bookings are managed by `BookingRepository`.
+Only `ACTIVE` hotels appear in search results — `INACTIVE` and `PENDING`
+hotels are automatically excluded by `HotelSearchService`.
+
+```java
+public record Hotel(
+    UUID id,
+    String name,
+    Address address,
+    double rating,              // derived from reviews, updated by ReviewService
+    HotelStatus status,
+    String description,
+    PhoneNumber phoneNumber,
+    List<Amenity> amenities,
+    List<RoomType> roomTypes
+) {}
+```
+
+**Validation rules (service layer):**
+- `name` — must not be blank
+- `address` — must not be null
+- `phoneNumber` — must not be null
+- `status` — must not be null, defaults to `PENDING` on creation
+
+---
+
+## Enums
+
+### `HotelStatus`
+
+```java
+public enum HotelStatus {
+    ACTIVE,     // visible in search results
+    INACTIVE,   // temporarily closed, excluded from search
+    PENDING     // awaiting activation, excluded from search
+}
+```
+
+### `Amenity`
+
+```java
+public enum Amenity {
+    POOL,
+    WIFI,
+    GYM,
+    PARKING,
+    SPA,
+    RESTAURANT
+}
+```
 
 ---
 
@@ -88,6 +165,23 @@ public record Address(
 
 ---
 
+### `PhoneNumber`
+
+A structured phone number held by `Hotel`.
+
+```java
+public record PhoneNumber(
+    String countryCode,    // e.g. "+880"
+    String number          // e.g. "1712345678"
+) {}
+```
+
+**Validation rules (service layer):**
+- `countryCode` — starts with `+` followed by digits
+- `number` — digits only, must not be blank
+
+---
+
 ### `Coordinates`
 
 A geographic coordinate pair. Used by `City` and potentially by
@@ -102,7 +196,73 @@ public record Coordinates(
 
 ---
 
+## Query / Result Records
+
+### `CitySearchQuery`
+
+Input to `HotelSearchService.searchByCity()`.
+
+```java
+public record CitySearchQuery(
+    UUID cityId,
+    LocalDate checkIn,
+    LocalDate checkOut,
+    int guestCount,
+    List<Amenity> amenities    // optional — empty list means no filter
+) {}
+```
+
+### `HotelSearchQuery`
+
+Input to `HotelSearchService.searchByHotel()`.
+
+```java
+public record HotelSearchQuery(
+    UUID hotelId,
+    LocalDate checkIn,
+    LocalDate checkOut,
+    int guestCount
+) {}
+```
+
+### `HotelSummary`
+
+A lightweight projection returned in search results. Not the full `Hotel`
+entity — contains only what is needed to render a search results page.
+
+```java
+public record HotelSummary(
+    UUID hotelId,
+    String name,
+    Address address,
+    double rating,
+    BigDecimal startingFromPrice
+) {}
+```
+
+### `SearchResult`
+
+The top-level response from `HotelSearchService`.
+
+```java
+public record SearchResult(
+    List<HotelSummary> hotels,
+    List<HotelSummary> suggestions,
+    int page,
+    int size,
+    long totalResults
+) {}
+```
+
+---
+
 ## Invariants
 
+- A booking's `checkOut` must be strictly after `checkIn`
+- `guestCount` must be ≤ the room type's `capacity`
+- A room type cannot be double-booked: concurrent bookings cannot exceed `totalRooms`
+- A `RatePolicy` must not have overlapping date ranges within the same `RoomType`
 - A `City` must reference an existing `Country`
 - A `Hotel` address must reference an existing `City`
+- Only `ACTIVE` hotels appear in search results
+- `Hotel` rating is always derived from reviews — never set manually
