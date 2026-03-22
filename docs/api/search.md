@@ -2,8 +2,8 @@
 
 ## Overview
 
-`HotelSearchService` is responsible for searching available room types across
-hotels matching a given query. It is NOT responsible for storing search history,
+`HotelSearchService` is responsible for searching available hotels and room
+types matching a given query. It is NOT responsible for storing search history,
 managing popular destinations, creating bookings, or any user-specific logic.
 
 ## Collaborators
@@ -46,7 +46,8 @@ public record CitySearchQuery(
     UUID cityId,
     LocalDate checkIn,
     LocalDate checkOut,
-    int guestCount
+    int guestCount,
+    List<Amenity> amenities    // optional — empty list means no filter
 ) {}
 ```
 
@@ -113,16 +114,19 @@ Both `searchByCity` and `searchByHotel` follow the same internal steps:
 
 1. **Validate query** — fail fast before any repository calls
 2. **Fetch hotels** — by `cityId` or `hotelId` via `HotelRepository`
-3. **Iterate room types** — room types are fetched as part of the `Hotel` aggregate
-4. **Filter by capacity** — exclude room types where `capacity < guestCount`
-5. **Check availability** — via `InventoryRepository.countAvailableRooms()`
-6. **Resolve rate** — find applicable `RatePolicy` for the requested date range
-7. **Build `HotelSummary`** — assemble with `startingFromPrice` (lowest available rate)
-8. **Handle empty results** — if no hotels found, call `RecommendationService`
-   for alternative suggestions
-9. **Sort results** — rating descending, price ascending as tiebreaker
-10. **Apply pagination** — `page` and `size`
-11. **Return `SearchResult`**
+3. **Filter by status** — exclude any hotel where `status != ACTIVE`
+4. **Filter by amenities** — exclude hotels missing any requested `Amenity`
+   (only applies to `searchByCity`)
+5. **Iterate room types** — room types are fetched as part of the `Hotel` aggregate
+6. **Filter by capacity** — exclude room types where `capacity < guestCount`
+7. **Check availability** — via `InventoryRepository.countAvailableRooms()`
+8. **Resolve rate** — find applicable `RatePolicy` for the requested date range
+9. **Build `HotelSummary`** — assemble with `startingFromPrice` (lowest available rate)
+10. **Handle empty results** — if no hotels found, call `RecommendationService`
+    for alternative suggestions
+11. **Sort results** — rating descending, price ascending as tiebreaker
+12. **Apply pagination** — `page` and `size`
+13. **Return `SearchResult`**
 
 ---
 
