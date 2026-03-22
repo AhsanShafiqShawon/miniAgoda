@@ -47,7 +47,9 @@ public record CitySearchQuery(
     LocalDate checkIn,
     LocalDate checkOut,
     int guestCount,
-    List<Amenity> amenities    // optional — empty list means no filter
+    List<Amenity> amenities,           // optional — empty list means no filter
+    List<RoomCategory> categories,     // optional — empty list means no filter
+    List<BedType> bedTypes             // optional — empty list means no filter
 ) {}
 ```
 
@@ -104,7 +106,7 @@ public record HotelSummary(
 ```
 
 - `startingFromPrice` — the lowest available room type price for the queried
-  date range and guest count (i.e. "from $45/night")
+  date range and guest count, after any applicable discount
 
 ---
 
@@ -118,15 +120,20 @@ Both `searchByCity` and `searchByHotel` follow the same internal steps:
 4. **Filter by amenities** — exclude hotels missing any requested `Amenity`
    (only applies to `searchByCity`)
 5. **Iterate room types** — room types are fetched as part of the `Hotel` aggregate
-6. **Filter by capacity** — exclude room types where `capacity < guestCount`
-7. **Check availability** — via `InventoryRepository.countAvailableRooms()`
-8. **Resolve rate** — find applicable `RatePolicy` for the requested date range
-9. **Build `HotelSummary`** — assemble with `startingFromPrice` (lowest available rate)
-10. **Handle empty results** — if no hotels found, call `RecommendationService`
+6. **Filter by category** — exclude room types not matching requested `RoomCategory`
+   (only applies to `searchByCity`)
+7. **Filter by bed type** — exclude room types not matching requested `BedType`
+   (only applies to `searchByCity`)
+8. **Filter by capacity** — exclude room types where `capacity < guestCount`
+9. **Check availability** — via `InventoryRepository.countAvailableRooms()`
+10. **Resolve rate** — find applicable `RatePolicy` for the requested date range
+11. **Apply discount** — calculate effective price from `DiscountPolicy` if present
+12. **Build `HotelSummary`** — assemble with `startingFromPrice` (lowest effective rate)
+13. **Handle empty results** — if no hotels found, call `RecommendationService`
     for alternative suggestions
-11. **Sort results** — rating descending, price ascending as tiebreaker
-12. **Apply pagination** — `page` and `size`
-13. **Return `SearchResult`**
+14. **Sort results** — rating descending, price ascending as tiebreaker
+15. **Apply pagination** — `page` and `size`
+16. **Return `SearchResult`**
 
 ---
 
