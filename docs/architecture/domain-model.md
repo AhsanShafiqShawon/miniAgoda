@@ -25,9 +25,15 @@ Hotel
  ├── status → HotelStatus
  ├── amenities → List<Amenity>
  └── List<RoomType>
+       ├── category → RoomCategory
+       ├── bedTypes → List<BedType>
        ├── capacity: int
        ├── totalRooms: int
-       └── List<RatePolicy>     (date-range → price per night)
+       ├── imageUrls: List<String>
+       └── List<RatePolicy>
+             ├── pricePerNight: BigDecimal
+             ├── currencyCode: String
+             └── discountPolicy → DiscountPolicy (optional)
 
 Booking
  ├── roomTypeId → RoomType
@@ -114,6 +120,39 @@ public record Hotel(
 
 ---
 
+### `RoomType`
+
+Represents a category of rooms within a hotel (e.g., "Deluxe Double",
+"Suite"). The unit of availability and pricing in miniAgoda. Availability
+is modeled at this level — we track how many rooms of a given type are
+bookable, not individual physical room numbers.
+
+```java
+public record RoomType(
+    UUID id,
+    String name,
+    RoomCategory category,
+    List<BedType> bedTypes,
+    int totalRooms,
+    int capacity,
+    List<String> imageUrls,
+    List<RatePolicy> ratePolicies
+) {}
+```
+
+**Validation rules (service layer):**
+- `name` — must not be blank
+- `totalRooms` — must be ≥ 1
+- `capacity` — must be ≥ 1
+- `category` — must not be null
+- `bedTypes` — must not be empty
+- `ratePolicies` — must not have overlapping date ranges
+
+See [ADR-002](decisions/ADR-002-availability-per-room-type.md) for why
+availability is modeled per room type.
+
+---
+
 ## Enums
 
 ### `HotelStatus`
@@ -139,9 +178,89 @@ public enum Amenity {
 }
 ```
 
+### `RoomCategory`
+
+```java
+public enum RoomCategory {
+    STANDARD,
+    DELUXE,
+    SUITE,
+    VILLA
+}
+```
+
+### `BedType`
+
+```java
+public enum BedType {
+    SINGLE,
+    DOUBLE,
+    TWIN,
+    QUEEN,
+    KING
+}
+```
+
+### `DiscountType`
+
+```java
+public enum DiscountType {
+    PERCENTAGE,    // e.g. 20.0 means 20% off pricePerNight
+    FIXED          // e.g. 10.00 fixed amount off pricePerNight
+}
+```
+
 ---
 
 ## Value Objects
+
+### `RatePolicy`
+
+A date-range-based pricing rule. A `RoomType` can have multiple `RatePolicy`
+entries covering different periods (e.g., peak season vs. off-peak).
+
+```java
+public record RatePolicy(
+    LocalDate validFrom,
+    LocalDate validTo,
+    BigDecimal pricePerNight,
+    String currencyCode,              // ISO 4217, e.g. "USD", "BDT"
+    DiscountPolicy discountPolicy     // optional — null means no discount
+) {}
+```
+
+**Validation rules (service layer):**
+- `validTo` must be strictly after `validFrom`
+- `pricePerNight` must be > 0
+- `currencyCode` — exactly 3 uppercase characters
+- No overlapping date ranges within the same `RoomType`
+
+See [ADR-001](decisions/ADR-001-rate-policy.md) for why this is a separate class.
+
+---
+
+### `DiscountPolicy`
+
+An optional discount applied on top of a `RatePolicy`.
+
+```java
+public record DiscountPolicy(
+    DiscountType type,
+    BigDecimal value,      // percentage (20.0) or fixed amount (10.00)
+    String reason          // e.g. "Early Bird", "Weekend Special"
+) {}
+```
+
+**Validation rules (service layer):**
+- `value` must be > 0
+- For `PERCENTAGE` — value must be between 0 and 100 exclusive
+- For `FIXED` — discount must not exceed `pricePerNight`
+
+**Effective price calculation:**
+- `PERCENTAGE`: `pricePerNight * (1 - value / 100)`
+- `FIXED`: `pricePerNight - value`
+
+---
 
 ### `Address`
 
@@ -208,7 +327,9 @@ public record CitySearchQuery(
     LocalDate checkIn,
     LocalDate checkOut,
     int guestCount,
-    List<Amenity> amenities    // optional — empty list means no filter
+    List<Amenity> amenities,           // optional — empty list means no filter
+    List<RoomCategory> categories,     // optional — empty list means no filter
+    List<BedType> bedTypes             // optional — empty list means no filter
 ) {}
 ```
 
@@ -266,3 +387,5 @@ public record SearchResult(
 - A `Hotel` address must reference an existing `City`
 - Only `ACTIVE` hotels appear in search results
 - `Hotel` rating is always derived from reviews — never set manually
+- For `PERCENTAGE` discount — value must be between 0 and 100 exclusive
+- For `FIXED` discount — discount must not exceed `pricePerNight`
