@@ -5,6 +5,11 @@
 ```
 Country
  └── isoCode, phoneCode, currencyCode
+
+City
+ ├── countryId → Country
+ ├── timezone
+ └── coordinates → Coordinates
 ```
 
 ---
@@ -33,6 +38,45 @@ public record Country(
 
 ---
 
+### `City`
+
+Represents a destination that hotels belong to and the target of a
+city-based search. References `Country` by ID only — no embedded object.
+
+```java
+public record City(
+    UUID id,
+    String name,
+    String timezone,            // IANA timezone, e.g. "Asia/Dhaka"
+    Coordinates coordinates,
+    UUID countryId
+) {}
+```
+
+**Validation rules (service layer):**
+- `timezone` — valid IANA timezone string
+- `coordinates` — must not be null
+- `countryId` — must reference an existing Country
+
+---
+
+## Value Objects
+
+### `Coordinates`
+
+A geographic coordinate pair. Used by `City` and potentially by
+`RecommendationService` for proximity-based suggestions.
+
+```java
+public record Coordinates(
+    double latitude,
+    double longitude
+) {}
+```
+
+---
+
 ## Invariants
 
 - A `City` must reference an existing `Country`
+- A `Hotel` address must reference an existing `City`
