@@ -10,6 +10,10 @@ City
  ├── countryId → Country
  ├── timezone
  └── coordinates → Coordinates
+
+Address
+ ├── street, area, zipCode
+ └── cityId → City
 ```
 
 ---
@@ -61,6 +65,28 @@ public record City(
 ---
 
 ## Value Objects
+
+### `Address`
+
+A structured address held by `Hotel`. References `City` by ID only —
+no embedded object.
+
+```java
+public record Address(
+    String street,
+    String area,        // optional — neighborhood or district, e.g. "Gulshan"
+    String zipCode,
+    UUID cityId
+) {}
+```
+
+**Validation rules (service layer):**
+- `street` — must not be blank
+- `zipCode` — must not be blank
+- `cityId` — must reference an existing `City`
+- `area` — optional, can be null
+
+---
 
 ### `Coordinates`
 
