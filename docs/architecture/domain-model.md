@@ -8,7 +8,7 @@ When modeling a class, ask:
 
 > **"Do I need to distinguish this object from another identical one?"**
 > - **YES** → Entity (has a unique `UUID id`)
-> - **NO** → Value Object (defined purely by its data)
+> - **NO** → Value Object (defined purely by its data that's why it should be immutable by design in almost all cases)
 
 For example: two hotels with the same name are still different hotels → `Hotel` is an Entity.
 Two addresses with identical fields are interchangeable → `Address` is a Value Object.
