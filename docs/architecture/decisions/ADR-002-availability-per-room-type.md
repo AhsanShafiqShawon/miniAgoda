@@ -27,7 +27,7 @@ boolean isAvailable = available > 0;
 
 `InventoryRepository` is the single source of truth for availability. It is
 updated by `BookingService` when bookings are created or cancelled. See
-ADR-004 for the rationale behind this separation.
+[ADR-004](decisions/ADR-004-inventory-repository.md) for the rationale behind this separation.
 
 ## Consequences
 
