@@ -87,6 +87,14 @@ Booking
  ├── checkIn / checkOut: LocalDate
  ├── cancelledAt / cancellationReason (only if CANCELLED)
  └── createdAt / updatedAt: LocalDateTime
+
+Review
+ ├── bookingId → Booking (one review per booking)
+ ├── userId → User
+ ├── hotelId → Hotel
+ ├── rating → ReviewRating
+ ├── comment: String
+ └── createdAt / updatedAt: LocalDateTime
 ```
 
 ---
@@ -232,6 +240,35 @@ public record Booking(
 - `cancelledAt` and `cancellationReason` — null unless status is `CANCELLED`
 - `createdAt` — set on creation, never updated
 - `updatedAt` — updated on every state change
+
+---
+
+### `Review`
+
+Represents a guest's rating and feedback for a hotel after a completed stay.
+One review per booking — a guest may review the same hotel multiple times
+if they have multiple completed bookings.
+
+```java
+public record Review(
+    UUID id,
+    UUID bookingId,
+    UUID userId,
+    UUID hotelId,
+    ReviewRating rating,
+    String comment,
+    LocalDateTime createdAt,
+    LocalDateTime updatedAt     // null until first edit
+) {}
+```
+
+**Validation rules (service layer):**
+- `bookingId` — must reference a `COMPLETED` booking
+- One review per `bookingId` — enforced before creation
+- `comment` — must not be blank
+- All `ReviewRating` fields — must be between 1 and 10 inclusive
+- `createdAt` — set on creation, never updated
+- `updatedAt` — set on every edit, null until first edit
 
 ---
 
@@ -407,6 +444,24 @@ public record Coordinates(
 
 ---
 
+### `ReviewRating`
+
+A structured rating broken into categories. All scores are on a 1-10 scale.
+The overall hotel rating is derived as the average of all five category
+averages across all reviews for that hotel.
+
+```java
+public record ReviewRating(
+    double cleanliness,     // 1-10
+    double facilities,      // 1-10
+    double location,        // 1-10
+    double service,         // 1-10
+    double valueForMoney    // 1-10
+) {}
+```
+
+---
+
 ## Query / Result Records
 
 ### `CitySearchQuery`
@@ -531,3 +586,7 @@ public record BookingSummary(
 - A room type cannot be double-booked: concurrent bookings cannot exceed `totalRooms`
 - `totalPrice` is snapshotted at booking creation — never recalculated after
 - `cancelledAt` and `cancellationReason` are only populated when status is `CANCELLED`
+- A review can only be submitted for a `COMPLETED` booking
+- One review per `bookingId` — uniqueness enforced on `bookingId`
+- A guest may review the same hotel multiple times if they have multiple completed bookings
+- All `ReviewRating` fields must be between 1 and 10 inclusive
