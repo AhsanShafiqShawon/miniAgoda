@@ -8,7 +8,7 @@ When modeling a class, ask:
 
 > **"Do I need to distinguish this object from another identical one?"**
 > - **YES** → Entity (has a unique `UUID id`)
-> - **NO** → Value Object (defined purely by its data that's why it should be immutable by design in almost all cases)
+> - **NO** → Value Object (defined purely by its data)
 
 For example: two hotels with the same name are still different hotels → `Hotel` is an Entity.
 Two addresses with identical fields are interchangeable → `Address` is a Value Object.
@@ -76,6 +76,17 @@ Hotel
              ├── pricePerNight: BigDecimal
              ├── currencyCode: String
              └── discountPolicy → DiscountPolicy (optional)
+
+Booking
+ ├── hotelId → Hotel
+ ├── roomTypeId → RoomType
+ ├── userId → User
+ ├── status → BookingStatus
+ ├── totalPrice: BigDecimal (snapshotted at creation)
+ ├── currencyCode: String
+ ├── checkIn / checkOut: LocalDate
+ ├── cancelledAt / cancellationReason (only if CANCELLED)
+ └── createdAt / updatedAt: LocalDateTime
 ```
 
 ---
@@ -188,6 +199,42 @@ availability is modeled per room type.
 
 ---
 
+### `Booking`
+
+An immutable record representing a confirmed reservation. Created by
+`BookingService` after availability and capacity checks pass. Price is
+snapshotted at creation — never recalculated after.
+
+```java
+public record Booking(
+    UUID id,
+    UUID hotelId,
+    UUID roomTypeId,
+    UUID userId,
+    int guestCount,
+    LocalDate checkIn,
+    LocalDate checkOut,
+    BookingStatus status,
+    BigDecimal totalPrice,      // snapshotted at booking creation
+    String currencyCode,        // ISO 4217
+    LocalDateTime cancelledAt,  // null unless CANCELLED
+    String cancellationReason,  // null unless CANCELLED
+    LocalDateTime createdAt,
+    LocalDateTime updatedAt
+) {}
+```
+
+**Validation rules (service layer):**
+- `checkOut` must be strictly after `checkIn`
+- `guestCount` must be ≥ 1
+- `totalPrice` must be > 0
+- `currencyCode` — exactly 3 uppercase characters
+- `cancelledAt` and `cancellationReason` — null unless status is `CANCELLED`
+- `createdAt` — set on creation, never updated
+- `updatedAt` — updated on every state change
+
+---
+
 ## Enums
 
 ### `HotelStatus`
@@ -242,6 +289,16 @@ public enum BedType {
 public enum DiscountType {
     PERCENTAGE,    // e.g. 20.0 means 20% off pricePerNight
     FIXED          // e.g. 10.00 fixed amount off pricePerNight
+}
+```
+
+### `BookingStatus`
+
+```java
+public enum BookingStatus {
+    CONFIRMED,    // booking created and confirmed instantly
+    COMPLETED,    // automatically set after checkOut date passes
+    CANCELLED     // cancelled by guest or system
 }
 ```
 
@@ -412,6 +469,54 @@ public record SearchResult(
 
 ---
 
+### `CreateBookingRequest`
+
+Input to `BookingService.createBooking()`.
+
+```java
+public record CreateBookingRequest(
+    UUID hotelId,
+    UUID roomTypeId,
+    UUID userId,
+    int guestCount,
+    LocalDate checkIn,
+    LocalDate checkOut
+) {}
+```
+
+### `EditBookingRequest`
+
+Input to `BookingService.editBooking()`. All fields optional —
+at least one must be present. If dates are changed, both `checkIn`
+and `checkOut` must be provided together.
+
+```java
+public record EditBookingRequest(
+    Optional<LocalDate> checkIn,
+    Optional<LocalDate> checkOut,
+    Optional<Integer> guestCount
+) {}
+```
+
+### `BookingSummary`
+
+A lightweight projection returned in booking list responses.
+
+```java
+public record BookingSummary(
+    UUID bookingId,
+    String hotelName,
+    String roomTypeName,
+    LocalDate checkIn,
+    LocalDate checkOut,
+    BookingStatus status,
+    BigDecimal totalPrice,
+    String currencyCode
+) {}
+```
+
+---
+
 ## Invariants
 
 - A `City` must reference an existing `Country`
@@ -421,3 +526,8 @@ public record SearchResult(
 - A `RatePolicy` must not have overlapping date ranges within the same `RoomType`
 - For `PERCENTAGE` discount — value must be between 0 and 100 exclusive
 - For `FIXED` discount — discount must not exceed `pricePerNight`
+- A booking's `checkOut` must be strictly after `checkIn`
+- `guestCount` must be ≤ the room type's `capacity`
+- A room type cannot be double-booked: concurrent bookings cannot exceed `totalRooms`
+- `totalPrice` is snapshotted at booking creation — never recalculated after
+- `cancelledAt` and `cancellationReason` are only populated when status is `CANCELLED`
