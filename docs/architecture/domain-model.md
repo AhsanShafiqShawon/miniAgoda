@@ -1,5 +1,47 @@
 # Domain Model
 
+## Classification Guide
+
+### Entity vs Value Object
+
+When modeling a class, ask:
+
+> **"Do I need to distinguish this object from another identical one?"**
+> - **YES** → Entity (has a unique `UUID id`)
+> - **NO** → Value Object (defined purely by its data)
+
+For example: two hotels with the same name are still different hotels → `Hotel` is an Entity.
+Two addresses with identical fields are interchangeable → `Address` is a Value Object.
+
+### Enums
+
+Enums are neither entities nor value objects — they represent a fixed set of
+named constants with no fields or behavior. Grouped separately so valid values
+for a given concept (e.g. hotel status, bed type) are easy to locate.
+
+### Query / Result Records
+
+These are not domain concepts — they are **communication contracts between layers**:
+
+- Query records (e.g. `CitySearchQuery`) — input contracts, what a caller must provide
+- Result records (e.g. `SearchResult`, `HotelSummary`) — output contracts, projections
+  of domain data shaped for a specific use case
+
+A `Hotel` exists in the domain regardless of any search.
+A `HotelSummary` only exists because someone asked a question.
+
+In a future microservices architecture, query/result records become API request/response
+DTOs that cross service boundaries — keeping them separate now prepares for that split.
+
+| Category | Purpose |
+|---|---|
+| Entities | Domain objects with identity |
+| Value Objects | Domain objects defined purely by their data |
+| Enums | Fixed sets of valid constants |
+| Query / Result Records | Input/output contracts between layers |
+
+---
+
 ## Entity Overview
 
 ```
@@ -34,13 +76,6 @@ Hotel
              ├── pricePerNight: BigDecimal
              ├── currencyCode: String
              └── discountPolicy → DiscountPolicy (optional)
-
-Booking
- ├── roomTypeId → RoomType
- ├── hotelId → Hotel
- ├── guestCount: int
- ├── checkIn: LocalDate
- └── checkOut: LocalDate
 ```
 
 ---
@@ -379,13 +414,10 @@ public record SearchResult(
 
 ## Invariants
 
-- A booking's `checkOut` must be strictly after `checkIn`
-- `guestCount` must be ≤ the room type's `capacity`
-- A room type cannot be double-booked: concurrent bookings cannot exceed `totalRooms`
-- A `RatePolicy` must not have overlapping date ranges within the same `RoomType`
 - A `City` must reference an existing `Country`
 - A `Hotel` address must reference an existing `City`
 - Only `ACTIVE` hotels appear in search results
 - `Hotel` rating is always derived from reviews — never set manually
+- A `RatePolicy` must not have overlapping date ranges within the same `RoomType`
 - For `PERCENTAGE` discount — value must be between 0 and 100 exclusive
 - For `FIXED` discount — discount must not exceed `pricePerNight`
