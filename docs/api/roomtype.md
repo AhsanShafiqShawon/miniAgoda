@@ -5,7 +5,7 @@
 `RoomTypeService` is responsible for managing room types within a hotel
 and their rate policies. It is NOT responsible for availability checking
 (that's `InventoryRepository`), pricing resolution during search (that's
-`HotelSearchService`), or physical room tracking (deferred — see [ADR-006](ADR-006-defer-room-service.md)).
+`HotelSearchService`), or physical room tracking (deferred — see [ADR-006](architecture/decisions/ADR-006-defer-room-service.md)).
 
 ## Collaborators
 
