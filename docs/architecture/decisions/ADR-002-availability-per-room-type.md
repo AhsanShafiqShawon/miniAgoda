@@ -50,13 +50,13 @@ updated by `BookingService` when bookings are created or cancelled. See
   Deferred to a later phase.
 - **Query `BookingRepository` directly for availability**: Couples search to
   booking internals and makes availability logic harder to extend. Rejected in
-  favour of `InventoryRepository` — see [ADR-004](decisions/ADR-004-inventory-repository.md).
+  favour of `InventoryRepository` — see [ADR-004](ADR-004-inventory-repository.md).
 
 ---
 
 ## Revision Note
 
 Originally written with availability computed by counting overlapping bookings
-directly from `BookingRepository`. Revised after [ADR-004](decisions/ADR-004-inventory-repository.md) was accepted —
+directly from `BookingRepository`. Revised after [ADR-004](ADR-004-inventory-repository.md) was accepted —
 availability is now owned by `InventoryRepository`, keeping booking and
 inventory concerns separate.
