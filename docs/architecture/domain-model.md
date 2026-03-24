@@ -72,6 +72,7 @@ Hotel
        ├── bedTypes → List<BedType>
        ├── capacity: int
        ├── totalRooms: int
+       ├── status → RoomTypeStatus
        ├── imageUrls: List<String>
        └── List<RatePolicy>
              ├── pricePerNight: BigDecimal
@@ -193,6 +194,7 @@ public record RoomType(
     List<BedType> bedTypes,
     int totalRooms,
     int capacity,
+    RoomTypeStatus status,
     List<String> imageUrls,
     List<RatePolicy> ratePolicies
 ) {}
@@ -310,6 +312,15 @@ public enum RoomCategory {
     DELUXE,
     SUITE,
     VILLA
+}
+```
+
+### `RoomTypeStatus`
+
+```java
+public enum RoomTypeStatus {
+    ACTIVE,     // visible and bookable
+    INACTIVE    // hidden and not bookable
 }
 ```
 
@@ -572,6 +583,69 @@ public record EditHotelRequest(
 
 ---
 
+### `AddRoomTypeRequest`
+
+Input to `RoomTypeService.addRoomType()`. System-managed fields excluded —
+`id`, `status` (defaults to `ACTIVE`), `ratePolicies` (added separately).
+
+```java
+public record AddRoomTypeRequest(
+    String name,
+    RoomCategory category,
+    List<BedType> bedTypes,
+    int totalRooms,
+    int capacity,
+    List<String> imageUrls
+) {}
+```
+
+### `EditRoomTypeRequest`
+
+Input to `RoomTypeService.editRoomType()`. All fields optional —
+at least one must be present.
+
+```java
+public record EditRoomTypeRequest(
+    Optional<String> name,
+    Optional<RoomCategory> category,
+    Optional<List<BedType>> bedTypes,
+    Optional<Integer> totalRooms,
+    Optional<Integer> capacity,
+    Optional<List<String>> imageUrls
+) {}
+```
+
+### `AddRatePolicyRequest`
+
+Input to `RoomTypeService.addRatePolicy()`.
+
+```java
+public record AddRatePolicyRequest(
+    LocalDate validFrom,
+    LocalDate validTo,
+    BigDecimal pricePerNight,
+    String currencyCode,
+    DiscountPolicy discountPolicy    // optional — null means no discount
+) {}
+```
+
+### `EditRatePolicyRequest`
+
+Input to `RoomTypeService.editRatePolicy()`. All fields optional —
+at least one must be present.
+
+```java
+public record EditRatePolicyRequest(
+    Optional<LocalDate> validFrom,
+    Optional<LocalDate> validTo,
+    Optional<BigDecimal> pricePerNight,
+    Optional<String> currencyCode,
+    Optional<DiscountPolicy> discountPolicy
+) {}
+```
+
+---
+
 ### `CreateBookingRequest`
 
 Input to `BookingService.createBooking()`.
@@ -653,6 +727,7 @@ public record EditReviewRequest(
 - A `Hotel` address must reference an existing `City`
 - A `Hotel` must reference an existing `User` with `HOTEL_OWNER` role via `ownerId`
 - Only `ACTIVE` hotels appear in search results
+- Only `ACTIVE` room types are included in search results
 - `Hotel` rating is always derived from reviews — never set manually
 - A `RatePolicy` must not have overlapping date ranges within the same `RoomType`
 - For `PERCENTAGE` discount — value must be between 0 and 100 exclusive
