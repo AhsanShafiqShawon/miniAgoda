@@ -8,7 +8,7 @@ When modeling a class, ask:
 
 > **"Do I need to distinguish this object from another identical one?"**
 > - **YES** → Entity (has a unique `UUID id`)
-> - **NO** → Value Object (defined purely by its data that's why it should be immutable by design in almost all cases)
+> - **NO** → Value Object (defined purely by its data)
 
 For example: two hotels with the same name are still different hotels → `Hotel` is an Entity.
 Two addresses with identical fields are interchangeable → `Address` is a Value Object.
@@ -256,6 +256,7 @@ public record Review(
     UUID userId,
     UUID hotelId,
     ReviewRating rating,
+    ReviewStatus status,
     String comment,
     LocalDateTime createdAt,
     LocalDateTime updatedAt     // null until first edit
@@ -336,6 +337,15 @@ public enum BookingStatus {
     CONFIRMED,    // booking created and confirmed instantly
     COMPLETED,    // automatically set after checkOut date passes
     CANCELLED     // cancelled by guest or system
+}
+```
+
+### `ReviewStatus`
+
+```java
+public enum ReviewStatus {
+    ACTIVE,     // visible publicly
+    INACTIVE    // hidden by admin moderation
 }
 ```
 
@@ -572,6 +582,33 @@ public record BookingSummary(
 
 ---
 
+### `CreateReviewRequest`
+
+Input to `ReviewService.writeReview()`.
+
+```java
+public record CreateReviewRequest(
+    UUID bookingId,
+    UUID userId,
+    UUID hotelId,
+    ReviewRating rating,
+    String comment
+) {}
+```
+
+### `EditReviewRequest`
+
+Input to `ReviewService.editReview()`. At least one field must be present.
+
+```java
+public record EditReviewRequest(
+    Optional<ReviewRating> rating,
+    Optional<String> comment
+) {}
+```
+
+---
+
 ## Invariants
 
 - A `City` must reference an existing `Country`
@@ -590,3 +627,5 @@ public record BookingSummary(
 - One review per `bookingId` — uniqueness enforced on `bookingId`
 - A guest may review the same hotel multiple times if they have multiple completed bookings
 - All `ReviewRating` fields must be between 1 and 10 inclusive
+- Only `ACTIVE` reviews are returned in public-facing queries
+- Admin uses `deactivateReview` to hide reviews — hard deletes are not permitted
