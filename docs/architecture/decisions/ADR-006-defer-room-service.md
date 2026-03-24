@@ -14,7 +14,7 @@ Physical room tracking would enable:
 - Filtering by room-specific features (floor, view, accessible)
 - Managing per-room maintenance status
 
-However, ADR-002 already established that availability is modeled at the
+However, [ADR-002](ADR-002-availability-per-room-type.md) already established that availability is modeled at the
 **room type** level — all rooms of a given type are interchangeable. There
 is no current use case in miniAgoda that requires knowing which specific
 physical room a guest is staying in.
@@ -31,7 +31,7 @@ created until a concrete use case requires it.
 
 **Positive:**
 - Keeps the domain model lean — no entity without a clear use case
-- Consistent with ADR-002 — availability per room type, not per physical room
+- Consistent with [ADR-002](ADR-002-availability-per-room-type.md) — availability per room type, not per physical room
 - Reduces implementation scope for the current phase
 - `RoomTypeService` stays focused without physical room concerns mixed in
 
