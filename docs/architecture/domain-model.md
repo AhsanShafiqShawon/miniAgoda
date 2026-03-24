@@ -8,7 +8,7 @@ When modeling a class, ask:
 
 > **"Do I need to distinguish this object from another identical one?"**
 > - **YES** → Entity (has a unique `UUID id`)
-> - **NO** → Value Object (defined purely by its data)
+> - **NO** → Value Object (defined purely by its data that's why it should be immutable by design in almost all cases)
 
 For example: two hotels with the same name are still different hotels → `Hotel` is an Entity.
 Two addresses with identical fields are interchangeable → `Address` is a Value Object.
@@ -65,6 +65,7 @@ Hotel
  ├── phoneNumber → PhoneNumber
  ├── rating (derived from reviews)
  ├── status → HotelStatus
+ ├── ownerId → User
  ├── amenities → List<Amenity>
  └── List<RoomType>
        ├── category → RoomCategory
@@ -162,7 +163,8 @@ public record Hotel(
     String description,
     PhoneNumber phoneNumber,
     List<Amenity> amenities,
-    List<RoomType> roomTypes
+    List<RoomType> roomTypes,
+    UUID ownerId                // references User with HOTEL_OWNER role
 ) {}
 ```
 
@@ -171,6 +173,8 @@ public record Hotel(
 - `address` — must not be null
 - `phoneNumber` — must not be null
 - `status` — must not be null, defaults to `PENDING` on creation
+- `ownerId` — must reference an existing `User` with `HOTEL_OWNER` role
+- `rating` — defaults to `0.0` on creation
 
 ---
 
@@ -534,6 +538,40 @@ public record SearchResult(
 
 ---
 
+### `AddHotelRequest`
+
+Input to `HotelService.addHotel()`. System-managed fields excluded —
+`id`, `rating` (defaults to 0.0), `status` (defaults to PENDING),
+and `roomTypes` (added later via `RoomTypeService`).
+
+```java
+public record AddHotelRequest(
+    String name,
+    Address address,
+    String description,
+    PhoneNumber phoneNumber,
+    List<Amenity> amenities,
+    UUID ownerId
+) {}
+```
+
+### `EditHotelRequest`
+
+Input to `HotelService.editHotel()`. All fields optional —
+at least one must be present. `ownerId` not editable via this request.
+
+```java
+public record EditHotelRequest(
+    Optional<String> name,
+    Optional<Address> address,
+    Optional<String> description,
+    Optional<PhoneNumber> phoneNumber,
+    Optional<List<Amenity>> amenities
+) {}
+```
+
+---
+
 ### `CreateBookingRequest`
 
 Input to `BookingService.createBooking()`.
@@ -613,6 +651,7 @@ public record EditReviewRequest(
 
 - A `City` must reference an existing `Country`
 - A `Hotel` address must reference an existing `City`
+- A `Hotel` must reference an existing `User` with `HOTEL_OWNER` role via `ownerId`
 - Only `ACTIVE` hotels appear in search results
 - `Hotel` rating is always derived from reviews — never set manually
 - A `RatePolicy` must not have overlapping date ranges within the same `RoomType`
