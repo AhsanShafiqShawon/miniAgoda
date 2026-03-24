@@ -129,8 +129,10 @@ Both `searchByCity` and `searchByHotel` follow the same internal steps:
 10. **Resolve rate** — find applicable `RatePolicy` for the requested date range
 11. **Apply discount** — calculate effective price from `DiscountPolicy` if present
 12. **Build `HotelSummary`** — assemble with `startingFromPrice` (lowest effective rate)
-13. **Handle empty results** — if no hotels found, call `RecommendationService`
-    for alternative suggestions
+13. **Handle insufficient results** — if `hotels.size() < recommendation-threshold`,
+    call `RecommendationService` for suggestions. Date relaxation is tried first;
+    if still insufficient, guest count relaxation is tried. Already-found hotels
+    are excluded from suggestions via `excludeHotelIds`.
 14. **Sort results** — rating descending, price ascending as tiebreaker
 15. **Apply pagination** — `page` and `size`
 16. **Return `SearchResult`**
@@ -145,6 +147,21 @@ Sorting is internal — callers cannot override sort order.
 |---|---|
 | Rating | Descending (best rated first) |
 | Starting price | Ascending (cheapest first, as tiebreaker) |
+
+---
+
+## Configurable Properties
+
+```properties
+# Minimum results before recommendations are triggered
+miniagoda.search.recommendation-threshold=5
+
+# Number of days to expand date range for relaxed date recommendations
+miniagoda.search.recommendation-flex-days=3
+
+# Number of guests to reduce for relaxed guest count recommendations
+miniagoda.search.recommendation-flex-guests=2
+```
 
 ---
 
