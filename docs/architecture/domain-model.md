@@ -279,6 +279,34 @@ public record Review(
 
 ---
 
+### `SearchHistory`
+
+Represents a recorded search query made by a user. Only city-based searches
+are recorded — drill-down searches (`HotelSearchQuery`) are not recorded.
+Anonymous searches (null `userId`) are never recorded.
+
+```java
+public record SearchHistory(
+    UUID id,
+    UUID userId,
+    UUID cityId,
+    LocalDate checkIn,
+    LocalDate checkOut,
+    int guestCount,
+    SearchHistoryStatus status,
+    LocalDateTime createdAt
+) {}
+```
+
+**Validation rules (service layer):**
+- `userId` — must reference an existing `User`
+- `cityId` — must reference an existing `City`
+- `checkOut` must be strictly after `checkIn`
+- `guestCount` must be ≥ 1
+- `createdAt` — set on creation, never updated
+
+---
+
 ## Enums
 
 ### `HotelStatus`
@@ -361,6 +389,15 @@ public enum BookingStatus {
 public enum ReviewStatus {
     ACTIVE,     // visible publicly
     INACTIVE    // hidden by admin moderation
+}
+```
+
+### `SearchHistoryStatus`
+
+```java
+public enum SearchHistoryStatus {
+    ACTIVE,     // visible in user's search history
+    INACTIVE    // hidden by user
 }
 ```
 
@@ -495,6 +532,7 @@ Input to `HotelSearchService.searchByCity()`.
 
 ```java
 public record CitySearchQuery(
+    UUID userId,                           // nullable — null means anonymous search, not recorded
     UUID cityId,
     LocalDate checkIn,
     LocalDate checkOut,
