@@ -53,6 +53,14 @@ City
  ├── timezone
  └── coordinates → Coordinates
 
+User
+ ├── email, password (hashed)
+ ├── phoneNumber → PhoneNumber
+ ├── profileImageUrl, preferredCurrency
+ ├── role → UserRole
+ ├── status → UserStatus
+ └── createdAt / updatedAt: LocalDateTime
+
 Address
  ├── street, area, zipCode
  └── cityId → City
@@ -145,6 +153,40 @@ public record Country(
 - `isoCode` — exactly 2 uppercase characters
 - `currencyCode` — exactly 3 uppercase characters
 - `phoneCode` — starts with `+` followed by digits
+
+---
+
+### `User`
+
+The central identity entity. Referenced by bookings, reviews, hotels,
+and search history. Anonymous access is handled at the security layer —
+there is no `ANONYMOUS` user role.
+
+```java
+public record User(
+    UUID id,
+    String firstName,
+    String lastName,
+    String email,
+    String password,            // hashed — never stored as plaintext
+    PhoneNumber phoneNumber,    // optional
+    String profileImageUrl,     // optional
+    String preferredCurrency,   // ISO 4217, e.g. "USD", "BDT"
+    UserRole role,
+    UserStatus status,
+    LocalDateTime createdAt,
+    LocalDateTime updatedAt
+) {}
+```
+
+**Validation rules (service layer):**
+- `email` — valid email format, unique across all users
+- `password` — minimum complexity enforced, stored hashed
+- `preferredCurrency` — exactly 3 uppercase characters (ISO 4217)
+- `phoneNumber` — optional, can be null
+- `profileImageUrl` — optional, can be null
+- `role` — defaults to `GUEST` on registration
+- `status` — defaults to `ACTIVE` on registration
 
 ---
 
@@ -377,6 +419,27 @@ public enum HotelStatus {
     ACTIVE,     // visible in search results
     INACTIVE,   // temporarily closed, excluded from search
     PENDING     // awaiting activation, excluded from search
+}
+```
+
+### `UserRole`
+
+```java
+public enum UserRole {
+    GUEST,          // can search, book, and write reviews
+    HOTEL_ADMIN,    // full hotel management — data and operations
+    HOTEL_MANAGER,  // operational only — bookings and availability
+    SUPER_ADMIN     // system-wide access — all operations
+}
+```
+
+### `UserStatus`
+
+```java
+public enum UserStatus {
+    ACTIVE,     // normal access
+    INACTIVE,   // account deactivated
+    BANNED      // account banned — cannot book or write reviews
 }
 ```
 
@@ -929,9 +992,14 @@ public record OccupancyRate(
 
 - A `City` must reference an existing `Country`
 - A `Hotel` address must reference an existing `City`
-- A `Hotel` must reference an existing `User` with `HOTEL_OWNER` role via `ownerId`
+- A `Hotel` must reference an existing `User` with `HOTEL_ADMIN` role via `ownerId`
 - Only `ACTIVE` hotels appear in search results
 - Only `ACTIVE` room types are included in search results
+- `email` must be unique across all users
+- `password` is never stored or returned as plaintext
+- A `BANNED` user cannot create bookings or write reviews
+- `User.role` defaults to `GUEST` on registration
+- `User.status` defaults to `ACTIVE` on registration
 - `Hotel` rating is always derived from reviews — never set manually
 - A `RatePolicy` must not have overlapping date ranges within the same `RoomType`
 - For `PERCENTAGE` discount — value must be between 0 and 100 exclusive
