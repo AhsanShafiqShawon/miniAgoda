@@ -43,6 +43,7 @@ SearchResult searchByHotel(HotelSearchQuery query, int page, int size);
 
 ```java
 public record CitySearchQuery(
+    UUID userId,                           // nullable — null means anonymous search, not recorded
     UUID cityId,
     LocalDate checkIn,
     LocalDate checkOut,
@@ -115,27 +116,31 @@ public record HotelSummary(
 Both `searchByCity` and `searchByHotel` follow the same internal steps:
 
 1. **Validate query** — fail fast before any repository calls
-2. **Fetch hotels** — by `cityId` or `hotelId` via `HotelRepository`
-3. **Filter by status** — exclude any hotel where `status != ACTIVE`
-4. **Filter by amenities** — exclude hotels missing any requested `Amenity`
+2. **Record search asynchronously** — if `query.userId() != null`, call
+   `searchHistoryService.recordSearch()` asynchronously via `@Async`.
+   Never blocks the search response.
+3. **Fetch hotels** — by `cityId` or `hotelId` via `HotelRepository`
+4. **Filter by status** — exclude any hotel where `status != ACTIVE`
+5. **Filter by amenities** — exclude hotels missing any requested `Amenity`
    (only applies to `searchByCity`)
-5. **Iterate room types** — room types are fetched as part of the `Hotel` aggregate
-6. **Filter by category** — exclude room types not matching requested `RoomCategory`
+6. **Iterate room types** — room types are fetched as part of the `Hotel` aggregate
+7. **Filter by room type status** — exclude room types where `status != ACTIVE`
+8. **Filter by category** — exclude room types not matching requested `RoomCategory`
    (only applies to `searchByCity`)
-7. **Filter by bed type** — exclude room types not matching requested `BedType`
+9. **Filter by bed type** — exclude room types not matching requested `BedType`
    (only applies to `searchByCity`)
-8. **Filter by capacity** — exclude room types where `capacity < guestCount`
-9. **Check availability** — via `InventoryRepository.countAvailableRooms()`
-10. **Resolve rate** — find applicable `RatePolicy` for the requested date range
-11. **Apply discount** — calculate effective price from `DiscountPolicy` if present
-12. **Build `HotelSummary`** — assemble with `startingFromPrice` (lowest effective rate)
-13. **Handle insufficient results** — if `hotels.size() < recommendation-threshold`,
+10. **Filter by capacity** — exclude room types where `capacity < guestCount`
+11. **Check availability** — via `InventoryRepository.countAvailableRooms()`
+12. **Resolve rate** — find applicable `RatePolicy` for the requested date range
+13. **Apply discount** — calculate effective price from `DiscountPolicy` if present
+14. **Build `HotelSummary`** — assemble with `startingFromPrice` (lowest effective rate)
+15. **Handle insufficient results** — if `hotels.size() < recommendation-threshold`,
     call `RecommendationService` for suggestions. Date relaxation is tried first;
     if still insufficient, guest count relaxation is tried. Already-found hotels
     are excluded from suggestions via `excludeHotelIds`.
-14. **Sort results** — rating descending, price ascending as tiebreaker
-15. **Apply pagination** — `page` and `size`
-16. **Return `SearchResult`**
+16. **Sort results** — rating descending, price ascending as tiebreaker
+17. **Apply pagination** — `page` and `size`
+18. **Return `SearchResult`**
 
 ---
 
