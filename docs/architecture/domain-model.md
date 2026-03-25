@@ -8,7 +8,7 @@ When modeling a class, ask:
 
 > **"Do I need to distinguish this object from another identical one?"**
 > - **YES** → Entity (has a unique `UUID id`)
-> - **NO** → Value Object (defined purely by its data that's why it should be immutable by design in almost all cases)
+> - **NO** → Value Object (defined purely by its data)
 
 For example: two hotels with the same name are still different hotels → `Hotel` is an Entity.
 Two addresses with identical fields are interchangeable → `Address` is a Value Object.
@@ -96,6 +96,14 @@ Review
  ├── hotelId → Hotel
  ├── rating → ReviewRating
  ├── comment: String
+ └── createdAt / updatedAt: LocalDateTime
+
+Destination
+ ├── cityId → City
+ ├── name, description
+ ├── imageUrls: List<String>
+ ├── searchCount, bookingCount
+ ├── status → DestinationStatus
  └── createdAt / updatedAt: LocalDateTime
 ```
 
@@ -307,6 +315,44 @@ public record SearchHistory(
 
 ---
 
+### `Destination`
+
+A curated point of interest wrapping a city with popularity metadata.
+Used for the "Popular Destinations" feature. Popularity is derived from
+search and booking activity — bookings are weighted higher than searches.
+
+```java
+public record Destination(
+    UUID id,
+    UUID cityId,
+    String name,
+    String description,
+    List<String> imageUrls,
+    int searchCount,
+    int bookingCount,
+    DestinationStatus status,
+    LocalDateTime createdAt,
+    LocalDateTime updatedAt
+) {}
+```
+
+**Popularity score:**
+```java
+popularityScore = searchCount + (bookingCount * 2)
+```
+
+**Who updates counts:**
+- `searchCount` — incremented asynchronously by `SearchHistoryService.recordSearch()`
+- `bookingCount` — incremented asynchronously by `BookingService.createBooking()`
+
+**Validation rules (service layer):**
+- `cityId` — must reference an existing `City`
+- `name` — must not be blank
+- `createdAt` — set on creation, never updated
+- `updatedAt` — updated on every state change
+
+---
+
 ## Enums
 
 ### `HotelStatus`
@@ -398,6 +444,15 @@ public enum ReviewStatus {
 public enum SearchHistoryStatus {
     ACTIVE,     // visible in user's search history
     INACTIVE    // hidden by user
+}
+```
+
+### `DestinationStatus`
+
+```java
+public enum DestinationStatus {
+    ACTIVE,     // visible publicly in popular destinations
+    INACTIVE    // hidden
 }
 ```
 
@@ -732,6 +787,35 @@ public record BookingSummary(
 
 ---
 
+### `AddDestinationRequest`
+
+Input to `DestinationService.addDestination()`. System-managed fields
+excluded — `id`, `searchCount` (defaults to 0), `bookingCount` (defaults
+to 0), `status` (defaults to `ACTIVE`), `createdAt`, `updatedAt`.
+
+```java
+public record AddDestinationRequest(
+    String name,
+    String description,
+    List<String> imageUrls
+) {}
+```
+
+### `EditDestinationRequest`
+
+Input to `DestinationService.editDestination()`. All fields optional —
+at least one must be present.
+
+```java
+public record EditDestinationRequest(
+    Optional<String> name,
+    Optional<String> description,
+    Optional<List<String>> imageUrls
+) {}
+```
+
+---
+
 ### `CreateReviewRequest`
 
 Input to `ReviewService.writeReview()`.
@@ -781,3 +865,5 @@ public record EditReviewRequest(
 - All `ReviewRating` fields must be between 1 and 10 inclusive
 - Only `ACTIVE` reviews are returned in public-facing queries
 - Admin uses `deactivateReview` to hide reviews — hard deletes are not permitted
+- `popularityScore` = `searchCount` + (`bookingCount` * 2)
+- Only `ACTIVE` destinations appear in `getPopularDestinations`
