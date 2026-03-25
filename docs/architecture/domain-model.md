@@ -105,6 +105,21 @@ Destination
  ├── searchCount, bookingCount
  ├── status → DestinationStatus
  └── createdAt / updatedAt: LocalDateTime
+
+RoomTypeAvailability (result record)
+ ├── roomTypeId, roomTypeName
+ ├── totalRooms, bookedRooms, availableRooms
+ └── status → AvailabilityStatus
+
+Revenue (result record)
+ ├── hotelId, period → RevenuePeriod
+ ├── revenuePerCurrency: Map<String, BigDecimal>
+ └── from / to: LocalDateTime
+
+OccupancyRate (result record)
+ ├── hotelId, rate: double
+ ├── totalRooms, occupiedRooms
+ └── asOf: LocalDate
 ```
 
 ---
@@ -453,6 +468,27 @@ public enum SearchHistoryStatus {
 public enum DestinationStatus {
     ACTIVE,     // visible publicly in popular destinations
     INACTIVE    // hidden
+}
+```
+
+### `AvailabilityStatus`
+
+```java
+public enum AvailabilityStatus {
+    AVAILABLE,          // rooms still available for booking
+    PARTIALLY_BOOKED,   // some rooms booked, some available
+    FULLY_BOOKED        // all rooms booked for the period
+}
+```
+
+### `RevenuePeriod`
+
+```java
+public enum RevenuePeriod {
+    DAY,
+    WEEK,
+    MONTH,
+    YEAR
 }
 ```
 
@@ -843,6 +879,52 @@ public record EditReviewRequest(
 
 ---
 
+### `RoomTypeAvailability`
+
+A result record returned by `HotelManagementService` availability queries.
+
+```java
+public record RoomTypeAvailability(
+    UUID roomTypeId,
+    String roomTypeName,
+    int totalRooms,
+    int bookedRooms,
+    int availableRooms,
+    AvailabilityStatus status
+) {}
+```
+
+### `Revenue`
+
+A result record returned by `HotelManagementService.getRevenue()`.
+Revenue is broken down per currency — not converted to a single currency.
+
+```java
+public record Revenue(
+    UUID hotelId,
+    RevenuePeriod period,
+    Map<String, BigDecimal> revenuePerCurrency,  // e.g. {"USD": 1500.00, "BDT": 85000.00}
+    LocalDateTime from,
+    LocalDateTime to
+) {}
+```
+
+### `OccupancyRate`
+
+A result record returned by `HotelManagementService.getOccupancyRate()`.
+
+```java
+public record OccupancyRate(
+    UUID hotelId,
+    double rate,           // 0.0 to 1.0 — e.g. 0.75 means 75% occupied
+    int totalRooms,
+    int occupiedRooms,
+    LocalDate asOf
+) {}
+```
+
+---
+
 ## Invariants
 
 - A `City` must reference an existing `Country`
@@ -867,3 +949,4 @@ public record EditReviewRequest(
 - Admin uses `deactivateReview` to hide reviews — hard deletes are not permitted
 - `popularityScore` = `searchCount` + (`bookingCount` * 2)
 - Only `ACTIVE` destinations appear in `getPopularDestinations`
+- `OccupancyRate.rate` is always between 0.0 and 1.0 inclusive
