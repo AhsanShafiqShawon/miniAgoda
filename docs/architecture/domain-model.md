@@ -843,6 +843,41 @@ public record EditRatePolicyRequest(
 
 ---
 
+### `RegisterRequest`
+
+Input to `UserService.registerUser()`. System-managed fields excluded —
+`id`, `status` (defaults to `INACTIVE`), `role` (defaults to `GUEST`),
+`rating`, `createdAt`, `updatedAt`.
+
+```java
+public record RegisterRequest(
+    String firstName,
+    String lastName,
+    String email,
+    String password,
+    PhoneNumber phoneNumber,        // optional
+    String preferredCurrency
+) {}
+```
+
+### `EditUserRequest`
+
+Input to `UserService.editUser()`. All fields optional — at least one
+must be present. `email` and `password` not editable via this request —
+handled by `AuthService` for security verification.
+
+```java
+public record EditUserRequest(
+    Optional<String> firstName,
+    Optional<String> lastName,
+    Optional<PhoneNumber> phoneNumber,
+    Optional<String> profileImageUrl,
+    Optional<String> preferredCurrency
+) {}
+```
+
+---
+
 ### `CreateBookingRequest`
 
 Input to `BookingService.createBooking()`.
@@ -1004,7 +1039,8 @@ public record OccupancyRate(
 - `password` is never stored or returned as plaintext
 - A `BANNED` user cannot create bookings or write reviews
 - `User.role` defaults to `GUEST` on registration
-- `User.status` defaults to `ACTIVE` on registration
+- `User.status` defaults to `INACTIVE` on registration — activated after email verification
+- Deleted accounts are anonymized — personal data replaced, status set to `INACTIVE`
 - `Hotel` rating is always derived from reviews — never set manually
 - A `RatePolicy` must not have overlapping date ranges within the same `RoomType`
 - For `PERCENTAGE` discount — value must be between 0 and 100 exclusive
