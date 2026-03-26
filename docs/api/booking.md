@@ -14,7 +14,7 @@ for checking availability (that's `InventoryRepository`), processing payments
 @Service
 public class BookingService {
     private final BookingRepository bookingRepository;
-    private final InventoryRepository inventoryRepository;
+    private final AvailabilityService availabilityService;
     private final HotelRepository hotelRepository;
 }
 ```
@@ -45,12 +45,13 @@ Booking createBooking(CreateBookingRequest request);
 1. Validate request — fail fast
 2. Look up hotel and room type — throw `ResourceNotFoundException` if not found
 3. Check `guestCount` ≤ `roomType.capacity()` — throw `InvalidBookingRequestException` if exceeded
-4. Acquire write lock on `InventoryRepository`
-5. Recheck availability inside lock (TOCTOU-safe)
-6. If available — snapshot `totalPrice` from applicable `RatePolicy` + `DiscountPolicy`
-7. Create `Booking` with status `CONFIRMED`, set `createdAt` and `updatedAt`
-8. Update `InventoryRepository`
-9. Release lock and return `Booking`
+4. Check `rooms` ≥ 1 — throw `InvalidBookingRequestException` if invalid
+5. Call `availabilityService.isAvailable()` — throw `RoomNotAvailableException` if not available
+6. Generate `bookingGroupId` if not provided (new transaction) or use existing (multi-room booking)
+7. Snapshot `totalPrice` from applicable `RatePolicy` + `DiscountPolicy`
+8. Create `Booking` with status `CONFIRMED`, set `createdAt` and `updatedAt`
+9. Call `availabilityService.blockRooms()` — update inventory
+10. Persist and return `Booking`
 
 ---
 
@@ -66,7 +67,7 @@ void cancelBooking(UUID bookingId);
 1. Look up booking — throw `BookingNotFoundException` if not found
 2. Check status — throw `InvalidBookingStateException` if already `CANCELLED` or `COMPLETED`
 3. Update status to `CANCELLED`, set `cancelledAt` to now, set `updatedAt`
-4. Update `InventoryRepository` — release the held rooms back
+4. Call `availabilityService.releaseRooms()` — restore inventory
 
 ---
 
@@ -84,12 +85,13 @@ Booking editBooking(UUID bookingId, EditBookingRequest request);
 2. If dates provided — both `checkIn` and `checkOut` must be present together
 3. Look up booking — throw `BookingNotFoundException` if not found
 4. Check status — only `CONFIRMED` bookings can be edited
-5. Acquire write lock on `InventoryRepository`
-6. Release current booking's inventory
-7. Recheck availability for new dates/guest count
-8. If available — update booking, re-snapshot `totalPrice`, update `updatedAt`
-9. If not available — restore original inventory, throw `RoomNotAvailableException`
-10. Release lock and return updated `Booking`
+5. Call `availabilityService.releaseRooms()` — release current booking's inventory
+6. Call `availabilityService.isAvailable()` — check availability for new dates/rooms
+7. If available — update booking, re-snapshot `totalPrice`, update `updatedAt`
+8. Call `availabilityService.blockRooms()` — block new inventory
+9. If not available — call `availabilityService.blockRooms()` to restore original,
+   throw `RoomNotAvailableException`
+10. Return updated `Booking`
 
 ---
 
