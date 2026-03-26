@@ -8,7 +8,7 @@ When modeling a class, ask:
 
 > **"Do I need to distinguish this object from another identical one?"**
 > - **YES** → Entity (has a unique `UUID id`)
-> - **NO** → Value Object (defined purely by its data)
+> - **NO** → Value Object (defined purely by its data that's why it should be immutable by design in almost all cases)
 
 For example: two hotels with the same name are still different hotels → `Hotel` is an Entity.
 Two addresses with identical fields are interchangeable → `Address` is a Value Object.
@@ -88,9 +88,11 @@ Hotel
              └── discountPolicy → DiscountPolicy (optional)
 
 Booking
+ ├── bookingGroupId (links multiple room type bookings)
  ├── hotelId → Hotel
  ├── roomTypeId → RoomType
  ├── userId → User
+ ├── rooms: int (number of rooms of this type booked)
  ├── status → BookingStatus
  ├── totalPrice: BigDecimal (snapshotted at creation)
  ├── currencyCode: String
@@ -287,9 +289,11 @@ snapshotted at creation — never recalculated after.
 ```java
 public record Booking(
     UUID id,
+    UUID bookingGroupId,        // links multiple room type bookings together
     UUID hotelId,
     UUID roomTypeId,
     UUID userId,
+    int rooms,                  // number of rooms of this type booked
     int guestCount,
     LocalDate checkIn,
     LocalDate checkOut,
@@ -306,6 +310,7 @@ public record Booking(
 **Validation rules (service layer):**
 - `checkOut` must be strictly after `checkIn`
 - `guestCount` must be ≥ 1
+- `rooms` must be ≥ 1
 - `totalPrice` must be > 0
 - `currencyCode` — exactly 3 uppercase characters
 - `cancelledAt` and `cancellationReason` — null unless status is `CANCELLED`
@@ -1006,9 +1011,11 @@ public record OccupancyRate(
 - For `FIXED` discount — discount must not exceed `pricePerNight`
 - A booking's `checkOut` must be strictly after `checkIn`
 - `guestCount` must be ≤ the room type's `capacity`
+- `rooms` must be ≤ available rooms for the requested date range
 - A room type cannot be double-booked: concurrent bookings cannot exceed `totalRooms`
 - `totalPrice` is snapshotted at booking creation — never recalculated after
 - `cancelledAt` and `cancellationReason` are only populated when status is `CANCELLED`
+- Bookings sharing a `bookingGroupId` belong to the same transaction
 - A review can only be submitted for a `COMPLETED` booking
 - One review per `bookingId` — uniqueness enforced on `bookingId`
 - A guest may review the same hotel multiple times if they have multiple completed bookings
