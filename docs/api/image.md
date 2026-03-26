@@ -8,7 +8,7 @@ responsible for managing the entities themselves (that's `HotelService`,
 `RoomTypeService`, etc.) or image processing/resizing (future concern).
 
 See [ADR-009](../architecture/decisions/ADR-009-storage-service.md) for
-the StorageService abstraction rationale.
+the StorageGateway abstraction rationale.
 
 ## Collaborators
 
@@ -16,7 +16,7 @@ the StorageService abstraction rationale.
 @Service
 public class ImageService {
     private final ImageRepository imageRepository;
-    private final StorageService storageService;
+    private final StorageGateway storageService;
 }
 ```
 
@@ -24,7 +24,7 @@ public class ImageService {
 
 ```
 1. uploadImage(request)
-   → StorageService stores the file
+   → StorageGateway stores the file
    → Image created with confirmed=false
    → Returns Image with URL
 
@@ -50,7 +50,7 @@ Image uploadImage(ImageUploadRequest request);
 **Behavior:**
 1. Validate request — fail fast
 2. Verify entity exists — throw `ResourceNotFoundException` if not found
-3. Store file via `StorageService` — returns storage URL
+3. Store file via `StorageGateway` — returns storage URL
 4. Create `Image` with `confirmed=false`, status `ACTIVE`
 5. Set `createdAt`, persist and return
 

@@ -8,7 +8,7 @@ responsible for triggering notifications (callers do that), managing user
 preferences (that's `UserService`), or template design.
 
 See [ADR-010](../architecture/decisions/ADR-010-email-service.md) for
-the EmailService abstraction rationale.
+the EmailGateway abstraction rationale.
 
 ## Collaborators
 
@@ -16,7 +16,7 @@ the EmailService abstraction rationale.
 @Service
 public class NotificationService {
     private final NotificationRepository notificationRepository;
-    private final EmailService emailService;
+    private final EmailGateway emailService;
 }
 ```
 
@@ -25,7 +25,7 @@ public class NotificationService {
 ```
 1. sendNotification(request)
    → Create Notification with status PENDING, readStatus UNREAD
-   → Attempt to send via EmailService
+   → Attempt to send via EmailGateway
    → On success: update status to SENT, set sentAt
    → On failure: update status to FAILED (eligible for retry)
 ```
@@ -61,7 +61,7 @@ Notification sendNotification(CreateNotificationRequest request);
 **Behavior:**
 1. Validate request — fail fast
 2. Create `Notification` with status `PENDING`, `readStatus` `UNREAD`
-3. If `scheduledAt` is null — attempt to send immediately via `EmailService`
+3. If `scheduledAt` is null — attempt to send immediately via `EmailGateway`
 4. If `scheduledAt` is set — defer to scheduled job
 5. On success → update status to `SENT`, set `sentAt`
 6. On failure → update status to `FAILED`
