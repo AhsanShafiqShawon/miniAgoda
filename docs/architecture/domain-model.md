@@ -126,6 +126,17 @@ Image
  ├── status → ImageStatus
  └── createdAt / updatedAt: LocalDateTime
 
+Notification
+ ├── userId → User
+ ├── hotelId → Hotel (optional)
+ ├── type → NotificationType
+ ├── channel → Channel
+ ├── status → NotificationStatus
+ ├── readStatus → NotificationReadStatus
+ ├── scheduledAt: LocalDateTime (optional)
+ ├── sentAt: LocalDateTime (null until SENT)
+ └── createdAt / updatedAt: LocalDateTime
+
 RoomTypeAvailability (result record)
  ├── roomTypeId, roomTypeName
  ├── totalRooms, bookedRooms, availableRooms
@@ -455,6 +466,42 @@ public record Image(
 
 ---
 
+### `Notification`
+
+Represents a notification sent or scheduled to be sent to a user.
+Follows the Outbox Pattern — created as `PENDING` then dispatched.
+`hotelId` is optional — null for user-only notifications like
+email verification and password reset.
+
+```java
+public record Notification(
+    UUID id,
+    UUID userId,
+    UUID hotelId,                   // optional
+    NotificationType type,
+    String subject,
+    String body,
+    Channel channel,
+    NotificationStatus status,
+    NotificationReadStatus readStatus,
+    LocalDateTime scheduledAt,      // optional — null means send immediately
+    LocalDateTime sentAt,           // null until SENT
+    LocalDateTime createdAt,
+    LocalDateTime updatedAt
+) {}
+```
+
+**Validation rules (service layer):**
+- `userId` — must reference an existing `User`
+- `hotelId` — optional, must reference an existing `Hotel` if present
+- `subject` and `body` — must not be blank
+- `status` — defaults to `PENDING` on creation
+- `readStatus` — defaults to `UNREAD` on creation
+- `createdAt` — set on creation, never updated
+- `updatedAt` — updated on every state change
+
+---
+
 ## Enums
 
 ### `HotelStatus`
@@ -596,6 +643,47 @@ public enum ImageEntityType {
     ROOM_TYPE,
     DESTINATION,
     USER
+}
+```
+
+### `NotificationType`
+
+```java
+public enum NotificationType {
+    BOOKING_CONFIRMATION,
+    BOOKING_CANCELLATION,
+    BOOKING_EDIT,
+    EMAIL_VERIFICATION,
+    PASSWORD_RESET,
+    REVIEW_REQUEST
+}
+```
+
+### `NotificationStatus`
+
+```java
+public enum NotificationStatus {
+    PENDING,      // created, not yet sent
+    SENT,         // successfully sent
+    FAILED,       // sending failed — eligible for retry
+    CANCELLED     // cancelled before sending
+}
+```
+
+### `NotificationReadStatus`
+
+```java
+public enum NotificationReadStatus {
+    READ,
+    UNREAD
+}
+```
+
+### `Channel`
+
+```java
+public enum Channel {
+    EMAIL    // MVP — SMS, PUSH_NOTIFICATION, IN_APP deferred
 }
 ```
 
@@ -1067,6 +1155,24 @@ public record ImageUploadRequest(
 
 ---
 
+### `CreateNotificationRequest`
+
+Input to `NotificationService.sendNotification()`.
+
+```java
+public record CreateNotificationRequest(
+    UUID userId,
+    UUID hotelId,               // optional
+    NotificationType type,
+    String subject,
+    String body,
+    Channel channel,
+    LocalDateTime scheduledAt   // optional — null means send immediately
+) {}
+```
+
+---
+
 ### `CreateReviewRequest`
 
 Input to `ReviewService.writeReview()`.
@@ -1175,3 +1281,7 @@ public record OccupancyRate(
 - `OccupancyRate.rate` is always between 0.0 and 1.0 inclusive
 - Only `ACTIVE` confirmed images are returned in public queries
 - `primaryImageId` is optional — entities can exist without a primary image
+- Notifications are created as `PENDING` — dispatched asynchronously
+- Only `PENDING` notifications can be cancelled
+- `sentAt` is null until status transitions to `SENT`
+- `readStatus` defaults to `UNREAD` on creation
