@@ -162,6 +162,26 @@ UserSummary (result record)
  ├── status → UserStatus
  └── createdAt: LocalDateTime
 
+Payment
+ ├── bookingId → Booking
+ ├── userId → User
+ ├── amount: BigDecimal
+ ├── currencyCode: String
+ ├── paymentMethod → PaymentMethod
+ ├── status → PaymentStatus
+ ├── gatewayTransactionId: String
+ ├── gatewayProvider: String
+ └── createdAt / updatedAt: LocalDateTime
+
+Refund
+ ├── paymentId → Payment
+ ├── amount: BigDecimal
+ ├── currencyCode: String
+ ├── status → RefundStatus
+ ├── reason: String
+ ├── gatewayRefundId: String
+ └── createdAt / updatedAt: LocalDateTime
+
 RoomTypeAvailability (result record)
  ├── roomTypeId, roomTypeName
  ├── totalRooms, bookedRooms, availableRooms
@@ -568,6 +588,68 @@ public record Promotion(
 
 ---
 
+### `Payment`
+
+Represents a payment transaction for a booking. Stores the actual
+amount charged independently from `Booking.totalPrice` to account
+for promotions and partial payments. Gateway transaction ID stored
+for Stripe reconciliation.
+
+```java
+public record Payment(
+    UUID id,
+    UUID bookingId,
+    UUID userId,
+    BigDecimal amount,              // actual amount charged
+    String currencyCode,            // ISO 4217
+    PaymentMethod paymentMethod,
+    PaymentStatus status,
+    String gatewayTransactionId,    // e.g. Stripe "pi_3N..."
+    String gatewayProvider,         // e.g. "STRIPE"
+    LocalDateTime createdAt,
+    LocalDateTime updatedAt
+) {}
+```
+
+**Validation rules (service layer):**
+- `bookingId` — must reference an existing `Booking`
+- `userId` — must reference an existing `User`
+- `amount` must be > 0
+- `currencyCode` — exactly 3 uppercase characters
+- `status` — defaults to `PENDING` on creation
+- `gatewayTransactionId` — set after gateway initiates payment
+- `createdAt` — set on creation, never updated
+
+---
+
+### `Refund`
+
+Represents a refund for a payment. Tracked independently from `Payment`
+to support partial refunds and refund lifecycle management.
+
+```java
+public record Refund(
+    UUID id,
+    UUID paymentId,
+    BigDecimal amount,
+    String currencyCode,
+    RefundStatus status,
+    String reason,
+    String gatewayRefundId,         // e.g. Stripe "re_3N..."
+    LocalDateTime createdAt,
+    LocalDateTime updatedAt
+) {}
+```
+
+**Validation rules (service layer):**
+- `paymentId` — must reference an existing `Payment` with status `COMPLETED`
+- `amount` must be > 0 and ≤ `payment.amount`
+- `currencyCode` — must match `payment.currencyCode`
+- `status` — defaults to `PENDING` on creation
+- `reason` — must not be blank
+
+---
+
 ## Enums
 
 ### `HotelStatus`
@@ -800,6 +882,39 @@ public enum ContentType {
 public enum ModerationAction {
     ACTIVATE,
     DEACTIVATE
+}
+```
+
+### `PaymentStatus`
+
+```java
+public enum PaymentStatus {
+    PENDING,      // initiated, awaiting confirmation
+    CONFIRMED,    // gateway confirmed
+    COMPLETED,    // funds settled
+    CANCELLED,    // cancelled before completion
+    REFUNDED      // fully refunded
+}
+```
+
+### `RefundStatus`
+
+```java
+public enum RefundStatus {
+    PENDING,
+    COMPLETED,
+    FAILED
+}
+```
+
+### `PaymentMethod`
+
+```java
+public enum PaymentMethod {
+    CREDIT_CARD,
+    DEBIT_CARD,
+    BANK_TRANSFER,
+    DIGITAL_WALLET    // e.g. Apple Pay, Google Pay
 }
 ```
 
@@ -1388,6 +1503,22 @@ public record SystemStats(
 
 ---
 
+### `CreatePaymentRequest`
+
+Input to `PaymentService.makePayment()`.
+
+```java
+public record CreatePaymentRequest(
+    UUID bookingId,
+    UUID userId,
+    BigDecimal amount,
+    String currencyCode,
+    PaymentMethod paymentMethod
+) {}
+```
+
+---
+
 ### `CreateReviewRequest`
 
 Input to `ReviewService.writeReview()`.
@@ -1508,3 +1639,8 @@ public record OccupancyRate(
 - `hotelId` is required when scope is `HOTEL`, null otherwise
 - `RevenueScope.scopeId` is null when type is `SYSTEM`
 - All moderation actions go through `AdminService.moderateContent()`
+- `Payment.amount` is stored independently from `Booking.totalPrice`
+- Refunds can only be processed for `COMPLETED` payments
+- `Refund.amount` must not exceed `Payment.amount`
+- `Refund.currencyCode` must match `Payment.currencyCode`
+- `gatewayTransactionId` is set after gateway initiates payment — never null after `CONFIRMED`
