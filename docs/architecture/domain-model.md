@@ -137,6 +137,18 @@ Notification
  ├── sentAt: LocalDateTime (null until SENT)
  └── createdAt / updatedAt: LocalDateTime
 
+Promotion
+ ├── code: String (unique)
+ ├── scope → PromotionScope
+ ├── userId → User (null unless USER scope)
+ ├── hotelId → Hotel (null unless HOTEL scope)
+ ├── discountType → DiscountType
+ ├── discountValue: BigDecimal
+ ├── usageLimit, usageLimitPerUser, usageCount
+ ├── validFrom / validTo: LocalDate (expiry derived from validTo)
+ ├── status → PromotionStatus
+ └── createdAt / updatedAt: LocalDateTime
+
 RoomTypeAvailability (result record)
  ├── roomTypeId, roomTypeName
  ├── totalRooms, bookedRooms, availableRooms
@@ -502,6 +514,47 @@ public record Notification(
 
 ---
 
+### `Promotion`
+
+Represents a promotional code that can be applied to a booking for a
+discount. Expiry is derived from `validTo` — not stored as a separate
+status. Scope controls who can use the promotion.
+
+```java
+public record Promotion(
+    UUID id,
+    String code,              // unique across all promotions
+    String description,
+    PromotionScope scope,
+    UUID userId,              // null unless scope is USER
+    UUID hotelId,             // null unless scope is HOTEL
+    DiscountType discountType,
+    BigDecimal discountValue,
+    int usageLimit,           // total uses allowed across all users
+    int usageLimitPerUser,    // uses allowed per individual user
+    int usageCount,           // total uses so far
+    LocalDate validFrom,
+    LocalDate validTo,        // expiry derived from this — not stored as status
+    PromotionStatus status,
+    LocalDateTime createdAt,
+    LocalDateTime updatedAt
+) {}
+```
+
+**Validation rules (service layer):**
+- `code` — must not be blank, unique across all promotions
+- `validTo` must be strictly after `validFrom`
+- `discountValue` must be > 0
+- For `PERCENTAGE` — value must be between 0 and 100 exclusive
+- `usageLimit` must be ≥ 1
+- `usageLimitPerUser` must be ≥ 1
+- `userId` — required if scope is `USER`, null otherwise
+- `hotelId` — required if scope is `HOTEL`, null otherwise
+- `status` — defaults to `ACTIVE` on creation
+- `usageCount` — defaults to 0 on creation
+
+---
+
 ## Enums
 
 ### `HotelStatus`
@@ -684,6 +737,26 @@ public enum NotificationReadStatus {
 ```java
 public enum Channel {
     EMAIL    // MVP — SMS, PUSH_NOTIFICATION, IN_APP deferred
+}
+```
+
+### `PromotionScope`
+
+```java
+public enum PromotionScope {
+    GLOBAL,     // available to all users
+    USER,       // tied to a specific user
+    HOTEL       // tied to a specific hotel
+}
+```
+
+### `PromotionStatus`
+
+```java
+public enum PromotionStatus {
+    ACTIVE,
+    INACTIVE
+    // EXPIRED is derived from validTo — not stored
 }
 ```
 
@@ -1173,6 +1246,59 @@ public record CreateNotificationRequest(
 
 ---
 
+### `CreatePromotionRequest`
+
+Input to `PromotionService.createPromotion()` and
+`PromotionService.createUserPromotion()`.
+
+```java
+public record CreatePromotionRequest(
+    String code,
+    String description,
+    PromotionScope scope,
+    UUID hotelId,             // optional — required if scope is HOTEL
+    DiscountType discountType,
+    BigDecimal discountValue,
+    int usageLimit,
+    int usageLimitPerUser,
+    LocalDate validFrom,
+    LocalDate validTo
+) {}
+```
+
+### `EditPromotionRequest`
+
+Input to `PromotionService.editPromotion()`. All fields optional —
+at least one must be present. `code` and `scope` not editable.
+
+```java
+public record EditPromotionRequest(
+    Optional<String> description,
+    Optional<BigDecimal> discountValue,
+    Optional<Integer> usageLimit,
+    Optional<Integer> usageLimitPerUser,
+    Optional<LocalDate> validFrom,
+    Optional<LocalDate> validTo
+) {}
+```
+
+### `ValidatePromotionResult`
+
+Returned by `PromotionService.validatePromotion()`.
+
+```java
+public record ValidatePromotionResult(
+    UUID promotionId,
+    String code,
+    DiscountType discountType,
+    BigDecimal discountValue,
+    BigDecimal discountAmount,    // calculated against booking price
+    BigDecimal finalPrice         // booking price after discount
+) {}
+```
+
+---
+
 ### `CreateReviewRequest`
 
 Input to `ReviewService.writeReview()`.
@@ -1285,3 +1411,9 @@ public record OccupancyRate(
 - Only `PENDING` notifications can be cancelled
 - `sentAt` is null until status transitions to `SENT`
 - `readStatus` defaults to `UNREAD` on creation
+- Promotion `code` must be unique across all promotions
+- Promotion expiry is derived from `validTo` — never stored as a status
+- `usageCount` must never exceed `usageLimit`
+- A user's usage of a promotion must never exceed `usageLimitPerUser`
+- `userId` is required when scope is `USER`, null otherwise
+- `hotelId` is required when scope is `HOTEL`, null otherwise
