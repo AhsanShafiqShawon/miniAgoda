@@ -12,8 +12,9 @@ managing popular destinations, creating bookings, or any user-specific logic.
 @Service
 public class HotelSearchService {
     private final HotelRepository hotelRepository;
-    private final InventoryRepository inventoryRepository;
+    private final AvailabilityService availabilityService;
     private final RecommendationService recommendationService;
+    private final SearchHistoryService searchHistoryService;
 }
 ```
 
@@ -123,24 +124,22 @@ Both `searchByCity` and `searchByHotel` follow the same internal steps:
 4. **Filter by status** — exclude any hotel where `status != ACTIVE`
 5. **Filter by amenities** — exclude hotels missing any requested `Amenity`
    (only applies to `searchByCity`)
-6. **Iterate room types** — room types are fetched as part of the `Hotel` aggregate
-7. **Filter by room type status** — exclude room types where `status != ACTIVE`
-8. **Filter by category** — exclude room types not matching requested `RoomCategory`
+6. **Get available room types** — call `availabilityService.getAvailableRoomTypes()`
+   per hotel — returns all available room types filtered by capacity in one call
+7. **Filter by category** — exclude room types not matching requested `RoomCategory`
    (only applies to `searchByCity`)
-9. **Filter by bed type** — exclude room types not matching requested `BedType`
+8. **Filter by bed type** — exclude room types not matching requested `BedType`
    (only applies to `searchByCity`)
-10. **Filter by capacity** — exclude room types where `capacity < guestCount`
-11. **Check availability** — via `InventoryRepository.countAvailableRooms()`
-12. **Resolve rate** — find applicable `RatePolicy` for the requested date range
-13. **Apply discount** — calculate effective price from `DiscountPolicy` if present
-14. **Build `HotelSummary`** — assemble with `startingFromPrice` (lowest effective rate)
-15. **Handle insufficient results** — if `hotels.size() < recommendation-threshold`,
+9. **Resolve rate** — find applicable `RatePolicy` for the requested date range
+10. **Apply discount** — calculate effective price from `DiscountPolicy` if present
+11. **Build `HotelSummary`** — assemble with `startingFromPrice` (lowest effective rate)
+12. **Handle insufficient results** — if `hotels.size() < recommendation-threshold`,
     call `RecommendationService` for suggestions. Date relaxation is tried first;
     if still insufficient, guest count relaxation is tried. Already-found hotels
     are excluded from suggestions via `excludeHotelIds`.
-16. **Sort results** — rating descending, price ascending as tiebreaker
-17. **Apply pagination** — `page` and `size`
-18. **Return `SearchResult`**
+13. **Sort results** — rating descending, price ascending as tiebreaker
+14. **Apply pagination** — `page` and `size`
+15. **Return `SearchResult`**
 
 ---
 
