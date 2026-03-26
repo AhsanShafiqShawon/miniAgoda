@@ -149,6 +149,19 @@ Promotion
  ├── status → PromotionStatus
  └── createdAt / updatedAt: LocalDateTime
 
+SystemStats (result record)
+ ├── totalUsers, totalHotels, totalBookings, totalReviews
+ ├── activePromotions
+ ├── usersByStatus: Map<UserStatus, Long>
+ ├── bookingsByStatus: Map<BookingStatus, Long>
+ └── asOf: LocalDateTime
+
+UserSummary (result record)
+ ├── userId, firstName, lastName, email
+ ├── role → UserRole
+ ├── status → UserStatus
+ └── createdAt: LocalDateTime
+
 RoomTypeAvailability (result record)
  ├── roomTypeId, roomTypeName
  ├── totalRooms, bookedRooms, availableRooms
@@ -760,6 +773,36 @@ public enum PromotionStatus {
 }
 ```
 
+### `RevenueScopeType`
+
+```java
+public enum RevenueScopeType {
+    SYSTEM,     // entire system revenue
+    HOTEL,      // revenue for a specific hotel
+    CITY        // revenue for all hotels in a city
+}
+```
+
+### `ContentType`
+
+```java
+public enum ContentType {
+    REVIEW,
+    IMAGE,
+    NOTIFICATION,
+    DESTINATION
+}
+```
+
+### `ModerationAction`
+
+```java
+public enum ModerationAction {
+    ACTIVATE,
+    DEACTIVATE
+}
+```
+
 ### `AvailabilityStatus`
 
 ```java
@@ -1299,6 +1342,52 @@ public record ValidatePromotionResult(
 
 ---
 
+### `RevenueScope`
+
+Input to `AdminService.getRevenue()` and `HotelManagementService.getRevenue()`.
+
+```java
+public record RevenueScope(
+    RevenueScopeType type,    // SYSTEM, HOTEL, CITY
+    UUID scopeId              // null for SYSTEM
+) {}
+```
+
+### `UserSummary`
+
+A lightweight projection returned in admin user list responses.
+
+```java
+public record UserSummary(
+    UUID userId,
+    String firstName,
+    String lastName,
+    String email,
+    UserRole role,
+    UserStatus status,
+    LocalDateTime createdAt
+) {}
+```
+
+### `SystemStats`
+
+Returned by `AdminService.getSystemStats()`. Snapshot of key system metrics.
+
+```java
+public record SystemStats(
+    long totalUsers,
+    long totalHotels,
+    long totalBookings,
+    long totalReviews,
+    long activePromotions,
+    Map<UserStatus, Long> usersByStatus,
+    Map<BookingStatus, Long> bookingsByStatus,
+    LocalDateTime asOf
+) {}
+```
+
+---
+
 ### `CreateReviewRequest`
 
 Input to `ReviewService.writeReview()`.
@@ -1417,3 +1506,5 @@ public record OccupancyRate(
 - A user's usage of a promotion must never exceed `usageLimitPerUser`
 - `userId` is required when scope is `USER`, null otherwise
 - `hotelId` is required when scope is `HOTEL`, null otherwise
+- `RevenueScope.scopeId` is null when type is `SYSTEM`
+- All moderation actions go through `AdminService.moderateContent()`
