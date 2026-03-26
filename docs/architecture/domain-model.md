@@ -56,7 +56,8 @@ City
 User
  ├── email, password (hashed)
  ├── phoneNumber → PhoneNumber
- ├── profileImageUrl, preferredCurrency
+ ├── primaryImageId → Image (optional)
+ ├── preferredCurrency
  ├── role → UserRole
  ├── status → UserStatus
  └── createdAt / updatedAt: LocalDateTime
@@ -74,6 +75,7 @@ Hotel
  ├── rating (derived from reviews)
  ├── status → HotelStatus
  ├── ownerId → User
+ ├── primaryImageId → Image (optional)
  ├── amenities → List<Amenity>
  └── List<RoomType>
        ├── category → RoomCategory
@@ -81,7 +83,7 @@ Hotel
        ├── capacity: int
        ├── totalRooms: int
        ├── status → RoomTypeStatus
-       ├── imageUrls: List<String>
+       ├── primaryImageId → Image (optional)
        └── List<RatePolicy>
              ├── pricePerNight: BigDecimal
              ├── currencyCode: String
@@ -111,9 +113,17 @@ Review
 Destination
  ├── cityId → City
  ├── name, description
- ├── imageUrls: List<String>
+ ├── primaryImageId → Image (optional)
  ├── searchCount, bookingCount
  ├── status → DestinationStatus
+ └── createdAt / updatedAt: LocalDateTime
+
+Image
+ ├── entityId → Hotel/RoomType/Destination/User
+ ├── entityType → ImageEntityType
+ ├── url: String
+ ├── confirmed: boolean
+ ├── status → ImageStatus
  └── createdAt / updatedAt: LocalDateTime
 
 RoomTypeAvailability (result record)
@@ -172,7 +182,7 @@ public record User(
     String email,
     String password,            // hashed — never stored as plaintext
     PhoneNumber phoneNumber,    // optional
-    String profileImageUrl,     // optional
+    UUID primaryImageId,        // optional — profile picture
     String preferredCurrency,   // ISO 4217, e.g. "USD", "BDT"
     UserRole role,
     UserStatus status,
@@ -186,7 +196,7 @@ public record User(
 - `password` — minimum complexity enforced, stored hashed
 - `preferredCurrency` — exactly 3 uppercase characters (ISO 4217)
 - `phoneNumber` — optional, can be null
-- `profileImageUrl` — optional, can be null
+- `primaryImageId` — optional, can be null
 - `role` — defaults to `GUEST` on registration
 - `status` — defaults to `ACTIVE` on registration
 
@@ -232,7 +242,8 @@ public record Hotel(
     PhoneNumber phoneNumber,
     List<Amenity> amenities,
     List<RoomType> roomTypes,
-    UUID ownerId                // references User with HOTEL_OWNER role
+    UUID primaryImageId,        // optional — cover image for search results
+    UUID ownerId                // references User with HOTEL_ADMIN role
 ) {}
 ```
 
@@ -241,7 +252,7 @@ public record Hotel(
 - `address` — must not be null
 - `phoneNumber` — must not be null
 - `status` — must not be null, defaults to `PENDING` on creation
-- `ownerId` — must reference an existing `User` with `HOTEL_OWNER` role
+- `ownerId` — must reference an existing `User` with `HOTEL_ADMIN` role
 - `rating` — defaults to `0.0` on creation
 
 ---
@@ -262,7 +273,7 @@ public record RoomType(
     int totalRooms,
     int capacity,
     RoomTypeStatus status,
-    List<String> imageUrls,
+    UUID primaryImageId,        // optional — cover image for room listings
     List<RatePolicy> ratePolicies
 ) {}
 ```
@@ -389,7 +400,7 @@ public record Destination(
     UUID cityId,
     String name,
     String description,
-    List<String> imageUrls,
+    UUID primaryImageId,        // optional — cover image for destination cards
     int searchCount,
     int bookingCount,
     DestinationStatus status,
@@ -410,6 +421,35 @@ popularityScore = searchCount + (bookingCount * 2)
 **Validation rules (service layer):**
 - `cityId` — must reference an existing `City`
 - `name` — must not be blank
+- `createdAt` — set on creation, never updated
+- `updatedAt` — updated on every state change
+
+---
+
+### `Image`
+
+Represents an uploaded image associated with a hotel, room type,
+destination, or user. Images are unconfirmed until `confirmImage()`
+is called after successful upload. Only `ACTIVE` confirmed images
+are returned in public queries.
+
+```java
+public record Image(
+    UUID id,
+    UUID entityId,              // ID of the associated entity
+    ImageEntityType entityType, // HOTEL, ROOM_TYPE, DESTINATION, USER
+    String url,                 // storage URL
+    boolean confirmed,          // false until confirmImage() called
+    ImageStatus status,
+    LocalDateTime createdAt,
+    LocalDateTime updatedAt
+) {}
+```
+
+**Validation rules (service layer):**
+- `entityId` — must reference an existing entity of `entityType`
+- `url` — must not be blank
+- `confirmed` — defaults to `false` on upload
 - `createdAt` — set on creation, never updated
 - `updatedAt` — updated on every state change
 
@@ -536,6 +576,26 @@ public enum SearchHistoryStatus {
 public enum DestinationStatus {
     ACTIVE,     // visible publicly in popular destinations
     INACTIVE    // hidden
+}
+```
+
+### `ImageStatus`
+
+```java
+public enum ImageStatus {
+    ACTIVE,     // visible publicly
+    INACTIVE    // hidden
+}
+```
+
+### `ImageEntityType`
+
+```java
+public enum ImageEntityType {
+    HOTEL,
+    ROOM_TYPE,
+    DESTINATION,
+    USER
 }
 ```
 
@@ -967,12 +1027,12 @@ public record BookingSummary(
 Input to `DestinationService.addDestination()`. System-managed fields
 excluded — `id`, `searchCount` (defaults to 0), `bookingCount` (defaults
 to 0), `status` (defaults to `ACTIVE`), `createdAt`, `updatedAt`.
+`primaryImageId` set later via `ImageService`.
 
 ```java
 public record AddDestinationRequest(
     String name,
-    String description,
-    List<String> imageUrls
+    String description
 ) {}
 ```
 
@@ -985,7 +1045,23 @@ at least one must be present.
 public record EditDestinationRequest(
     Optional<String> name,
     Optional<String> description,
-    Optional<List<String>> imageUrls
+    Optional<UUID> primaryImageId
+) {}
+```
+
+---
+
+### `ImageUploadRequest`
+
+Input to `ImageService.uploadImage()`.
+
+```java
+public record ImageUploadRequest(
+    UUID entityId,
+    ImageEntityType entityType,
+    byte[] data,
+    String fileName,
+    String contentType        // e.g. "image/jpeg", "image/png"
 ) {}
 ```
 
@@ -1097,3 +1173,5 @@ public record OccupancyRate(
 - `popularityScore` = `searchCount` + (`bookingCount` * 2)
 - Only `ACTIVE` destinations appear in `getPopularDestinations`
 - `OccupancyRate.rate` is always between 0.0 and 1.0 inclusive
+- Only `ACTIVE` confirmed images are returned in public queries
+- `primaryImageId` is optional — entities can exist without a primary image
