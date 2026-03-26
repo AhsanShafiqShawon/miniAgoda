@@ -1,4 +1,4 @@
-# ADR-009: StorageService Abstraction for File Storage
+# ADR-009: StorageGateway Abstraction for File Storage
 
 ## Status
 Accepted
@@ -13,12 +13,12 @@ Google Cloud Storage) in production.
 
 ## Decision
 
-Introduce a `StorageService` interface that abstracts the file storage
-backend. `ImageService` depends on `StorageService`, not on any specific
+Introduce a `StorageGateway` interface that abstracts the file storage
+backend. `ImageService` depends on `StorageGateway`, not on any specific
 storage implementation.
 
 ```java
-public interface StorageService {
+public interface StorageGateway {
     String store(byte[] data, String fileName, String contentType);
     void delete(String fileKey);
     String getUrl(String fileKey);
@@ -31,12 +31,12 @@ Two implementations:
 // Current phase — local filesystem
 @Service
 @Profile("local")
-public class LocalStorageService implements StorageService { ... }
+public class LocalStorageGateway implements StorageGateway { ... }
 
 // Future phase — AWS S3
 @Service
 @Profile("production")
-public class S3StorageService implements StorageService { ... }
+public class S3StorageGateway implements StorageGateway { ... }
 ```
 
 Spring profiles control which implementation is active. Switching from
@@ -58,8 +58,8 @@ profile changes.
 
 ## Migration Path
 
-Phase 1 (current): `LocalStorageService` — files stored on local filesystem
-Phase 2 (production): `S3StorageService` — files stored on AWS S3 with CDN
+Phase 1 (current): `LocalStorageGateway` — files stored on local filesystem
+Phase 2 (production): `S3StorageGateway` — files stored on AWS S3 with CDN
 
 ## Alternatives Considered
 

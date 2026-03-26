@@ -1,4 +1,4 @@
-# ADR-010: EmailService Abstraction for Email Sending
+# ADR-010: EmailGateway Abstraction for Email Sending
 
 ## Status
 Accepted
@@ -13,12 +13,12 @@ AWS SES, Mailgun) in production.
 
 ## Decision
 
-Introduce an `EmailService` interface that abstracts the email sending
-backend. `NotificationService` depends on `EmailService`, not on any
+Introduce an `EmailGateway` interface that abstracts the email sending
+backend. `NotificationService` depends on `EmailGateway`, not on any
 specific email implementation.
 
 ```java
-public interface EmailService {
+public interface EmailGateway {
     void send(String to, String subject, String body);
 }
 ```
@@ -29,12 +29,12 @@ Two implementations:
 // Current phase — JavaMailSender (SMTP)
 @Service
 @Profile("local")
-public class SmtpEmailService implements EmailService { ... }
+public class SmtpEmailGateway implements EmailGateway { ... }
 
 // Future phase — SendGrid or AWS SES
 @Service
 @Profile("production")
-public class SendGridEmailService implements EmailService { ... }
+public class SendGridEmailGateway implements EmailGateway { ... }
 ```
 
 Spring profiles control which implementation is active. Switching from
@@ -48,7 +48,7 @@ the active profile changes.
 - Switching to SendGrid or SES requires no changes to `NotificationService`
 - SMTP works for development and testing
 - Clean interface — easy to mock in tests
-- Consistent with [ADR-009](ADR-009-storage-service.md) (`StorageService` abstraction pattern)
+- Consistent with ADR-009 (`StorageService` abstraction pattern)
 
 **Negative:**
 - One additional abstraction layer
@@ -57,8 +57,8 @@ the active profile changes.
 
 ## Migration Path
 
-Phase 1 (current): `SmtpEmailService` — emails sent via SMTP/JavaMailSender
-Phase 2 (production): `SendGridEmailService` — emails sent via SendGrid API
+Phase 1 (current): `SmtpEmailGateway` — emails sent via SMTP/JavaMailSender
+Phase 2 (production): `SendGridEmailGateway` — emails sent via SendGrid API
   with delivery tracking, bounce handling, and email templates
 
 ## Alternatives Considered
