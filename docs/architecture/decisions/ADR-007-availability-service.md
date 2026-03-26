@@ -97,7 +97,7 @@ room type individually.
 - **In-memory `Map` in `AvailabilityService`**: Simpler short-term but
   not thread-safe at scale and requires migration to a database later.
   Rejected in favour of repository-backed approach.
-- **Query `BookingRepository` directly**: Already rejected in ADR-004 —
+- **Query `BookingRepository` directly**: Already rejected in [ADR-004](ADR-004-inventory-repository.md) —
   couples search to booking internals.
 
 ## Related Decisions
