@@ -878,6 +878,42 @@ public record EditUserRequest(
 
 ---
 
+### `AuthRequest`
+
+Input to `AuthService.authenticateUser()`.
+
+```java
+public record AuthRequest(
+    String email,
+    String password
+) {}
+```
+
+### `AuthResponse`
+
+Response from `AuthService.authenticateUser()`. Contains JWT token pair.
+
+```java
+public record AuthResponse(
+    String accessToken,
+    String refreshToken,
+    LocalDateTime expiresAt
+) {}
+```
+
+### `ChangePasswordRequest`
+
+Input to `AuthService.changePassword()`.
+
+```java
+public record ChangePasswordRequest(
+    String currentPassword,
+    String newPassword
+) {}
+```
+
+---
+
 ### `CreateBookingRequest`
 
 Input to `BookingService.createBooking()`.
