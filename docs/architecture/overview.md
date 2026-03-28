@@ -20,34 +20,34 @@ This means:
 ## System Layers
 
 ```
-┌─────────────────────────────────────────────────────────┐
-│                    REST Controllers                      │
-│           (Phase 2 — not yet implemented)               │
-├─────────────────────────────────────────────────────────┤
-│                    Domain Services                       │
-│                                                         │
-│  HotelSearchService    BookingService    ReviewService  │
-│  HotelService          RoomTypeService  UserService     │
-│  AuthService           ImageService     AdminService    │
-│  SearchHistoryService  DestinationService               │
-│  RecommendationService NotificationService              │
-│  HotelManagementService PromotionService                │
-│  AvailabilityService   PaymentService                   │
-├─────────────────────────────────────────────────────────┤
-│                    Repositories                          │
-│                                                         │
-│  HotelRepository       BookingRepository                │
-│  AvailabilityRepository UserRepository                  │
-│  ReviewRepository      NotificationRepository           │
-│  SearchHistoryRepository DestinationRepository          │
-│  PromotionRepository   PaymentRepository                │
-│  RefundRepository      ImageRepository                  │
-│  TokenRepository                                        │
-├─────────────────────────────────────────────────────────┤
-│               Infrastructure Gateways                    │
-│                                                         │
-│  StorageGateway    EmailGateway    PaymentGateway       │
-└─────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────┐
+│                    REST Controllers                             │
+│           (Phase 2 — not yet implemented)                       │
+├─────────────────────────────────────────────────────────────────┤
+│                    Domain Services                              │
+│                                                                 │
+│  HotelSearchService        BookingService        ReviewService  │
+│  HotelService              RoomTypeService       UserService    │
+│  AuthService               ImageService          AdminService   │
+│  SearchHistoryService      DestinationService                   │
+│  RecommendationService     NotificationService                  │
+│  HotelManagementService    PromotionService                     │
+│  AvailabilityService       PaymentService                       │
+├─────────────────────────────────────────────────────────────────┤
+│                    Repositories                                 │
+│                                                                 │
+│  HotelRepository           BookingRepository                    │
+│  AvailabilityRepository    UserRepository                       │
+│  ReviewRepository          NotificationRepository               │
+│  SearchHistoryRepository   DestinationRepository                │
+│  PromotionRepository       PaymentRepository                    │
+│  RefundRepository          ImageRepository                      │
+│  TokenRepository                                                │
+├─────────────────────────────────────────────────────────────────┤
+│               Infrastructure Gateways                           │
+│                                                                 │
+│  StorageGateway            EmailGateway          PaymentGateway │
+└─────────────────────────────────────────────────────────────────┘
 ```
 
 ---
