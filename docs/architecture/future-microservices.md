@@ -13,15 +13,15 @@ the primary migration task.
 
 ```
 ┌─────────────────┐  ┌─────────────────┐  ┌─────────────────┐
-│  Search Service  │  │ Booking Service  │  │  Hotel Service   │
-│                 │  │                 │  │                  │
-│ HotelSearch     │  │ Booking         │  │ Hotel            │
-│ Recommendation  │  │ Availability    │  │ RoomType         │
-│ SearchHistory   │  │ HotelMgmt       │  │ Destination      │
-└────────┬────────┘  └────────┬────────┘  └────────┬─────────┘
-         │                    │                     │
+│  Search Service │  │ Booking Service │  │  Hotel Service  │
+│                 │  │                 │  │                 │
+│ HotelSearch     │  │ Booking         │  │ Hotel           │
+│ Recommendation  │  │ Availability    │  │ RoomType        │
+│ SearchHistory   │  │ HotelMgmt       │  │ Destination     │
+└────────┬────────┘  └────────┬────────┘  └────────┬────────┘
+         │                    │                    │
 ┌────────▼────────┐  ┌────────▼────────┐  ┌────────▼─────────┐
-│  User Service   │  │ Payment Service  │  │  Media Service   │
+│  User Service   │  │ Payment Service │  │  Media Service   │
 │                 │  │                 │  │                  │
 │ User            │  │ Payment         │  │ Image            │
 │ Auth            │  │ Refund          │  │ StorageGateway   │
@@ -35,14 +35,14 @@ the primary migration task.
 └─────────────────┘  └─────────────────┘  └─────────────────┘
 
                     ┌───────────────────┐
-                    │  Promotion Service │
+                    │ Promotion Service │
                     │                   │
                     │ Promotion         │
                     │ ValidatePromotion │
                     └───────────────────┘
 
          ┌──────────────────────────────────────┐
-         │           Event Bus / Queue           │
+         │          Event Bus / Queue           │
          │                                      │
          │  booking.created   booking.cancelled │
          │  payment.completed review.submitted  │
