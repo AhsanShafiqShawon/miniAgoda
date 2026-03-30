@@ -16,7 +16,7 @@ works before writing a single line of code.
 |---|---|---|---|
 | Full results | Logged in (Shawon) | 2 hotels found, discount applied | [search-logged-in-full-results.md](search/search-logged-in-full-results.md) |
 | Insufficient results | Anonymous | Below threshold → recommendations triggered | [search-anonymous-insufficient-results.md](search/search-anonymous-insufficient-results.md) |
-| No results | Logged in (Shawon) | Zero results → relaxed dates fail → relaxed guests | [search-logged-in-no-results.md](search/search-logged-in-no-results.md) |
+| No results | Logged in (Shawon) | Zero results → relaxed dates → relaxed guests | [search-logged-in-no-results.md](search/search-logged-in-no-results.md) |
 
 ## Registration Flows
 
@@ -26,11 +26,19 @@ works before writing a single line of code.
 | Duplicate email | 409 Conflict — no user created, no email sent | [registration-duplicate-email.md](registration/registration-duplicate-email.md) |
 | Email verification | Token validated, account activated ACTIVE | [registration-email-verification.md](registration/registration-email-verification.md) |
 
+## Login Flows
+
+| Scenario | Outcome | File |
+|---|---|---|
+| Successful login | JWT pair issued, immediately used for search | [login-success.md](login/login-success.md) |
+| Wrong password | 401 Unauthorized — BCrypt runs but fails | [login-wrong-password.md](login/login-wrong-password.md) |
+| Unverified account | 403 Forbidden — status=INACTIVE | [login-unverified-account.md](login/login-unverified-account.md) |
+| Banned account | 403 Forbidden — status=BANNED | [login-banned-account.md](login/login-banned-account.md) |
+
 ## Coming Soon
 
 | Flow | Description |
 |---|---|
-| Login | JWT issued, SecurityContext populated |
 | Booking | Room selected, availability locked, payment initiated |
 | Cancel Booking | Booking cancelled, inventory released, refund triggered |
 | Write Review | Review submitted, hotel rating recalculated |
