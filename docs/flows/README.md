@@ -35,11 +35,18 @@ works before writing a single line of code.
 | Unverified account | 403 Forbidden — status=INACTIVE | [login-unverified-account.md](login/login-unverified-account.md) |
 | Banned account | 403 Forbidden — status=BANNED | [login-banned-account.md](login/login-banned-account.md) |
 
+## Booking Flows
+
+| Scenario | Outcome | File |
+|---|---|---|
+| Successful booking | Room blocked, inventory updated, confirmation sent | [booking-success.md](booking/booking-success.md) |
+| Room unavailable (TOCTOU) | 409 Conflict — room taken between search and booking | [booking-room-unavailable.md](booking/booking-room-unavailable.md) |
+| Booking with promotion | Promo validated, usage incremented, reduced price | [booking-with-promotion.md](booking/booking-with-promotion.md) |
+
 ## Coming Soon
 
 | Flow | Description |
 |---|---|
-| Booking | Room selected, availability locked, payment initiated |
 | Cancel Booking | Booking cancelled, inventory released, refund triggered |
 | Write Review | Review submitted, hotel rating recalculated |
 | Add Hotel | Hotel owner adds property, inventory initialized |
