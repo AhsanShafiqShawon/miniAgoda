@@ -43,10 +43,17 @@ works before writing a single line of code.
 | Room unavailable (TOCTOU) | 409 Conflict — room taken between search and booking | [booking-room-unavailable.md](booking/booking-room-unavailable.md) |
 | Booking with promotion | Promo validated, usage incremented, reduced price | [booking-with-promotion.md](booking/booking-with-promotion.md) |
 
+## Cancel Booking Flows
+
+| Scenario | Outcome | File |
+|---|---|---|
+| Successful cancellation | CANCELLED, inventory released, Stripe refund, email sent | [cancel-booking-success.md](cancel-booking/cancel-booking-success.md) |
+| Already cancelled | 409 Conflict — double cancellation rejected | [cancel-booking-already-cancelled.md](cancel-booking/cancel-booking-already-cancelled.md) |
+| Completed stay | 409 Conflict — cannot cancel finished stay | [cancel-booking-completed.md](cancel-booking/cancel-booking-completed.md) |
+
 ## Coming Soon
 
 | Flow | Description |
 |---|---|
-| Cancel Booking | Booking cancelled, inventory released, refund triggered |
 | Write Review | Review submitted, hotel rating recalculated |
 | Add Hotel | Hotel owner adds property, inventory initialized |
