@@ -59,8 +59,10 @@ works before writing a single line of code.
 | Booking not completed | 409 Conflict — cannot review future or active booking | [review-booking-not-completed.md](review/review-booking-not-completed.md) |
 | Duplicate review | 409 Conflict — one review per booking enforced | [review-duplicate.md](review/review-duplicate.md) |
 
-## Coming Soon
+## Add Hotel Flows
 
-| Flow | Description |
-|---|---|
-| Add Hotel | Hotel owner adds property, inventory initialized |
+| Scenario | Outcome | File |
+|---|---|---|
+| Successful hotel addition | Hotel PENDING, room type added, inventory initialized, image uploaded | [add-hotel-success.md](add-hotel/add-hotel-success.md) |
+| Unauthorized role | 403 Forbidden — GUEST cannot add hotels | [add-hotel-unauthorized.md](add-hotel/add-hotel-unauthorized.md) |
+| Invalid city | 404 Not Found — cityId does not exist | [add-hotel-invalid-city.md](add-hotel/add-hotel-invalid-city.md) |
