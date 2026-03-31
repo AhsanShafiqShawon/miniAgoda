@@ -51,9 +51,16 @@ works before writing a single line of code.
 | Already cancelled | 409 Conflict — double cancellation rejected | [cancel-booking-already-cancelled.md](cancel-booking/cancel-booking-already-cancelled.md) |
 | Completed stay | 409 Conflict — cannot cancel finished stay | [cancel-booking-completed.md](cancel-booking/cancel-booking-completed.md) |
 
+## Review Flows
+
+| Scenario | Outcome | File |
+|---|---|---|
+| Successful review | Review saved, hotel rating recalculated, email sent | [review-success.md](review/review-success.md) |
+| Booking not completed | 409 Conflict — cannot review future or active booking | [review-booking-not-completed.md](review/review-booking-not-completed.md) |
+| Duplicate review | 409 Conflict — one review per booking enforced | [review-duplicate.md](review/review-duplicate.md) |
+
 ## Coming Soon
 
 | Flow | Description |
 |---|---|
-| Write Review | Review submitted, hotel rating recalculated |
 | Add Hotel | Hotel owner adds property, inventory initialized |
