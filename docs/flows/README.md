@@ -66,3 +66,15 @@ works before writing a single line of code.
 | Successful hotel addition | Hotel PENDING, room type added, inventory initialized, image uploaded | [add-hotel-success.md](add-hotel/add-hotel-success.md) |
 | Unauthorized role | 403 Forbidden — GUEST cannot add hotels | [add-hotel-unauthorized.md](add-hotel/add-hotel-unauthorized.md) |
 | Invalid city | 404 Not Found — cityId does not exist | [add-hotel-invalid-city.md](add-hotel/add-hotel-invalid-city.md) |
+
+## Payment Flows
+
+| Scenario | Outcome | File |
+|---|---|---|
+| Successful payment | 3DS passed, card charged, booking CONFIRMED, availability blocked, notifications sent | [payment-happy-path.md](payment/payment-happy-path.md) |
+| Booking expired | 409 Conflict — hold timed out before payment, Stripe never called | [payment-scenario-1-booking-expired.md](payment/payment-scenario-1-booking-expired.md) |
+| Duplicate payment attempt | Idempotency replay — API Gateway + DB constraint, Stripe called exactly once | [payment-scenario-2-idempotency.md](payment/payment-scenario-2-idempotency.md) |
+| Room no longer available | 409 Conflict — race condition, final re-check blocks charge, alternatives offered | [payment-scenario-3-race-condition.md](payment/payment-scenario-3-race-condition.md) |
+| Stripe webhook delayed | Webhook stalls — browser poll triggers direct Stripe API query, delayed webhook arrives as no-op | [payment-scenario-4-webhook-delayed.md](payment/payment-scenario-4-webhook-delayed.md) |
+| Promo code invalid or expired | 422 Unprocessable — validate endpoint rejects before payment, PaymentService re-validates server-side | [payment-scenario-5-promo-invalid.md](payment/payment-scenario-5-promo-invalid.md) |
+| Payment gateway timeout | 202 Accepted — outcome ambiguous, GATEWAY_TIMEOUT status, reconciliation scheduler resolves within 2 minutes | [payment-scenario-6-gateway-timeout.md](payment/payment-scenario-6-gateway-timeout.md) |
