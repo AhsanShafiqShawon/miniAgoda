@@ -1,4 +1,4 @@
-package com.shawon.miniAgoda;
+package com.miniagoda;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

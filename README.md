@@ -79,6 +79,7 @@ miniAgoda/
 │   ├── architecture/        # System design, domain model, ADRs
 │   ├── api/                 # Service contracts
 │   ├── setup/               # Getting started, configuration
+│   ├── flows/
 │   └── roadmap.md
 └── README.md
 ```
