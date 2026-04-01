@@ -1,4 +1,4 @@
-# Payment Scenario 3: Room No Longer Available — Race Condition
+# Payment Scenario 4: Room No Longer Available — Race Condition
 
 **User:** Shawon (authenticated)
 **Booking:** Grand Hyatt Bangkok — Deluxe King, Dec 20–25

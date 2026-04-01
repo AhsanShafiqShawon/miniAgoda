@@ -1,4 +1,4 @@
-# Payment Scenario 4: Stripe Webhook Delayed / Out-of-Order
+# Payment Scenario 7: Stripe Webhook Delayed / Out-of-Order
 
 **User:** Shawon (authenticated)
 **Booking:** Grand Hyatt Bangkok — Deluxe King, Dec 20–25

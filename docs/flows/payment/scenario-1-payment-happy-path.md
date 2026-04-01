@@ -1,4 +1,4 @@
-# Payment Happy Path: 3DS Passed, Card Charged, Booking Confirmed
+# Payment Scenario 1: Payment Happy Path — 3DS Passed, Card Charged, Booking Confirmed
 
 **User:** Shawon (authenticated)
 **Booking:** Grand Hyatt Bangkok — Deluxe King, Dec 20–25, 2 guests, 1 room

@@ -1,4 +1,4 @@
-# Payment Scenario 1: Booking Expired — Hold Timeout Before Payment
+# Payment Scenario 2: Booking Expired — Hold Timeout Before Payment
 
 **User:** Shawon (authenticated)
 **Booking:** Grand Hyatt Bangkok — Deluxe King, Dec 20–25, 2 guests, 1 room

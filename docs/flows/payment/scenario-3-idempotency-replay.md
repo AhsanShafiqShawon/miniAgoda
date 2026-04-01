@@ -1,4 +1,4 @@
-# Payment Scenario 2: Duplicate Payment Attempt — Idempotency Replay
+# Payment Scenario 3: Duplicate Payment Attempt — Idempotency Replay
 
 **User:** Shawon (authenticated)
 **Booking:** Grand Hyatt Bangkok — Deluxe King, Dec 20–25, 2 guests, 1 room

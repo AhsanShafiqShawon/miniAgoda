@@ -55,9 +55,9 @@ works before writing a single line of code.
 
 | Scenario | Outcome | File |
 |---|---|---|
-| Successful review | Review saved, hotel rating recalculated, email sent | [review-success.md](review/scenario-1-review-success.md) |
-| Booking not completed | 409 Conflict — cannot review future or active booking | [review-booking-not-completed.md](review/scenario-2-review-booking-not-completed.md) |
-| Duplicate review | 409 Conflict — one review per booking enforced | [review-duplicate.md](review/scenario-3-review-duplicate.md) |
+| Successful review | Review saved, hotel rating recalculated, email sent | [review-success.md](review/scenario-1-successful-review.md) |
+| Booking not completed | 409 Conflict — cannot review future or active booking | [review-booking-not-completed.md](review/scenario-2-booking-not-completed.md) |
+| Duplicate review | 409 Conflict — one review per booking enforced | [review-duplicate.md](review/scenario-3-duplicate-review.md) |
 
 ## Add Hotel Flows
 
@@ -71,10 +71,10 @@ works before writing a single line of code.
 
 | Scenario | Outcome | File |
 |---|---|---|
-| Successful payment | 3DS passed, card charged, booking CONFIRMED, availability blocked, notifications sent | [payment-happy-path.md](payment/scenario-1-booking-expired.md) |
-| Booking expired | 409 Conflict — hold timed out before payment, Stripe never called | [payment-scenario-1-booking-expired.md](payment/scenario-2-idempotency-replay.md) |
-| Duplicate payment attempt | Idempotency replay — API Gateway + DB constraint, Stripe called exactly once | [payment-scenario-2-idempotency.md](payment/scenario-3-race-condition.md) |
-| Room no longer available | 409 Conflict — race condition, final re-check blocks charge, alternatives offered | [payment-scenario-3-race-condition.md](payment/payment-scenario-3-race-condition.md) |
-| Stripe webhook delayed | Webhook stalls — browser poll triggers direct Stripe API query, delayed webhook arrives as no-op | [payment-scenario-4-webhook-delayed.md](payment/payment-scenario-4-webhook-delayed.md) |
-| Promo code invalid or expired | 422 Unprocessable — validate endpoint rejects before payment, PaymentService re-validates server-side | [payment-scenario-5-promo-invalid.md](payment/payment-scenario-5-promo-invalid.md) |
-| Payment gateway timeout | 202 Accepted — outcome ambiguous, GATEWAY_TIMEOUT status, reconciliation scheduler resolves within 2 minutes | [payment-scenario-6-gateway-timeout.md](payment/payment-scenario-6-gateway-timeout.md) |
+| Successful payment | 3DS passed, card charged, booking CONFIRMED, availability blocked, notifications sent | [payment-happy-path.md](payment/scenario-1-payment-happy-path.md) |
+| Booking expired | 409 Conflict — hold timed out before payment, Stripe never called | [payment-scenario-1-booking-expired.md](payment/scenario-2-booking-expired.md) |
+| Duplicate payment attempt | Idempotency replay — API Gateway + DB constraint, Stripe called exactly once | [payment-scenario-3-idempotency.md](payment/scenario-3-idempotency-replay.md) |
+| Room no longer available | 409 Conflict — race condition, final re-check blocks charge, alternatives offered | [payment-scenario-4-race-condition.md](payment/scenario-4-race-condition.md) |
+| Stripe webhook delayed | Webhook stalls — browser poll triggers direct Stripe API query, delayed webhook arrives as no-op | [payment-scenario-5-promo-invalid.md](payment/scenario-5-promo-invalid-or-expired.md) |
+| Promo code invalid or expired | 422 Unprocessable — validate endpoint rejects before payment, PaymentService re-validates server-side | [payment-scenario-6-gateway-timeout.md](payment/scenario-6-gateway-timeout.md) |
+| Payment gateway timeout | 202 Accepted — outcome ambiguous, GATEWAY_TIMEOUT status, reconciliation scheduler resolves within 2 minutes | [payment-scenario-7-webhook-delayed.md](payment/scenario-7-webhook-delayed.md) |
