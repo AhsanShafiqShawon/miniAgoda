@@ -1,4 +1,4 @@
-# miniAgoda 🏨
+# miniAgoda
 
 A Java/Spring Boot hotel booking system modeled after Agoda, built as a
 structured learning project with an explicit goal of evolving into a
@@ -44,7 +44,7 @@ See [Architecture Overview](docs/architecture/overview.md) for the full picture.
 
 | Tool | Version |
 |---|---|
-| Java | 17+ |
+| Java | 21+ |
 | Maven | 3.8+ |
 | Spring Boot | 3.x |
 
