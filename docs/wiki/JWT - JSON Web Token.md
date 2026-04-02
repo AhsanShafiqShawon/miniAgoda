@@ -38,7 +38,7 @@ database:
 session_id: abc123  →  user: shawon, role: GUEST, expires: 1hr
 ```
 
-It sends `abc123` back to the browser as a [cookie](wiki/Cookie.md). The browser attaches
+It sends `abc123` back to the browser as a [cookie](Cookie.md). The browser attaches
 that cookie to every request automatically. The server looks up `abc123`,
 finds the user, and proceeds.
 
