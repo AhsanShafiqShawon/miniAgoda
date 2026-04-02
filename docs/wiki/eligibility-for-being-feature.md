@@ -1,4 +1,4 @@
-# Domain Services vs Feature Modules — Personal Wiki
+# Domain Services vs Feature Modules
 
 > A service is not the same as a feature module.
 > This is the guide for deciding when a domain concept becomes its own module and when it lives inside another.

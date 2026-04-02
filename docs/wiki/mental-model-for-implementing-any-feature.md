@@ -1,4 +1,4 @@
-# Feature Implementation Checklist — Personal Wiki
+# Feature Implementation Checklist
 
 > A bottom-up guide for implementing every new feature in a Spring Boot + PostgreSQL project.
 > Always build in this order. The controller is the last thing you write, not the first.
