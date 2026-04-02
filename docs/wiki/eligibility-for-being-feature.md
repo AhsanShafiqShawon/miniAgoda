@@ -1,4 +1,4 @@
-# Domain Services vs Feature Modules
+# Domain Services vs Feature Modules — Personal Wiki
 
 > A service is not the same as a feature module.
 > This is the guide for deciding when a domain concept becomes its own module and when it lives inside another.
@@ -59,7 +59,7 @@ ImageService              hotel/                No own endpoints — storage uti
 
 ---
 
-## 17 Domain Services → 8 Feature Modules
+## 17 Domain Services → 10 Feature Modules
 
 ```
 src/main/java/com/miniagoda/
@@ -168,7 +168,7 @@ Called by many modules              →  common/ utility
 
 ---
 
-## All 8 Modules at a Glance
+## All 10 Modules at a Glance
 
 | Module | Domain services inside | Has controller? |
 |--------|------------------------|-----------------|
