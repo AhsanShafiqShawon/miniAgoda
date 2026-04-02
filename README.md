@@ -69,11 +69,38 @@ mvn test
 miniAgoda/
 ├── src/
 │   ├── main/java/com/miniagoda/
-│   │   ├── domain/          # Entities, value objects, enums
-│   │   ├── service/         # Domain services
-│   │   ├── repository/      # Data access layer
-│   │   ├── gateway/         # Infrastructure abstractions
-│   │   └── controller/      # REST controllers (Phase 2)
+│   │   ├── commnon/
+│   │   │     ├── config/
+│   │   │     │     ├── SomeConfig.java
+│   │   │     │     ├── SomeAnotherConfig.java
+│   │   │     │
+│   │   │     ├── exception/
+│   │   │     │     ├── SomeException.java
+│   │   │     │     ├── SomeAnotherException.java
+│   │   │     │
+│   │   │     ├── response/
+│   │   │     │     ├── SomeResponse.java
+│   │   │     │     ├── SomeAnotherResponse.java
+│   │   │     │
+│   │   │     ├── util/
+│   │   │     │     ├── SomeUtil.java
+│   │   │     │     ├── SomeAnotherUtil.java
+│   │   │
+│   │   ├── feature/
+│   │   │     ├── FeatureController.java
+│   │   │     ├── FeatureService.java
+│   │   │     ├── FeatureRepository.java
+│   │   │     ├── dto/
+│   │   │     │     ├── FeatureRequest.java       ← records (immutable, no boilerplate)
+│   │   │     │     ├── FeatureResponse.java      ← records
+│   │   │     ├── entity/
+│   │   │     │     ├── Feature.java              ← @Entity class (never a record)
+│   │   │     │     ├── FeatureStatus.java        ← enum (lives here, not in entity/)
+│   │   │     ├── exception/
+│   │   │     │     ├── FeatureNotFoundException.java
+│   │   │     ├── mapper/
+│   │   │     │     ├── FeatureMapper.java
+│   │
 │   └── test/
 ├── docs/
 │   ├── architecture/        # System design, domain model, ADRs
