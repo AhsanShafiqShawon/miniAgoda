@@ -183,7 +183,7 @@ written by hand for basic operations.
 - No business logic
 - Never touches the database
 
-See the [DTO wiki page](dto.md) for full detail.
+See the [DTO wiki page](dto-data-transfer-object.md) for full detail.
 
 ---
 
@@ -195,7 +195,7 @@ See the [DTO wiki page](dto.md) for full detail.
 - No business logic
 - Never crosses the service boundary outward to the controller
 
-See the [Entity wiki page](entity.md) for full detail.
+See the [Entity wiki page](entities.md) for full detail.
 
 ---
 
@@ -301,33 +301,33 @@ cross-cutting infrastructure that all features share.
 ```
 src/main/java/com/miniagoda/
 │
-├── common/                        ← shared infrastructure, no business logic
-│   ├── config/                    ← wires the application together
-│   │   ├── SecurityConfig.java    ← which endpoints need auth
-│   │   ├── JwtConfig.java         ← token settings
-│   │   └── AppConfig.java         ← BCrypt, ModelMapper, CORS
+├── common/                                 ← shared infrastructure, no business logic
+│   ├── config/                             ← wires the application together
+│   │   ├── SecurityConfig.java             ← which endpoints need auth
+│   │   ├── JwtConfig.java                  ← token settings
+│   │   └── AppConfig.java                  ← BCrypt, ModelMapper, CORS
 │   ├── exception/
-│   │   └── GlobalExceptionHandler.java  ← converts exceptions → ErrorResponse
+│   │   └── GlobalExceptionHandler.java     ← converts exceptions → ErrorResponse
 │   ├── response/
-│   │   ├── ApiResponse.java       ← wraps all success responses
-│   │   └── ErrorResponse.java     ← wraps all error responses
+│   │   ├── ApiResponse.java                ← wraps all success responses
+│   │   └── ErrorResponse.java              ← wraps all error responses
 │   └── util/
-│       └── JwtUtil.java           ← stateless JWT helpers
+│       └── JwtUtil.java                    ← stateless JWT helpers
 │
-├── auth/                          ← one feature, all four layers
-│   ├── AuthController.java        ← layer 1: HTTP
-│   ├── AuthService.java           ← layer 2: business logic
-│   ├── dto/                       ← boundary objects
+├── auth/                                   ← one feature, all four layers
+│   ├── AuthController.java                 ← layer 1: HTTP
+│   ├── AuthService.java                    ← layer 2: business logic
+│   ├── dto/                                ← boundary objects
 │   │   ├── LoginRequest.java
 │   │   ├── RegisterRequest.java
 │   │   └── TokenResponse.java
 │   └── entity/
-│       └── RefreshToken.java      ← layer 4: database row
+│       └── RefreshToken.java               ← layer 4: database row
 │
 ├── user/
 │   ├── UserController.java
 │   ├── UserService.java
-│   ├── UserRepository.java        ← layer 3: database access
+│   ├── UserRepository.java                 ← layer 3: database access
 │   ├── dto/
 │   └── entity/
 │       └── User.java
@@ -365,12 +365,12 @@ src/main/java/com/miniagoda/
 
 Each concept above has its own dedicated page:
 
-- [DTO](dto.md) — what it is, inward and outward, the boundary rules in detail
-- [Entity](entity.md) — what it is, annotations, inward/outward relationship with DTOs
-- [config/ package](config-package.md) — SecurityConfig, JwtConfig, AppConfig
-- [response/ package](common-response-package.md) — ApiResponse, ErrorResponse, the envelope pattern
-- [util/ package](common-util-package.md) — JwtUtil, the three conditions for util
-- [JWT](jwt.md) — what a JWT is, access tokens, refresh tokens, the two-token flow
+- [DTO](dto-data-transfer-object.md) — what it is, inward and outward, the boundary rules in detail
+- [Entity](entities.md) — what it is, annotations, inward/outward relationship with DTOs
+- [config/ package](why-config-folder-exists.md) — SecurityConfig, JwtConfig, AppConfig
+- [response/ package](why-response-folder-exists.md) — ApiResponse, ErrorResponse, the envelope pattern
+- [util/ package](why-util-folder-exists.md) — JwtUtil, the three conditions for util
+- [JWT](jwt-json-web-token.md) — what a JWT is, access tokens, refresh tokens, the two-token flow
 - [Cookies](cookies.md) — what cookies are, HttpOnly, Secure, SameSite, XSS, CSRF
 
 ---
