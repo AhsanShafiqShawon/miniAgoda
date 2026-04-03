@@ -101,7 +101,17 @@ miniAgoda/
 │   │   │     ├── mapper/
 │   │   │     │     ├── FeatureMapper.java
 │   │
-│   └── test/
+│   ├── test/java/com/miniagoda/
+│   │   ├── feature1/
+│   │   ├── feature2/
+│   │   └── ...
+│   │
+│   └── main/resources/
+│       ├── application.yml
+│       └── db/migration/
+│           ├── V1__some_migration.sql
+│           ├── V2__some_another_migration.sql
+│           └── ...
 ├── docs/
 │   ├── architecture/        # System design, domain model, ADRs
 │   ├── api/                 # Service contracts
@@ -109,6 +119,7 @@ miniAgoda/
 │   ├── flows/
 │   ├── wiki/
 │   ├── http.md
+│   ├── implementation-progress.md
 │   └── roadmap.md
 └── README.md
 ```
