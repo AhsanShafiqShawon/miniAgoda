@@ -69,7 +69,7 @@ mvn test
 miniAgoda/
 ├── src/
 │   ├── main/java/com/miniagoda/
-│   │   ├── commnon/
+│   │   ├── common/
 │   │   │   ├── config/
 │   │   │   │   ├── SomeConfig.java
 │   │   │   │   └── SomeAnotherConfig.java
