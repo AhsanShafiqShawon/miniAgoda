@@ -70,36 +70,32 @@ miniAgoda/
 ├── src/
 │   ├── main/java/com/miniagoda/
 │   │   ├── commnon/
-│   │   │     ├── config/
-│   │   │     │     ├── SomeConfig.java
-│   │   │     │     ├── SomeAnotherConfig.java
-│   │   │     │
-│   │   │     ├── exception/
-│   │   │     │     ├── SomeException.java
-│   │   │     │     ├── SomeAnotherException.java
-│   │   │     │
-│   │   │     ├── response/
-│   │   │     │     ├── SomeResponse.java
-│   │   │     │     ├── SomeAnotherResponse.java
-│   │   │     │
-│   │   │     ├── util/
-│   │   │     │     ├── SomeUtil.java
-│   │   │     │     ├── SomeAnotherUtil.java
-│   │   │
-│   │   ├── feature/
-│   │   │     ├── FeatureController.java
-│   │   │     ├── FeatureService.java
-│   │   │     ├── FeatureRepository.java
-│   │   │     ├── dto/
-│   │   │     │     ├── FeatureRequest.java       ← records (immutable, no boilerplate)
-│   │   │     │     ├── FeatureResponse.java      ← records
-│   │   │     ├── entity/
-│   │   │     │     ├── Feature.java              ← @Entity class (never a record)
-│   │   │     │     ├── FeatureStatus.java        ← enum (lives here, not in entity/)
-│   │   │     ├── exception/
-│   │   │     │     ├── FeatureNotFoundException.java
-│   │   │     ├── mapper/
-│   │   │     │     ├── FeatureMapper.java
+│   │   │   ├── config/
+│   │   │   │   ├── SomeConfig.java
+│   │   │   │   └── SomeAnotherConfig.java
+│   │   │   ├── exception/
+│   │   │   │   ├── SomeException.java
+│   │   │   │   └── SomeAnotherException.java
+│   │   │   ├── response/
+│   │   │   │   ├── SomeResponse.java
+│   │   │   │   └── SomeAnotherResponse.java
+│   │   │   └── util/
+│   │   │       ├── SomeUtil.java
+│   │   │       └── SomeAnotherUtil.java
+│   │   └── feature/
+│   │       ├── FeatureController.java
+│   │       ├── FeatureService.java
+│   │       ├── FeatureRepository.java
+│   │       ├── dto/
+│   │       │   ├── FeatureRequest.java       ← records (immutable, no boilerplate)
+│   │       │   └── FeatureResponse.java      ← records
+│   │       ├── entity/
+│   │       │   ├── Feature.java              ← @Entity class (never a record)
+│   │       │   └── FeatureStatus.java        ← enum
+│   │       ├── exception/
+│   │       │   └── FeatureNotFoundException.java
+│   │       └── mapper/
+│   │           └── FeatureMapper.java
 │   │
 │   ├── test/java/com/miniagoda/
 │   │   ├── feature1/
@@ -116,8 +112,8 @@ miniAgoda/
 │   ├── architecture/        # System design, domain model, ADRs
 │   ├── api/                 # Service contracts
 │   ├── setup/               # Getting started, configuration
-│   ├── flows/
-│   ├── wiki/
+│   ├── flows/               # How different types of request flows through the system
+│   ├── wiki/                # Knowledge base
 │   ├── http.md
 │   ├── implementation-progress.md
 │   └── roadmap.md
