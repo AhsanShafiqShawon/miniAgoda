@@ -39,12 +39,15 @@ miniAgoda/
 │   │   │   ├── [ ] UserRepository.java
 │   │   │   ├── [ ] UserMapper.java
 │   │   │   ├── dto/
-│   │   │   │   ├── [ ] UserProfileResponse.java   ← record
-│   │   │   │   └── [ ] UpdateProfileRequest.java  ← record
+│   │   │   │   ├── [ ] UserSummary.java            ← record
+│   │   │   │   ├── [ ] EditUserRequest.java        ← record
+│   │   │   │   └── [ ] ChangePasswordRequest.java  ← record
 │   │   │   ├── entity/
-│   │   │   │   ├── [ ] User.java                  ← @Entity class
+│   │   │   │   ├── [ ] User.java                   ← @Entity class
 │   │   │   │   ├── [ ] UserRole.java               ← enum: GUEST, HOST, ADMIN
 │   │   │   │   └── [ ] UserStatus.java             ← enum: ACTIVE, SUSPENDED, UNVERIFIED
+│   │   │   ├── value/
+│   │   │   │   └── [ ] PhoneNumber.java            ← value object
 │   │   │   └── exception/
 │   │   │       └── [ ] UserNotFoundException.java
 │   │   │
@@ -53,12 +56,11 @@ miniAgoda/
 │   │   │   ├── [ ] AuthService.java
 │   │   │   ├── [ ] JwtAuthFilter.java
 │   │   │   ├── dto/
-│   │   │   │   ├── [ ] LoginRequest.java          ← record
-│   │   │   │   ├── [ ] RegisterRequest.java       ← record
-│   │   │   │   ├── [ ] TokenResponse.java         ← record
-│   │   │   │   └── [ ] RefreshTokenRequest.java   ← record
+│   │   │   │   ├── [ ] AuthRequest.java            ← record
+│   │   │   │   ├── [ ] AuthResponse.java           ← record
+│   │   │   │   └── [ ] RegisterRequest.java        ← record
 │   │   │   ├── entity/
-│   │   │   │   └── [ ] RefreshToken.java          ← @Entity class
+│   │   │   │   └── [ ] RefreshToken.java           ← @Entity class
 │   │   │   └── exception/
 │   │   │       ├── [ ] InvalidTokenException.java
 │   │   │       └── [ ] TokenExpiredException.java
@@ -68,25 +70,37 @@ miniAgoda/
 │   │   │   ╚══════════════════════════════════╝
 │   │   │
 │   │   ├── destination/                       # Build before hotel. Hotels reference cities.
+│   │   │   ├── [ ] DestinationController.java
 │   │   │   ├── [ ] DestinationService.java
 │   │   │   ├── [ ] DestinationRepository.java
 │   │   │   ├── [ ] DestinationMapper.java
 │   │   │   ├── dto/
-│   │   │   │   └── [ ] DestinationResponse.java   ← record
-│   │   │   └── entity/
-│   │   │       └── [ ] City.java                  ← @Entity class
+│   │   │   │   ├── [ ] AddDestinationRequest.java  ← record
+│   │   │   │   └── [ ] EditDestinationRequest.java ← record
+│   │   │   ├── entity/
+│   │   │   │   ├── [ ] Destination.java            ← @Entity class
+│   │   │   │   ├── [ ] Country.java                ← @Entity class
+│   │   │   │   ├── [ ] City.java                   ← @Entity class
+│   │   │   │   └── [ ] DestinationStatus.java      ← enum
+│   │   │   └── exception/
+│   │   │       └── [ ] DestinationNotFoundException.java
 │   │   │
 │   │   ├── image/                             # Build before hotel. Hotels reference images.
 │   │   │   ├── [ ] ImageController.java
 │   │   │   ├── [ ] ImageService.java
 │   │   │   ├── [ ] ImageRepository.java
 │   │   │   ├── dto/
-│   │   │   │   └── [ ] ImageUploadResponse.java   ← record
-│   │   │   └── entity/
-│   │   │       └── [ ] HotelImage.java            ← @Entity class
+│   │   │   │   └── [ ] ImageUploadRequest.java     ← record
+│   │   │   ├── entity/
+│   │   │   │   ├── [ ] Image.java                  ← @Entity class
+│   │   │   │   ├── [ ] ImageStatus.java            ← enum
+│   │   │   │   ├── [ ] ImageEntityType.java        ← enum
+│   │   │   │   └── [ ] ContentType.java            ← enum
+│   │   │   └── exception/
+│   │   │       └── [ ] ImageNotFoundException.java
 │   │   │
 │   │   ├── hotel/                             # Core domain. Build after destination + image.
-│   │   │   ├── [ ] HotelController.java           # guest-facing reads
+│   │   │   ├── [ ] HotelController.java            # guest-facing reads
 │   │   │   ├── [ ] HotelManagementController.java  # host-facing writes
 │   │   │   ├── [ ] HotelService.java
 │   │   │   ├── [ ] HotelManagementService.java
@@ -96,16 +110,26 @@ miniAgoda/
 │   │   │   ├── [ ] HotelMapper.java
 │   │   │   ├── [ ] RoomTypeMapper.java
 │   │   │   ├── dto/
-│   │   │   │   ├── [ ] HotelSummaryResponse.java  ← record
-│   │   │   │   ├── [ ] HotelDetailResponse.java   ← record
-│   │   │   │   ├── [ ] HotelCreateRequest.java    ← record
-│   │   │   │   └── [ ] RoomTypeResponse.java      ← record
+│   │   │   │   ├── [ ] HotelSummary.java           ← record
+│   │   │   │   ├── [ ] AddHotelRequest.java        ← record
+│   │   │   │   ├── [ ] EditHotelRequest.java       ← record
+│   │   │   │   ├── [ ] AddRoomTypeRequest.java     ← record
+│   │   │   │   ├── [ ] EditRoomTypeRequest.java    ← record
+│   │   │   │   ├── [ ] AddRatePolicyRequest.java   ← record
+│   │   │   │   └── [ ] EditRatePolicyRequest.java  ← record
 │   │   │   ├── entity/
-│   │   │   │   ├── [ ] Hotel.java                 ← @Entity class
-│   │   │   │   ├── [ ] HotelStatus.java           ← enum
-│   │   │   │   ├── [ ] RoomType.java              ← @Entity class
-│   │   │   │   ├── [ ] RatePolicy.java            ← @Entity class
-│   │   │   │   └── [ ] DiscountPolicy.java        ← @Entity class
+│   │   │   │   ├── [ ] Hotel.java                  ← @Entity class
+│   │   │   │   ├── [ ] HotelStatus.java            ← enum
+│   │   │   │   ├── [ ] RoomType.java               ← @Entity class
+│   │   │   │   ├── [ ] RoomTypeStatus.java         ← enum
+│   │   │   │   ├── [ ] RoomCategory.java           ← enum
+│   │   │   │   ├── [ ] BedType.java                ← enum
+│   │   │   │   └── [ ] Amenity.java                ← enum
+│   │   │   ├── value/
+│   │   │   │   ├── [ ] Address.java                ← value object
+│   │   │   │   ├── [ ] Coordinates.java            ← value object
+│   │   │   │   ├── [ ] RatePolicy.java             ← value object
+│   │   │   │   └── [ ] DiscountPolicy.java         ← value object
 │   │   │   └── exception/
 │   │   │       ├── [ ] HotelNotFoundException.java
 │   │   │       └── [ ] RoomTypeNotFoundException.java
@@ -118,20 +142,27 @@ miniAgoda/
 │   │   │   ├── [ ] AvailabilityService.java
 │   │   │   ├── [ ] AvailabilityRepository.java
 │   │   │   ├── dto/
-│   │   │   │   └── [ ] AvailabilityRequest.java   ← record
+│   │   │   │   └── [ ] RoomTypeAvailability.java   ← record
 │   │   │   ├── entity/
-│   │   │   │   └── [ ] AvailabilityBlock.java     ← @Entity class
+│   │   │   │   ├── [ ] AvailabilityBlock.java      ← @Entity class
+│   │   │   │   └── [ ] AvailabilityStatus.java     ← enum
 │   │   │   └── exception/
 │   │   │       └── [ ] RoomUnavailableException.java
 │   │   │
 │   │   ├── search/                            # Build after availability. Queries it heavily.
-│   │   │   ├── [ ] HotelSearchController.java
+│   │   │   ├── [ ] SearchController.java
 │   │   │   ├── [ ] HotelSearchService.java
 │   │   │   ├── [ ] SearchHistoryService.java
 │   │   │   ├── [ ] SearchHistoryRepository.java
-│   │   │   └── dto/
-│   │   │       ├── [ ] SearchResult.java          ← record
-│   │   │       └── [ ] CitySearchQuery.java       ← record
+│   │   │   ├── dto/
+│   │   │   │   ├── [ ] CitySearchQuery.java        ← record
+│   │   │   │   ├── [ ] HotelSearchQuery.java       ← record
+│   │   │   │   └── [ ] SearchResult.java           ← record
+│   │   │   ├── entity/
+│   │   │   │   ├── [ ] SearchHistory.java          ← @Entity class
+│   │   │   │   └── [ ] SearchHistoryStatus.java    ← enum
+│   │   │   └── exception/
+│   │   │       └── [ ] SearchHistoryNotFoundException.java
 │   │   │
 │   │   │   ╔══════════════════════════════════╗
 │   │   │   ║  Phase 4 — Booking & Payment     ║
@@ -141,28 +172,34 @@ miniAgoda/
 │   │   │   ├── [ ] PaymentController.java
 │   │   │   ├── [ ] PaymentService.java
 │   │   │   ├── [ ] PaymentRepository.java
+│   │   │   ├── [ ] RefundRepository.java
 │   │   │   ├── [ ] PaymentGatewayClient.java
 │   │   │   ├── [ ] PaymentReconciliationScheduler.java
 │   │   │   ├── dto/
-│   │   │   │   ├── [ ] PaymentRequest.java        ← record
-│   │   │   │   └── [ ] PaymentResponse.java       ← record
+│   │   │   │   └── [ ] CreatePaymentRequest.java   ← record
 │   │   │   ├── entity/
-│   │   │   │   ├── [ ] Payment.java               ← @Entity class
-│   │   │   │   └── [ ] PaymentStatus.java         ← enum
+│   │   │   │   ├── [ ] Payment.java                ← @Entity class
+│   │   │   │   ├── [ ] PaymentStatus.java          ← enum
+│   │   │   │   ├── [ ] PaymentMethod.java          ← enum
+│   │   │   │   ├── [ ] Refund.java                 ← @Entity class
+│   │   │   │   └── [ ] RefundStatus.java           ← enum
 │   │   │   └── exception/
-│   │   │       └── [ ] PaymentFailedException.java
+│   │   │       ├── [ ] PaymentFailedException.java
+│   │   │       └── [ ] RefundFailedException.java
 │   │   │
 │   │   ├── booking/                           # Build after payment + availability.
 │   │   │   ├── [ ] BookingController.java
 │   │   │   ├── [ ] BookingService.java
 │   │   │   ├── [ ] BookingRepository.java
+│   │   │   ├── [ ] BookingMapper.java
 │   │   │   ├── [ ] BookingExpiryScheduler.java
 │   │   │   ├── dto/
-│   │   │   │   ├── [ ] CreateBookingRequest.java  ← record
-│   │   │   │   └── [ ] BookingResponse.java       ← record
+│   │   │   │   ├── [ ] CreateBookingRequest.java   ← record
+│   │   │   │   ├── [ ] EditBookingRequest.java     ← record
+│   │   │   │   └── [ ] BookingSummary.java         ← record
 │   │   │   ├── entity/
-│   │   │   │   ├── [ ] Booking.java               ← @Entity class
-│   │   │   │   └── [ ] BookingStatus.java         ← enum
+│   │   │   │   ├── [ ] Booking.java                ← @Entity class
+│   │   │   │   └── [ ] BookingStatus.java          ← enum
 │   │   │   └── exception/
 │   │   │       ├── [ ] BookingNotFoundException.java
 │   │   │       └── [ ] CancellationNotAllowedException.java
@@ -176,21 +213,30 @@ miniAgoda/
 │   │   │   ├── [ ] NotificationService.java
 │   │   │   ├── [ ] NotificationRepository.java
 │   │   │   ├── dto/
-│   │   │   │   └── [ ] NotificationResponse.java  ← record
-│   │   │   └── entity/
-│   │   │       ├── [ ] Notification.java          ← @Entity class
-│   │   │       └── [ ] NotificationType.java      ← enum
+│   │   │   │   └── [ ] CreateNotificationRequest.java ← record
+│   │   │   ├── entity/
+│   │   │   │   ├── [ ] Notification.java           ← @Entity class
+│   │   │   │   ├── [ ] NotificationType.java       ← enum
+│   │   │   │   ├── [ ] NotificationStatus.java     ← enum
+│   │   │   │   ├── [ ] NotificationReadStatus.java ← enum
+│   │   │   │   └── [ ] Channel.java                ← enum
+│   │   │   └── exception/
+│   │   │       └── [ ] NotificationNotFoundException.java
 │   │   │
 │   │   ├── promotion/                         # Build after notification.
-│   │   │   ├── [ ] PromoController.java
+│   │   │   ├── [ ] PromotionController.java
 │   │   │   ├── [ ] PromotionService.java
 │   │   │   ├── [ ] PromotionRepository.java
+│   │   │   ├── [ ] PromotionMapper.java
 │   │   │   ├── dto/
-│   │   │   │   ├── [ ] PromoValidateRequest.java  ← record
-│   │   │   │   └── [ ] PromoValidateResponse.java ← record
+│   │   │   │   ├── [ ] CreatePromotionRequest.java ← record
+│   │   │   │   ├── [ ] EditPromotionRequest.java   ← record
+│   │   │   │   └── [ ] ValidatePromotionResult.java ← record
 │   │   │   ├── entity/
-│   │   │   │   ├── [ ] Promotion.java             ← @Entity class
-│   │   │   │   └── [ ] DiscountType.java          ← enum
+│   │   │   │   ├── [ ] Promotion.java              ← @Entity class
+│   │   │   │   ├── [ ] PromotionStatus.java        ← enum
+│   │   │   │   ├── [ ] PromotionScope.java         ← enum
+│   │   │   │   └── [ ] DiscountType.java           ← enum
 │   │   │   └── exception/
 │   │   │       └── [ ] InvalidPromoCodeException.java
 │   │   │
@@ -200,10 +246,13 @@ miniAgoda/
 │   │   │   ├── [ ] ReviewRepository.java
 │   │   │   ├── [ ] ReviewMapper.java
 │   │   │   ├── dto/
-│   │   │   │   ├── [ ] CreateReviewRequest.java   ← record
-│   │   │   │   └── [ ] ReviewResponse.java        ← record
+│   │   │   │   ├── [ ] CreateReviewRequest.java    ← record
+│   │   │   │   └── [ ] EditReviewRequest.java      ← record
 │   │   │   ├── entity/
-│   │   │   │   └── [ ] Review.java                ← @Entity class
+│   │   │   │   ├── [ ] Review.java                 ← @Entity class
+│   │   │   │   └── [ ] ReviewStatus.java           ← enum
+│   │   │   ├── value/
+│   │   │   │   └── [ ] ReviewRating.java           ← value object
 │   │   │   └── exception/
 │   │   │       ├── [ ] ReviewNotFoundException.java
 │   │   │       └── [ ] UnverifiedBookingException.java
@@ -218,7 +267,16 @@ miniAgoda/
 │   │   │
 │   │   ├── admin/                             # Build last. Touches every other module.
 │   │   │   ├── [ ] AdminController.java
-│   │   │   └── [ ] AdminService.java
+│   │   │   ├── [ ] AdminService.java
+│   │   │   ├── dto/
+│   │   │   │   ├── [ ] SystemStats.java            ← record
+│   │   │   │   ├── [ ] Revenue.java                ← record
+│   │   │   │   ├── [ ] OccupancyRate.java          ← record
+│   │   │   │   └── [ ] RevenueScope.java           ← record
+│   │   │   └── entity/
+│   │   │       ├── [ ] RevenueScopeType.java       ← enum
+│   │   │       ├── [ ] RevenuePeriod.java          ← enum
+│   │   │       └── [ ] ModerationAction.java       ← enum
 │   │   │
 │   │   └── MiniAgodaApplication.java
 │   │
@@ -226,26 +284,34 @@ miniAgoda/
 │   │   ├── [ ] auth/
 │   │   ├── [ ] user/
 │   │   ├── [ ] hotel/
+│   │   ├── [ ] search/
+│   │   ├── [ ] availability/
 │   │   ├── [ ] booking/
 │   │   ├── [ ] payment/
-│   │   └── [ ] ...
+│   │   ├── [ ] notification/
+│   │   ├── [ ] promotion/
+│   │   ├── [ ] review/
+│   │   └── [ ] recommendation/
 │   │
 │   └── main/resources/
 │       ├── [ ] application.yml
 │       └── db/migration/                      # Run in this order. Never skip a version.
-│           ├── [ ] V1__create_users.sql
-│           ├── [ ] V2__create_refresh_tokens.sql
-│           ├── [ ] V3__create_cities.sql
-│           ├── [ ] V4__create_hotels.sql
-│           ├── [ ] V5__create_room_types.sql
-│           ├── [ ] V6__create_hotel_images.sql
-│           ├── [ ] V7__create_availability_blocks.sql
-│           ├── [ ] V8__create_payments.sql
-│           ├── [ ] V9__create_bookings.sql
-│           ├── [ ] V10__create_notifications.sql
-│           ├── [ ] V11__create_promotions.sql
-│           ├── [ ] V12__create_reviews.sql
-│           └── [ ] V13__create_search_history.sql
+│           ├── [ ] V1__create_countries.sql
+│           ├── [ ] V2__create_cities.sql
+│           ├── [ ] V3__create_destinations.sql
+│           ├── [ ] V4__create_users.sql
+│           ├── [ ] V5__create_refresh_tokens.sql
+│           ├── [ ] V6__create_images.sql
+│           ├── [ ] V7__create_hotels.sql
+│           ├── [ ] V8__create_room_types.sql
+│           ├── [ ] V9__create_availability_blocks.sql
+│           ├── [ ] V10__create_search_history.sql
+│           ├── [ ] V11__create_payments.sql
+│           ├── [ ] V12__create_refunds.sql
+│           ├── [ ] V13__create_bookings.sql
+│           ├── [ ] V14__create_notifications.sql
+│           ├── [ ] V15__create_promotions.sql
+│           └── [ ] V16__create_reviews.sql
 │
 ├── docs/
 │   ├── architecture/
