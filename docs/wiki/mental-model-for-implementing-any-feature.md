@@ -33,20 +33,21 @@ feature/
 ├── FeatureController.java       HTTP layer — routes and request handling
 ├── FeatureService.java          Business logic
 ├── FeatureRepository.java       Database queries
+├── FeatureMapper.java           Converts entity ↔ DTO
 ├── dto/
 │   ├── FeatureRequest.java      What the API receives  (record)
 │   └── FeatureResponse.java     What the API returns   (record)
 ├── entity/
 │   ├── Feature.java             Database entity        (@Entity class, never a record)
 │   └── FeatureStatus.java       Status enum            (lives here, not in common/)
+├── value/
+│   └── valueObjects.java
 ├── exception/
 │   └── FeatureNotFoundException.java   Feature-specific exceptions
-├── gateway/                     Only present if the feature calls an external service
-│   ├── FeatureGateway.java      Interface — the only thing the service imports
-│   └── provider/
-│       └── ProviderFeatureGateway.java  Concrete implementation (Stripe, S3, SendGrid…)
-└── mapper/
-    └── FeatureMapper.java       Converts entity ↔ DTO
+└── gateway/                     Only present if the feature calls an external service
+    ├── FeatureGateway.java      Interface — the only thing the service imports
+    └── provider/
+        └── ProviderFeatureGateway.java  Concrete implementation (Stripe, S3, SendGrid…)
 ```
 
 ---

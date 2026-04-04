@@ -88,16 +88,19 @@ miniAgoda/
 │   │       ├── FeatureRepository.java
 │   │       ├── FeatureMapper.java
 │   │       ├── dto/
-│   │       │   ├── FeatureRequest.java       ← records (immutable, no boilerplate)
-│   │       │   └── FeatureResponse.java      ← records
+│   │       │   ├── FeatureRequest.java               ← records (immutable, no boilerplate)
+│   │       │   └── FeatureResponse.java              ← records
 │   │       ├── entity/
-│   │       │   ├── Feature.java              ← @Entity class (never a record)
-│   │       │   └── FeatureStatus.java        ← enum
+│   │       │   ├── Feature.java                      ← @Entity class (never a record)
+│   │       │   └── FeatureStatus.java                ← enum
 │   │       ├── value/
-│   │       │   └── someValueObjects.java     ← value object
-│   │       └── exception/
-│   │           └── FeatureNotFoundException.java
-│   │
+│   │       │   └── someValueObjects.java             ← value object
+│   │       ├── exception/
+│   │       │   └── FeatureNotFoundException.java
+│   │       └── gateway/                              # Only present if the feature calls an external service
+│   │           ├── FeatureGateway.java               # Interface — the only thing the service imports
+│   │           └── provider/
+│   │               └── ProviderFeatureGateway.java   # Concrete implementation (Stripe, S3, SendGrid…)
 │   ├── test/java/com/miniagoda/
 │   │   ├── feature1/
 │   │   ├── feature2/
