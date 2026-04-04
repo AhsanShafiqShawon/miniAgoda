@@ -82,20 +82,21 @@ miniAgoda/
 │   │   │   └── util/
 │   │   │       ├── SomeUtil.java
 │   │   │       └── SomeAnotherUtil.java
-│   │   └── feature/
+│   │   └── <feature>/
 │   │       ├── FeatureController.java
 │   │       ├── FeatureService.java
 │   │       ├── FeatureRepository.java
+│   │       ├── FeatureMapper.java
 │   │       ├── dto/
 │   │       │   ├── FeatureRequest.java       ← records (immutable, no boilerplate)
 │   │       │   └── FeatureResponse.java      ← records
 │   │       ├── entity/
 │   │       │   ├── Feature.java              ← @Entity class (never a record)
 │   │       │   └── FeatureStatus.java        ← enum
-│   │       ├── exception/
-│   │       │   └── FeatureNotFoundException.java
-│   │       └── mapper/
-│   │           └── FeatureMapper.java
+│   │       ├── value/
+│   │       │   └── someValueObjects.java     ← value object
+│   │       └── exception/
+│   │           └── FeatureNotFoundException.java
 │   │
 │   ├── test/java/com/miniagoda/
 │   │   ├── feature1/
