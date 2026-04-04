@@ -24,16 +24,22 @@ view operational data. Admins can moderate content and manage the platform.
 
 ## Architecture
 
-miniAgoda is a **modular monolith** — all services run in a single JVM,
-but internal module boundaries mirror how the system would be split into
-microservices. The design is intentionally microservices-ready from day one.
+miniAgoda is a modular monolith — all features run in a single JVM, but each feature module is self-contained and mirrors how the system would be split into microservices. The design is intentionally microservices-ready from day one.
 
 ```
 Client
   └── Spring Boot Application
-        ├── Domain Services       (HotelSearchService, BookingService, ...)
-        ├── Infrastructure Gateways (StorageGateway, EmailGateway, PaymentGateway)
-        └── Repositories          (HotelRepository, BookingRepository, ...)
+        ├── Feature Modules         (hotel/, booking/, user/, review/, ...)
+        │     ├── Controller        (HTTP layer — routes requests in, sends responses out)
+        │     ├── Service           (business logic)
+        │     ├── Repository        (data access)
+        │     ├── Mapper            (entity ↔ DTO conversion)
+        │     ├── dto/              (request & response records)
+        │     ├── entity/           (JPA entities & enums)
+        │     ├── value/            (value objects)
+        │     ├── exception/        (feature-scoped exceptions)
+        │     └── gateway/          (external service abstractions, if needed)
+        └── Common                  (shared config, exceptions, responses, utils)
 ```
 
 See [Architecture Overview](docs/architecture/overview.md) for the full picture.
