@@ -14,6 +14,7 @@ The database is the foundation. Everything above it depends on it. If you start 
 ```
 Controller        ← last
 Service
+Gateway interface + implementation   ← only if external service involved
 Mapper
 Exception
 Repository
@@ -40,6 +41,10 @@ feature/
 │   └── FeatureStatus.java       Status enum            (lives here, not in common/)
 ├── exception/
 │   └── FeatureNotFoundException.java   Feature-specific exceptions
+├── gateway/                     Only present if the feature calls an external service
+│   ├── FeatureGateway.java      Interface — the only thing the service imports
+│   └── provider/
+│       └── ProviderFeatureGateway.java  Concrete implementation (Stripe, S3, SendGrid…)
 └── mapper/
     └── FeatureMapper.java       Converts entity ↔ DTO
 ```
@@ -239,7 +244,73 @@ public class FeatureNotFoundException extends NotFoundException {
 
 ---
 
-## Step 6 — Service
+## Step 6 — Gateway *(only if the feature calls an external service)*
+
+**Does this feature talk to anything outside the application?**
+
+A gateway is an interface your service depends on. The concrete implementation — Stripe,
+S3, SendGrid, or a mock — is wired by Spring at runtime based on the active profile.
+The service never imports the concrete class. Only the interface.
+
+Three features in miniAgoda have a gateway:
+
+| Feature | Gateway interface | Calls |
+|---|---|---|
+| `payment/` | `PaymentGateway` | Stripe / Omise |
+| `image/` | `StorageGateway` | AWS S3 / GCS |
+| `notification/` | `EmailGateway` | SendGrid / SES |
+
+```java
+// gateway/PaymentGateway.java — the interface the service sees
+public interface PaymentGateway {
+    PaymentGatewayResult charge(CreatePaymentRequest request);
+    RefundGatewayResult refund(String gatewayTransactionId, BigDecimal amount, String currencyCode);
+}
+
+// gateway/stripe/StripePaymentGateway.java — production implementation
+@Component
+@Profile("production")
+public class StripePaymentGateway implements PaymentGateway {
+    @Override
+    public PaymentGatewayResult charge(CreatePaymentRequest request) {
+        // Stripe SDK call
+    }
+}
+
+// gateway/mock/MockPaymentGateway.java — dev/test implementation
+@Component
+@Profile("dev")
+public class MockPaymentGateway implements PaymentGateway {
+    @Override
+    public PaymentGatewayResult charge(CreatePaymentRequest request) {
+        // Returns hardcoded success — no real credentials needed locally
+    }
+}
+```
+
+The service constructor receives the interface, not the implementation:
+
+```java
+@Service
+@RequiredArgsConstructor
+public class PaymentService {
+    private final PaymentRepository repository;
+    private final PaymentGateway paymentGateway;   // interface only
+}
+```
+
+**Checklist:**
+- [ ] Interface lives at `feature/gateway/FeatureGateway.java`
+- [ ] Production implementation in `feature/gateway/provider/`
+- [ ] Mock/dev implementation in `feature/gateway/mock/`
+- [ ] Each implementation annotated with `@Component` and `@Profile("...")`
+- [ ] Service imports the interface — never the concrete class
+- [ ] No business logic in the gateway — external call only
+- [ ] Gateway throws a feature-specific exception on failure (e.g. `PaymentFailedException`)
+
+---
+
+## Step 7 — Service
 
 **What is the business logic?**
 
@@ -304,7 +375,7 @@ public class FeatureService {
 
 ---
 
-## Step 7 — Controller
+## Step 8 — Controller
 
 **What are the HTTP endpoints?**
 
@@ -369,11 +440,13 @@ Module dependencies should only ever point in one direction — never in a circl
 
 ```
 Controller  →  Service  →  Repository  →  Entity
+                        →  Gateway (interface)
                         →  Mapper
                         →  Exception
 ```
 
-If module A imports from module B and module B imports from module A, something is in the wrong place. Move the shared concept to `common/` or promote it to its own module.
+The service never reaches past the gateway interface. The concrete implementation
+(Stripe, S3, SendGrid) is invisible to the service — Spring injects it at startup.
 
 ---
 
@@ -386,6 +459,8 @@ If module A imports from module B and module B imports from module A, something 
 | `FeatureRequest.java` | `record` | none |
 | `FeatureResponse.java` | `record` | none |
 | `FeatureRepository.java` | `interface` | none (extends `JpaRepository`) |
+| `FeatureGateway.java` | `interface` | none (only if external service used) |
+| `ProviderFeatureGateway.java` | `class` | `@Component` + `@Profile` |
 | `FeatureMapper.java` | `class` | `@Component` |
 | `FeatureService.java` | `class` | `@Service` |
 | `FeatureController.java` | `class` | `@RestController` |
@@ -428,14 +503,22 @@ Step 5 — Exceptions
   [ ] Constructor takes identifier as parameter
   [ ] Human-readable message
 
-Step 6 — Service
+Step 6 — Gateway  (skip if no external service)
+  [ ] Interface at feature/gateway/FeatureGateway.java
+  [ ] Production implementation with @Profile("production")
+  [ ] Mock implementation with @Profile("dev")
+  [ ] Service imports interface only — never the concrete class
+  [ ] No business logic in gateway — external call only
+  [ ] Throws feature-specific exception on failure
+
+Step 7 — Service
   [ ] @Service + @RequiredArgsConstructor
   [ ] @Transactional on all write methods
   [ ] Throws exceptions, never returns null
   [ ] Uses mapper for conversions
   [ ] No HTTP concepts
 
-Step 7 — Controller
+Step 8 — Controller
   [ ] @RestController + @RequestMapping + @RequiredArgsConstructor
   [ ] @Valid on all @RequestBody params
   [ ] Correct HTTP status codes (201, 204, 200)
