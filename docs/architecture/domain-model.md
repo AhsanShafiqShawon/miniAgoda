@@ -30,6 +30,7 @@ In a future microservices architecture these become API request/response DTOs.
 | Value Objects | Domain objects defined purely by their data |
 | Enums | Fixed sets of valid constants |
 | Query / Result Records | Input/output contracts between layers |
+| Infrastructure Abstractions | Interfaces that decouple application logic from external services |
 
 ---
 
@@ -970,3 +971,73 @@ public record SystemStats(
 - `RevenueScope.scopeId` is null when type is `SYSTEM`
 - All moderation actions go through `AdminService.moderateContent()`
 - `OccupancyRate.rate` is always between 0.0 and 1.0 inclusive
+
+---
+
+## Infrastructure Abstractions
+
+Interfaces defined by the application layer and implemented by the infrastructure layer.
+The application never imports a concrete class — only the interface. This means the
+underlying provider (Stripe, S3, SendGrid) can be swapped without touching business logic.
+
+### `PaymentGateway`
+
+```java
+public interface PaymentGateway {
+
+    // Charges the given amount and returns a gateway transaction ID on success.
+    // Throws PaymentFailedException if the charge is declined or the gateway errors.
+    PaymentGatewayResult charge(CreatePaymentRequest request);
+
+    // Initiates a refund against a previously confirmed transaction.
+    // Throws RefundFailedException if the refund cannot be processed.
+    RefundGatewayResult refund(String gatewayTransactionId, BigDecimal amount, String currencyCode);
+}
+```
+
+**Implemented by:** `StripePaymentGateway`, `OmisePaymentGateway` (or any provider).
+**Used by:** `PaymentService` — never called directly from a controller or scheduler.
+**Invariant:** The gateway is never called unless `Booking.status` is `CONFIRMED` and
+`Payment.status` is `PENDING`.
+
+---
+
+### `StorageGateway`
+
+```java
+public interface StorageGateway {
+
+    // Uploads raw bytes and returns a publicly accessible URL.
+    // Throws ImageUploadException if the upload fails.
+    String upload(ImageUploadRequest request);
+
+    // Permanently deletes a file by its URL.
+    // Silent no-op if the file does not exist.
+    void delete(String url);
+}
+```
+
+**Implemented by:** `S3StorageGateway`, `GcsStorageGateway`, `LocalStorageGateway` (dev only).
+**Used by:** `ImageService` — the rest of the application only ever sees the returned URL.
+**Invariant:** `Image.confirmed` is set to `true` only after `StorageGateway.upload()` returns
+successfully. An unconfirmed image is never returned in public queries.
+
+---
+
+### `EmailGateway`
+
+```java
+public interface EmailGateway {
+
+    // Sends a single email immediately.
+    // Throws EmailDeliveryException if the provider rejects the request.
+    void send(EmailMessage message);
+}
+```
+
+**Implemented by:** `SendGridEmailGateway`, `SesEmailGateway`, `MockEmailGateway` (test only).
+**Used by:** `NotificationService` — only when `Notification.channel` is `EMAIL` and
+`Notification.status` is `PENDING`.
+**Invariant:** `Notification.sentAt` is populated and `status` transitions to `SENT` only
+after `EmailGateway.send()` returns without throwing. On failure, `status` transitions
+to `FAILED` and the notification is eligible for retry.
