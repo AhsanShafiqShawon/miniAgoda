@@ -51,6 +51,14 @@ User
  ├── preferredCurrency, role, status
  └── createdAt / updatedAt
 
+RefreshToken
+ ├── userId → User
+ ├── token (opaque UUID string, unique)
+ ├── deviceName (optional — e.g. "iPhone 15")
+ ├── expiresAt
+ ├── revoked
+ └── createdAt
+
 Address (value object)
  ├── street, area (optional), zipCode
  └── cityId → City
@@ -211,6 +219,27 @@ public record User(
 
 **Validation:** `email` — valid format, unique. `password` — hashed. `preferredCurrency` — 3 uppercase chars.
 `role` defaults to `GUEST`. `status` defaults to `INACTIVE` (activated after email verification).
+
+---
+
+### `RefreshToken`
+
+```java
+public record RefreshToken(
+    UUID id,
+    UUID userId,
+    String token,               // opaque UUID string — not a JWT
+    String deviceName,          // optional — e.g. "iPhone 15", "MacBook Pro"
+    LocalDateTime expiresAt,
+    boolean revoked,
+    LocalDateTime createdAt
+) {}
+```
+
+**Validation:** `token` must be unique. `expiresAt` must be in the future on creation.
+`revoked` defaults to `false`. One row per active session — a user may have multiple rows
+(one per device). Revoked or expired tokens are never deleted immediately; a cleanup
+scheduler purges them periodically.
 
 ---
 
@@ -871,6 +900,12 @@ public record SystemStats(
 - `User.status` defaults to `INACTIVE` — activated after email verification
 - A `BANNED` user cannot create bookings or write reviews
 - Deleted accounts are anonymized — personal data replaced, status set to `INACTIVE`
+- `RefreshToken.token` must be unique across all tokens
+- A user may have multiple active `RefreshToken` rows — one per device session
+- On logout, the corresponding `RefreshToken` is marked `revoked = true`
+- On password change or account suspension, all `RefreshToken` rows for that user are revoked
+- A revoked or expired `RefreshToken` is rejected at the refresh endpoint
+- If a revoked token is used, the account should be flagged for suspicious activity
 
 ### Geography
 - A `City` must reference an existing `Country`
