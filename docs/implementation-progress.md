@@ -17,9 +17,9 @@ miniAgoda/
 │   │   │
 │   │   ├── common/                                     # Build this first. Everything depends on it.
 │   │   │   ├── config/
-│   │   │   │   ├── [ ] AppConfig.java
-│   │   │   │   ├── [ ] SecurityConfig.java
-│   │   │   │   └── [ ] JwtConfig.java
+│   │   │   │   ├── [x] AppConfig.java
+│   │   │   │   ├── [x] SecurityConfig.java
+│   │   │   │   └── [x] JwtConfig.java
 │   │   │   ├── exception/
 │   │   │   │   ├── [ ] GlobalExceptionHandler.java
 │   │   │   │   ├── [ ] NotFoundException.java
