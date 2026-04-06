@@ -1,4 +1,4 @@
-package com.shawon.miniagoda.common.config;
+package com.miniagoda.common.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
