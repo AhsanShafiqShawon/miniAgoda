@@ -1,6 +1,6 @@
 # AppConfig — Code Prose
 
-`com.shawon.miniagoda.common.config.AppConfig`
+`com.miniagoda.common.config.AppConfig`
 
 ---
 
