@@ -118,6 +118,7 @@ miniAgoda/
 │           ├── V1__some_migration.sql
 │           ├── V2__some_another_migration.sql
 │           └── ...
+├── prose/
 ├── docs/
 │   ├── architecture/        # System design, domain model, ADRs
 │   ├── api/                 # Service contracts
