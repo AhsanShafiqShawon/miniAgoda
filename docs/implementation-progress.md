@@ -328,6 +328,7 @@ miniAgoda/
 │           ├── [ ] V15__create_promotions.sql
 │           └── [ ] V16__create_reviews.sql
 │
+├── prose/
 ├── docs/
 │   ├── architecture/
 │   ├── api/
