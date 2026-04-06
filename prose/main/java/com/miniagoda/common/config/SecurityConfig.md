@@ -1,6 +1,6 @@
 # SecurityConfig — Code Prose
 
-`com.shawon.miniagoda.common.config.SecurityConfig`
+`com.miniagoda.common.config.SecurityConfig`
 
 ---
 
