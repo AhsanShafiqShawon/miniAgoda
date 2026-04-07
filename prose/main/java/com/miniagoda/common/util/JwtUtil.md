@@ -1,3 +1,47 @@
+# JwtUtil — Code Prose
+
+`com.miniagoda.common.util.JwtUtil`
+
+---
+
+## Overview
+
+This class is the single place in the application responsible for minting JWTs.
+
+It is annotated with `@Component`, which registers it with Spring as a managed bean. Any class that needs to issue tokens — a login handler, an OAuth callback, a token refresh endpoint — declares a `JwtUtil` dependency and gets this instance injected. Token generation is never done ad-hoc or in-place.
+
+The class depends on two collaborators, both injected through the constructor. `JwtEncoder` is Spring Security's abstraction for signing and encoding a token; it knows how to take a set of claims and produce a compact, signed string. `JwtConfig` supplies the configuration that shapes what gets encoded — specifically, how long each token type should live. By separating those concerns, `JwtUtil` stays focused on assembly: it does not know or care how the encoder signs, and it does not hardcode any expiry values itself.
+
+---
+
+## `generateAccessToken(String userId, String role)`
+
+This method issues a short-lived credential the client will present on every protected request.
+
+It delegates immediately to `buildToken`, passing the user's ID, their role, and the access token expiry duration drawn from `JwtConfig`. The resulting token is what a client attaches to the `Authorization` header of each subsequent API call.
+
+---
+
+## `generateRefreshToken(String userId, String role)`
+
+This method issues a longer-lived credential the client holds in reserve.
+
+Its structure is identical to `generateAccessToken` — the same two arguments, the same delegation to `buildToken` — with one difference: it passes the refresh token expiry from `JwtConfig` instead. Because that value is configured to be significantly longer, the token this method produces is suitable for trading in for a new access token once the short-lived one expires, without requiring the user to log in again.
+
+The symmetry between these two methods is intentional. The distinction between an access token and a refresh token is entirely a matter of how long they live and how they are used; the structure of the token itself is the same.
+
+---
+
+## `buildToken(String userId, String role, long expiryMs)`
+
+This private method is where the token is actually assembled, and it is the only place that happens.
+
+It begins by capturing the current moment as `now`, then computes the expiry by adding the provided duration in milliseconds. Both instants are embedded in the claims so the token is self-describing about its own validity window — any party that receives it can check `issuedAt` and `expiresAt` without consulting an external store.
+
+The claims set is built with four pieces of information. The `issuer` is fixed as `"miniagoda"`, identifying the application that produced the token. The `subject` is the `userId`, which is the standard JWT field for identifying who the token belongs to. The `role` is attached as a custom claim, giving downstream services or security filters a way to make authorization decisions without a database lookup. Everything else — how those claims are encoded, which algorithm signs them, what the final compact string looks like — is the responsibility of `jwtEncoder`, which handles it opaquely.
+
+The method is private because there is no reason for anything outside this class to call it directly. The two public methods exist precisely to name the two contexts in which a token gets issued; `buildToken` is the shared mechanism underneath them.
+
 # JwtUtil — Plain English Breakdown
 
 ---
