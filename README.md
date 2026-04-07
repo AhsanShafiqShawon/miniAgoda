@@ -125,7 +125,9 @@ miniAgoda/
 │   ├── setup/               # Getting started, configuration
 │   ├── flows/               # How different types of request flows through the system
 │   ├── wiki/                # Knowledge base
+│   ├── conversation/        # How different module talks to each other
 │   ├── http.md
+│   ├── appendix.md
 │   ├── implementation-progress.md
 │   └── roadmap.md
 └── README.md
