@@ -1,3 +1,43 @@
+# JwtConfig — Code Prose
+
+`com.miniagoda.common.config.JwtConfig`
+
+---
+
+## Overview
+
+This class has one job: hold the JWT settings the application needs to issue and validate tokens.
+
+It is annotated with both `@Configuration` and `@ConfigurationProperties(prefix = "jwt")`. The first tells Spring to treat this class as a configuration source. The second tells Spring to look inside the application's property files for keys that start with `jwt.` — `jwt.secret`, `jwt.access-token-expiry-ms`, and so on — and bind their values directly onto the fields of this class. No manual parsing, no `@Value` annotations scattered across the codebase. Spring does the mapping once, at startup.
+
+---
+
+## `secret`
+
+This field holds the signing key for every JWT the application produces.
+
+When the application issues a token — after a user logs in, for example — it signs the token's payload with this secret using an HMAC algorithm. Any service that later receives that token can verify its authenticity by re-computing the signature with the same secret. If the signatures match, the token is genuine and untampered. If they don't, it is rejected.
+
+The value itself never appears in source code. It is read from configuration at startup, which means it can be kept in an environment variable or a secrets manager and rotated without touching the application itself.
+
+---
+
+## `accessTokenExpiryMs`
+
+This field controls how long a short-lived access token remains valid, expressed in milliseconds.
+
+Access tokens are the credentials a client presents on every protected request. Because they are passed around frequently, keeping their lifespan short limits the damage if one is intercepted — an attacker holding a stolen access token only has a narrow window before it expires. A typical value might be fifteen minutes or an hour, though the exact figure is a product decision, not a hard rule.
+
+---
+
+## `refreshTokenExpiryMs`
+
+This field controls how long a refresh token remains valid, also in milliseconds.
+
+Refresh tokens exist precisely because access tokens are short-lived. When an access token expires, the client presents its refresh token to get a new one without asking the user to log in again. Refresh tokens are therefore longer-lived — days or weeks — but they are also more sensitive. They are typically stored more carefully than access tokens, issued only once per login, and invalidated explicitly on logout.
+
+The separation of these two expiry values into distinct fields makes the tradeoff explicit: short access windows for safety, longer refresh windows for usability.
+
 # JwtConfig — Plain English Breakdown
 
 ---
