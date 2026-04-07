@@ -1,3 +1,51 @@
+# ErrorResponse — Code Prose
+
+`com.miniagoda.common.response.ErrorResponse`
+
+---
+
+## Overview
+
+This record defines the consistent shape the application sends back whenever something goes wrong.
+
+Where `ApiResponse<T>` is the envelope for success, `ErrorResponse` is its counterpart for failure. Rather than letting exceptions bubble up as raw stack traces, or letting each error handler invent its own structure, every error the API surfaces — a missing resource, a validation failure, an unauthorised request — arrives at the caller in the same predictable form: a status code, a short error label, a human-readable message, the path that triggered the problem, the moment it occurred, and optionally a breakdown of which fields were at fault.
+
+Like `ApiResponse`, it is a `record`. Error payloads have no reason to mutate once constructed, and the record syntax keeps the class concise without sacrificing any of the information a client needs to handle the error programmatically.
+
+---
+
+## Fields
+
+**`status`** carries the HTTP status code as an integer — `400`, `404`, `500`, and so on. Including it in the body means the client does not have to rely solely on the HTTP layer to understand the nature of the failure; the body is self-describing.
+
+**`error`** is a short, machine-friendly label for the error category — something like `"Bad Request"` or `"Not Found"`. It gives the caller a stable string to branch on without parsing the longer message.
+
+**`message`** is the human-readable explanation. This is what a frontend might surface to the user, or what a developer reads when debugging. It should be specific enough to be useful but not so detailed that it leaks internal implementation.
+
+**`path`** records the request URI that produced the error. In a system with many endpoints, this makes logs and error reports immediately actionable — there is no need to cross-reference request logs to find out where the failure came from.
+
+**`timestamp`** captures the exact moment the error was constructed, as an `Instant`. Using `Instant` rather than a formatted string keeps the value timezone-neutral and lets clients format or compare it however they need.
+
+**`fieldErrors`** is a map from field name to error message, and it is the only nullable field in the record. Most errors do not involve individual fields, so it is `null` by default and only populated when validation fails. A `Map<String, String>` is a natural shape here: each key is the name of the offending field, and each value is the reason it was rejected.
+
+---
+
+## `of(...)`
+
+This factory method handles the common case: an error that is not caused by invalid input fields.
+
+It fills all the structural fields — status, error label, message, and path — and sets `timestamp` to `Instant.now()` automatically, so callers never have to think about when to capture the time. `fieldErrors` is set to `null`, signalling to the client that this is a general error rather than a validation failure.
+
+---
+
+## `withFieldErrors(...)`
+
+This factory method handles validation failures specifically.
+
+It takes the same four structural arguments as `of`, but adds a `Map<String, String>` of field-level errors. The timestamp is still captured automatically. The result gives the client everything it needs to display targeted feedback — not just "something went wrong with your request," but precisely which fields failed and why.
+
+The two factory methods together draw a clean line between error categories: use `of` for anything systemic, and `withFieldErrors` when the problem is with the shape of the data the caller sent.
+
 # ErrorResponse — Plain English Breakdown
 
 ---
