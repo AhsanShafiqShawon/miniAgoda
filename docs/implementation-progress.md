@@ -335,7 +335,9 @@ miniAgoda/
 │   ├── setup/
 │   ├── flows/
 │   ├── wiki/
+│   ├── conversation/
 │   ├── http.md
+│   ├── appendix.md
 │   ├── implementation-progress.md
 │   └── roadmap.md
 └── README.md
