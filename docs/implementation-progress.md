@@ -19,6 +19,7 @@ miniAgoda/
 │   │   │   ├── config/
 │   │   │   │   ├── [x] AppConfig.java
 │   │   │   │   ├── [x] SecurityConfig.java
+│   │   │   │   ├── [ ] JwtAuthenticationFilter.java
 │   │   │   │   └── [x] JwtConfig.java
 │   │   │   ├── exception/
 │   │   │   │   ├── [ ] GlobalExceptionHandler.java
@@ -54,7 +55,6 @@ miniAgoda/
 │   │   ├── auth/                                       # Build after user. Depends on User entity.
 │   │   │   ├── [ ] AuthController.java
 │   │   │   ├── [ ] AuthService.java
-│   │   │   ├── [ ] JwtAuthFilter.java
 │   │   │   ├── dto/
 │   │   │   │   ├── [ ] AuthRequest.java                ← record
 │   │   │   │   ├── [ ] AuthResponse.java               ← record
