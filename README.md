@@ -161,6 +161,7 @@ miniAgoda/
 | Infrastructure Gateway naming convention | [ADR-012](docs/architecture/decisions/ADR-012-gateway-naming-convention.md) |
 | Feature-Based Package Structure | [ADR-013](docs/architecture/decisions/ADR-013-feature-based-package-structure.md) |
 | JWT Library Selection | [ADR-014](docs/architecture/decisions/ADR-014-jwt-library-selection.md) |
+| JWT Authentication Filter | [ADR-015](docs/architecture/decisions/ADR-015-jwt-authentication-filter.md) |
 
 ---
 
