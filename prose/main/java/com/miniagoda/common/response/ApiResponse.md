@@ -1,3 +1,45 @@
+# ApiResponse — Code Prose
+
+`com.miniagoda.common.response.ApiResponse`
+
+---
+
+## Overview
+
+This record defines the single, consistent envelope every API endpoint in the application sends back to its callers.
+
+Rather than letting each controller invent its own response shape — sometimes a bare object, sometimes a map, sometimes something else — `ApiResponse<T>` enforces a contract: every response has a `success` flag, a human-readable `message`, and a `data` payload. The caller always knows where to look.
+
+Being a `record` is a deliberate choice. Records in Java are immutable by design: once constructed, none of the fields can be changed. An API response has no reason to mutate after it is built, so a record is exactly the right tool. It also eliminates the boilerplate of writing constructors, getters, `equals`, `hashCode`, and `toString` by hand.
+
+The type parameter `<T>` makes the record generic, meaning the `data` field can carry any type — a single entity, a list, a page of results — without sacrificing type safety or requiring separate response classes for each use case.
+
+---
+
+## `ok(T data)`
+
+This factory method is the standard success path.
+
+It constructs a response with `success` set to `true`, a default message of `"Success"`, and the provided data as the payload. Most endpoints that return a result — a fetched resource, a created entity — go through this method. The caller gets a clean, consistent shape without needing to think about what message to attach.
+
+---
+
+## `ok(String message, T data)`
+
+This overload covers cases where the default `"Success"` message is not specific enough.
+
+The structure is identical to the first `ok` method, but the caller supplies their own message. This is useful when the response needs to communicate something meaningful beyond the bare fact of success — for instance, confirming what was just created, or describing an action that completed with nuance.
+
+The two `ok` methods together form a simple API: use the one-argument version when the message doesn't matter, and the two-argument version when it does.
+
+---
+
+## `noContent()`
+
+This factory method handles the case where the operation succeeded but there is nothing to return.
+
+It sets `success` to `true`, uses the message `"No content"`, and explicitly sets `data` to `null`. Rather than returning an empty body or a bare HTTP 204 and leaving the client to interpret silence, this method makes the emptiness intentional and legible. The caller receives the same envelope shape they always do — the absence of data is a value, not an accident.
+
 # ApiResponse — Plain English Breakdown
 
 ---
