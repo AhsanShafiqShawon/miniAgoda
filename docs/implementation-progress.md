@@ -28,8 +28,8 @@ miniAgoda/
 │   │   │   │   ├── [ ] ForbiddenException.java
 │   │   │   │   └── [ ] ValidationException.java
 │   │   │   ├── response/
-│   │   │   │   ├── [ ] ApiResponse.java
-│   │   │   │   └── [ ] ErrorResponse.java
+│   │   │   │   ├── [x] ApiResponse.java
+│   │   │   │   └── [x] ErrorResponse.java
 │   │   │   └── util/
 │   │   │       └── [x] JwtUtil.java
 │   │   │
