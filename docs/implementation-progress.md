@@ -23,7 +23,7 @@ miniAgoda/
 │   │   │   │   └── [x] JwtConfig.java
 │   │   │   ├── exception/
 │   │   │   │   ├── [ ] GlobalExceptionHandler.java
-│   │   │   │   ├── [ ] NotFoundException.java
+│   │   │   │   ├── [x] NotFoundException.java
 │   │   │   │   ├── [ ] ConflictException.java
 │   │   │   │   ├── [ ] UnauthorizedException.java
 │   │   │   │   ├── [ ] ForbiddenException.java
