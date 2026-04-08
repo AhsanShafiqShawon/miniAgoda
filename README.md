@@ -130,6 +130,9 @@ miniAgoda/
 │   ├── appendix.md
 │   ├── implementation-progress.md
 │   └── roadmap.md
+├── .env                     # real secrets, gitignored
+├── .env.example             # placeholders, committed
+├── pom.xml
 └── README.md
 ```
 

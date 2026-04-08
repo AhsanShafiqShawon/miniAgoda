@@ -340,6 +340,9 @@ miniAgoda/
 │   ├── appendix.md
 │   ├── implementation-progress.md
 │   └── roadmap.md
+├── .env
+├── .env.example
+├── pom.xml
 └── README.md
 ```
 
