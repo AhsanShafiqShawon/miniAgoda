@@ -24,7 +24,7 @@ miniAgoda/
 │   │   │   ├── exception/
 │   │   │   │   ├── [ ] GlobalExceptionHandler.java
 │   │   │   │   ├── [x] NotFoundException.java
-│   │   │   │   ├── [ ] ConflictException.java
+│   │   │   │   ├── [x] ConflictException.java
 │   │   │   │   ├── [ ] UnauthorizedException.java
 │   │   │   │   ├── [ ] ForbiddenException.java
 │   │   │   │   └── [ ] ValidationException.java
