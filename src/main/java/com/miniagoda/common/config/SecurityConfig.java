@@ -7,13 +7,17 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
-    // TODO: Inject JwtAuthFilter here once auth/ module is implemented
-    // private final JwtAuthFilter jwtAuthFilter;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+
+    public SecurityConfig(JwtAuthenticationFilter jwtAuthenticationFilter) {
+        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
+    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -22,18 +26,16 @@ public class SecurityConfig {
             .sessionManagement(session ->
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
-            .authorizeHttpRequests(auth ->
-                // TODO: Replace with proper rules once JwtAuthFilter is wired in.
-                //   Public:  POST /api/auth/**, GET /api/hotels/**, GET /api/search/**
-                //   Host:    /api/host/**
-                //   Admin:   /api/admin/**
-                //   Else:    authenticated()
-                auth.anyRequest().permitAll()
-            );
-            // TODO: Add this once JwtAuthFilter exists:
-            // .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers("POST", "/api/auth/**").permitAll()
+                .requestMatchers("GET",  "/api/hotels/**").permitAll()
+                .requestMatchers("GET",  "/api/search/**").permitAll()
+                .requestMatchers("/api/host/**").hasRole("HOST")
+                .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                .anyRequest().authenticated()
+            )
+            .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
-
 }
