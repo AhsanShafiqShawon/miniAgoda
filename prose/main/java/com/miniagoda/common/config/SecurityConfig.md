@@ -20,28 +20,20 @@ The method configures five things in sequence.
 
 **Sessions are set to `STATELESS`.** Spring Security will never create or consult an `HttpSession`. Every request must carry its own proof of identity in the form of a JWT. This is the standard posture for a JWT-based API and allows the application to scale horizontally without shared session state.
 
-**Authorization rules are configured by route.** Public routes — auth endpoints, hotel reads, and search reads — are open to all. Host-only and admin-only routes are gated by role. Everything else requires an authenticated user.
+**Authorization rules are configured by route.** Public routes are registered by iterating over `PublicRoutes.MATCHERS` — a shared constant that holds every `[method, path]` pair that should be open to all callers. Each entry is applied as a `permitAll` matcher. This keeps the list of public routes in one place, ensuring `SecurityConfig` and `JwtAuthenticationFilter` both refer to the same source of truth rather than duplicating path strings. After the public routes, host-only and admin-only routes are gated by role, and everything else requires an authenticated user.
 
 | Pattern | Access |
 |---------|--------|
-| `POST /api/auth/**` | Public |
-| `GET /api/hotels/**` | Public |
-| `GET /api/search/**` | Public |
+| Entries from `PublicRoutes.MATCHERS` | Public |
 | `/api/host/**` | `ROLE_HOST` |
 | `/api/admin/**` | `ROLE_ADMIN` |
 | Everything else | Authenticated |
 
-**Exception handling writes structured JSON errors.** Rather than letting Spring return its default HTML error pages, two handlers are registered. If a request reaches a protected route without valid credentials, the `authenticationEntryPoint` responds with a `401 Unauthorized` JSON body. If a request is authenticated but lacks the required role, the `accessDeniedHandler` responds with a `403 Forbidden` JSON body. Both use the shared `writeError` helper, which delegates to `ObjectMapper` to serialise an `ErrorResponse`.
+**Exception handling writes structured JSON errors.** Rather than letting Spring return its default HTML error pages, two handlers are registered inline. If a request reaches a protected route without valid credentials, the `authenticationEntryPoint` calls `securityErrorWriter.write(...)` with a `401 Unauthorized` response. If a request is authenticated but lacks the required role, the `accessDeniedHandler` calls it with a `403 Forbidden` response. `SecurityErrorWriter` owns the responsibility of setting headers and serialising the JSON body, keeping `SecurityConfig` free of those concerns.
 
 **`JwtAuthenticationFilter` is inserted before `UsernamePasswordAuthenticationFilter`.** This ensures the JWT is extracted and validated early in the filter chain, before Spring attempts any other form of authentication. If the token is missing or invalid, the filter writes a `401 ErrorResponse` directly to the response and the request never reaches the controller.
 
 Finally, `http.build()` assembles everything into a `SecurityFilterChain` and returns it to Spring as the active security policy.
-
----
-
-## `writeError(...)`
-
-A private helper called by both exception handlers. It delegates directly to `SecurityErrorWriter`, passing through the response, request, HTTP status code, error label, and message. `SecurityErrorWriter` owns the responsibility of setting headers and writing the JSON body. This ensures every security-layer rejection — whether due to a missing token or an insufficient role — returns a consistent, machine-readable error envelope, while keeping `SecurityConfig` free of serialisation concerns.
 
 ---
 
@@ -132,13 +124,23 @@ Every request must bring its own proof — a JWT token. The server verifies it a
 
 ### 4. 🔒 Access rules — who can go where
 
-Every route is now locked down with explicit rules:
+Every route is locked down with explicit rules. Public routes are no longer hardcoded directly here — instead, the method loops over `PublicRoutes.MATCHERS`:
+
+```java
+for (String[] matcher : PublicRoutes.MATCHERS) {
+    auth.requestMatchers(HttpMethod.valueOf(matcher[0]), matcher[1]).permitAll();
+}
+```
+
+**Why this matters:**
+
+The list of public routes needs to be consistent in two places: `SecurityConfig` (which decides what to allow) and `JwtAuthenticationFilter` (which decides what to skip). Before, both had their own hardcoded lists — a recipe for them drifting out of sync. Now `PublicRoutes.MATCHERS` is the single source of truth. Add a public route there and both places pick it up automatically.
+
+After the public routes are registered, the remaining rules are applied directly:
 
 | Route | Who can access |
 |---|---|
-| `POST /api/auth/**` | Everyone (login, register) |
-| `GET /api/hotels/**` | Everyone |
-| `GET /api/search/**` | Everyone |
+| Entries from `PublicRoutes.MATCHERS` | Everyone |
 | `/api/host/**` | Hosts only |
 | `/api/admin/**` | Admins only |
 | Everything else | Logged-in users only |
@@ -156,7 +158,7 @@ Two scenarios are handled:
 | No token / invalid token | `401 Unauthorized` | You need to log in first |
 | Valid token, wrong role | `403 Forbidden` | You're logged in but not allowed here |
 
-Both responses are handled by the `writeError` helper, which produces a consistent `ErrorResponse` JSON object. This way, your frontend always knows what to expect when something goes wrong.
+Both handlers delegate directly to `SecurityErrorWriter`, which owns the responsibility of building and writing the JSON response. `SecurityConfig` just calls it — it doesn't know or care how the response body is constructed. This way, your frontend always knows what to expect when something goes wrong, and the serialisation logic lives in exactly one place.
 
 ---
 
@@ -199,7 +201,7 @@ It finalises all the rules and returns a `SecurityFilterChain` that Spring regis
 
 ## 🔥 One-Line Summary
 
-> This class configures stateless JWT-based security: no sessions, no CSRF, explicit route-level access rules, structured JSON error responses for auth failures, and a JWT filter that validates every incoming request.
+> This class configures stateless JWT-based security: no sessions, no CSRF, public routes driven by a shared `PublicRoutes.MATCHERS` constant, structured JSON error responses for auth failures, and a JWT filter that validates every incoming request.
 
 ---
 
