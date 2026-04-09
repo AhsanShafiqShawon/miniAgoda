@@ -8,13 +8,13 @@
 
 This class defines the HTTP security rules for the application. Spring Security calls `securityFilterChain` once at startup, and the resulting `SecurityFilterChain` becomes the gatekeeper for every incoming HTTP request.
 
-It depends on `JwtAuthenticationFilter`, which is injected through the constructor and inserted into the filter chain.
+It depends on `JwtAuthenticationFilter` and `ObjectMapper`, both injected through the constructor. The filter is inserted into the chain, and the mapper is used to write structured JSON error responses.
 
 ---
 
 ## `securityFilterChain(HttpSecurity http)`
 
-The method configures four things in sequence.
+The method configures five things in sequence.
 
 **CSRF is disabled.** This is intentional for a stateless REST API. CSRF attacks exploit session cookies, and since this application transmits JWTs in `Authorization` headers — never in cookies — there is nothing for an attacker to exploit. The protection is unnecessary overhead.
 
@@ -31,9 +31,19 @@ The method configures four things in sequence.
 | `/api/admin/**` | `ROLE_ADMIN` |
 | Everything else | Authenticated |
 
+**Exception handling writes structured JSON errors.** Rather than letting Spring return its default HTML error pages, two handlers are registered. If a request reaches a protected route without valid credentials, the `authenticationEntryPoint` responds with a `401 Unauthorized` JSON body. If a request is authenticated but lacks the required role, the `accessDeniedHandler` responds with a `403 Forbidden` JSON body. Both use the shared `writeError` helper, which delegates to `ObjectMapper` to serialise an `ErrorResponse`.
+
 **`JwtAuthenticationFilter` is inserted before `UsernamePasswordAuthenticationFilter`.** This ensures the JWT is extracted and validated early in the filter chain, before Spring attempts any other form of authentication. If the token is missing or invalid, the filter writes a `401 ErrorResponse` directly to the response and the request never reaches the controller.
 
 Finally, `http.build()` assembles everything into a `SecurityFilterChain` and returns it to Spring as the active security policy.
+
+---
+
+## `writeError(...)`
+
+A private helper called by both exception handlers. It constructs an `ErrorResponse` via its factory method, sets the HTTP status code and `Content-Type: application/json` on the response, and writes the serialised body directly to the output stream. This ensures every security-layer rejection — whether due to a missing token or an insufficient role — returns a consistent, machine-readable error envelope.
+
+---
 
 # SecurityConfig — Plain English Breakdown
 
@@ -120,17 +130,9 @@ Every request must bring its own proof — a JWT token. The server verifies it a
 
 ---
 
-### 4. 🔓 `anyRequest().permitAll()` — let everyone in for now
+### 4. 🔒 Access rules — who can go where
 
-Right now, **no requests are blocked**. This is a temporary placeholder.
-
-Why? Because the real security — the `JwtAuthFilter` — hasn't been built yet. If you locked things down now, even you as the developer couldn't access anything. So `permitAll()` keeps the door open during early development.
-
----
-
-### 5. 🔜 The future access rules
-
-Once the JWT system is in place, the rules will look like this:
+Every route is now locked down with explicit rules:
 
 | Route | Who can access |
 |---|---|
@@ -143,9 +145,24 @@ Once the JWT system is in place, the rules will look like this:
 
 ---
 
-### 6. 🔐 The missing piece: `JwtAuthFilter`
+### 5. 🚨 Exception handling — structured error responses
 
-This is the future "ID checker." It will sit in front of every request and do the following:
+When a request is rejected by the security layer, the app doesn't return a blank page or Spring's default HTML. Instead, it sends a clean JSON error body.
+
+Two scenarios are handled:
+
+| Situation | HTTP Status | Meaning |
+|---|---|---|
+| No token / invalid token | `401 Unauthorized` | You need to log in first |
+| Valid token, wrong role | `403 Forbidden` | You're logged in but not allowed here |
+
+Both responses are handled by the `writeError` helper, which produces a consistent `ErrorResponse` JSON object. This way, your frontend always knows what to expect when something goes wrong.
+
+---
+
+### 6. 🔐 `JwtAuthenticationFilter` — the ID checker
+
+This filter sits in front of every request and does the following:
 
 1. Read the `Authorization` header
 2. Extract the JWT token: `Bearer <token>`
@@ -153,33 +170,24 @@ This is the future "ID checker." It will sit in front of every request and do th
 4. Identify the user
 5. Tell Spring: *"This request is from user X"*
 
-**Current flow:**
-```
-Incoming request → SecurityFilterChain → allow everything
-```
+It is inserted **before** `UsernamePasswordAuthenticationFilter` — early enough that Spring doesn't attempt any other form of authentication first.
 
-**Future flow:**
+**Current flow:**
 ```
 Incoming request
         ↓
-JwtAuthFilter (check and validate token)
+JwtAuthenticationFilter (validate token)
         ↓
 Security rules (who can access what)
         ↓
 Controller
 ```
 
----
-
-### 7. 📍 Where the filter will go
-
-`JwtAuthFilter` will be inserted **before** `UsernamePasswordAuthenticationFilter`.
-
-Why? Because you want JWT authentication to run early — before Spring tries any other form of authentication check.
+If the token is missing or invalid, `JwtAuthenticationFilter` writes a `401` error directly and the request never reaches the controller.
 
 ---
 
-### 8. 🏗️ `http.build()`
+### 7. 🏗️ `http.build()`
 
 This just means:
 
@@ -191,7 +199,7 @@ It finalises all the rules and returns a `SecurityFilterChain` that Spring regis
 
 ## 🔥 One-Line Summary
 
-> This class sets up your app to not use sessions, not care about CSRF, allow everything for now, and later plug in JWT-based security.
+> This class configures stateless JWT-based security: no sessions, no CSRF, explicit route-level access rules, structured JSON error responses for auth failures, and a JWT filter that validates every incoming request.
 
 ---
 

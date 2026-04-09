@@ -14,15 +14,25 @@ It is annotated with `@Component`, registering it as a Spring-managed bean. It d
 
 ---
 
+## `shouldNotFilter`
+
+Before `doFilterInternal` is even called, Spring checks `shouldNotFilter`. If it returns `true`, the filter skips the request entirely and passes it straight to the next filter in the chain.
+
+The method bypasses the filter for the three public route groups: `POST /api/auth/**`, `GET /api/hotels/**`, and `GET /api/search/**`. These routes are intentionally unauthenticated — no token should be required to log in, register, or browse public listings. Skipping the filter here rather than inside `doFilterInternal` keeps the main logic clean and avoids performing any header reads on requests that will never carry a token.
+
+---
+
 ## `doFilterInternal`
 
-This method is the filter's single entry point, and it follows a strict sequence: validate the header, decode the token, establish the authentication, and pass the request on.
+This method is the filter's single entry point for all non-public requests, and it follows a strict sequence: validate the header, decode the token, validate the claims, establish the authentication, and pass the request on.
 
 **Header check.** The first thing it does is read the `Authorization` header. If the header is absent or does not begin with `"Bearer "`, the request is rejected immediately with a `401`. There is nothing to decode and no reason to continue. The constant `BEARER_PREFIX` keeps this check readable and ensures the prefix string is defined in exactly one place.
 
 **Token decoding.** Once the raw token string is extracted by stripping the prefix, it is handed to `jwtDecoder.decode`. This is where the cryptographic verification happens — signature validation, expiry check, issuer check — all opaquely, inside the decoder. If the token is invalid for any reason, `JwtDecoder` throws a `JwtException`, which the filter catches and converts into a `401` with the message `"Invalid or expired token."` The two rejection paths — bad header, bad token — produce the same status code but different messages, giving a client or developer just enough information to distinguish between them.
 
-**Authentication establishment.** If decoding succeeds, the filter extracts the `subject` claim as the user ID and the custom `role` claim from the verified `Jwt`. It constructs a `UsernamePasswordAuthenticationToken` — Spring Security's standard representation of an authenticated principal — with the user ID as the principal, no credentials, and a single `GrantedAuthority` derived from the role. The role is prefixed with `"ROLE_"` because that is the convention Spring Security expects when making role-based access decisions downstream.
+**Claims validation.** After decoding succeeds, the `subject` claim is read as the user ID and the custom `role` claim is extracted. If `role` is `null` — meaning the token was structurally valid but was issued without the required claim — the request is rejected with a `401` and the message `"Token is missing required claims."` This guards against tokens that pass signature verification but lack the data needed to establish an identity.
+
+**Authentication establishment.** With both claims in hand, the filter constructs a `UsernamePasswordAuthenticationToken` — Spring Security's standard representation of an authenticated principal — with the user ID as the principal, no credentials, and a single `GrantedAuthority` derived from the role. The role is prefixed with `"ROLE_"` because that is the convention Spring Security expects when making role-based access decisions downstream.
 
 This token is placed into the `SecurityContextHolder`, which is the thread-local store Spring Security reads when evaluating whether an authenticated user has access to a given resource. From this point forward in the request lifecycle, the caller is known.
 
@@ -46,9 +56,7 @@ The method exists because error handling at the filter level bypasses the normal
 
 Think of this class as the **ID checker at the door**.
 
-Every single request that comes into the app passes through this filter before it reaches any controller. The filter has one job: look for a JWT token, validate it, and if it's good — tell the rest of the app who this request belongs to. If anything is wrong, stop the request right here and send back a `401`.
-
-This is the missing piece that `SecurityConfig` was waiting for.
+Every request that comes into the app — except for deliberately public routes — passes through this filter before it reaches any controller. The filter has one job: look for a JWT token, validate it, and if it's good — tell the rest of the app who this request belongs to. If anything is wrong, stop the request right here and send back a `401`.
 
 | Concept | What it is |
 |---|---|
@@ -75,9 +83,35 @@ Spring's filter chain can sometimes call a filter more than once per request in 
 
 ---
 
-### 3. `doFilterInternal` — the main logic, step by step
+### 3. `shouldNotFilter` — skipping public routes entirely
 
-This is the method Spring calls for every incoming request. It runs the full ID check sequence.
+```java
+protected boolean shouldNotFilter(HttpServletRequest request) {
+    String path = request.getServletPath();
+    String method = request.getMethod();
+    return (method.equals("POST") && path.startsWith("/api/auth/"))
+        || (method.equals("GET")  && path.startsWith("/api/hotels/"))
+        || (method.equals("GET")  && path.startsWith("/api/search/"));
+}
+```
+
+Before the main logic even runs, Spring checks `shouldNotFilter`. If it returns `true`, the filter is skipped for that request — `doFilterInternal` is never called.
+
+The three public route groups are excluded here:
+
+| Method | Path | Why |
+|---|---|---|
+| `POST` | `/api/auth/**` | Login and register — no token yet |
+| `GET` | `/api/hotels/**` | Public listings — no login needed |
+| `GET` | `/api/search/**` | Public search — no login needed |
+
+This keeps the main filter logic clean. These routes will never carry a token, so there's no point reading their headers.
+
+---
+
+### 4. `doFilterInternal` — the main logic, step by step
+
+This is the method Spring calls for every request that wasn't skipped. It runs the full ID check sequence.
 
 ---
 
@@ -136,18 +170,25 @@ If decoding succeeds, `jwt` holds the fully validated, decoded token and everyth
 
 ---
 
-**Step 4 — Extract the user's identity from the token**
+**Step 4 — Extract and validate the claims**
 
 ```java
 String userId = jwt.getSubject();
 String role = jwt.getClaimAsString("role");
+
+if (role == null) {
+    writeUnauthorized(response, request, "Token is missing required claims.");
+    return;
+}
 ```
 
 Two claims are pulled out of the decoded token:
 
-`getSubject()` returns the `sub` claim — the user ID that was stamped into the token when it was created in `JwtUtil`.
+`getSubject()` returns the `sub` claim — the user ID that was stamped into the token when it was created.
 
-`getClaimAsString("role")` returns the custom `role` claim — `"GUEST"`, `"HOST"`, or `"ADMIN"` — also stamped in at creation time.
+`getClaimAsString("role")` returns the custom `role` claim — `"GUEST"`, `"HOST"`, or `"ADMIN"`.
+
+If `role` is `null`, the token passed signature verification but was issued without the data needed to establish an identity. This is treated as a `401` — the token is technically valid but unusable. A well-formed token from this application will always carry a role, so a missing one is a sign of a token that didn't come from here.
 
 ---
 
@@ -189,12 +230,12 @@ Identity confirmed, context loaded. The request is allowed to continue. `filterC
 
 ---
 
-### 4. `writeUnauthorized` — why the filter writes responses directly
+### 5. `writeUnauthorized` — why the filter writes responses directly
 
 ```java
 private void writeUnauthorized(HttpServletResponse response,
-                                HttpServletRequest request,
-                                String message) throws IOException {
+                               HttpServletRequest request,
+                               String message) throws IOException {
     ErrorResponse body = ErrorResponse.of(401, "Unauthorized", message, request.getRequestURI());
     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
     response.setContentType(MediaType.APPLICATION_JSON_VALUE);
@@ -212,7 +253,7 @@ So instead of throwing, the filter writes the response itself. It sets the statu
 
 ## 🔥 One-Line Summary
 
-> Every request passes through this filter — it checks for a valid JWT, extracts the user's identity, loads it into the security context, and rejects anything that can't prove who it is before a single controller method runs.
+> Every non-public request passes through this filter — it checks for a valid JWT, validates its claims, extracts the user's identity, loads it into the security context, and rejects anything that can't prove who it is before a single controller method runs.
 
 ---
 
@@ -246,10 +287,15 @@ Spring Security clears the context at the end of every request. The sticky note 
 ```
 Incoming request
         ↓
-JwtAuthenticationFilter
-   ├── No header?         → 401, stop
-   ├── Bad token?         → 401, stop
-   └── Valid token?       → load identity into SecurityContextHolder
+shouldNotFilter?
+   ├── Public route?  → skip filter, continue chain
+   └── Protected route? → run doFilterInternal
+        ↓
+doFilterInternal
+   ├── No/bad header?           → 401, stop
+   ├── Invalid/expired token?   → 401, stop
+   ├── Missing role claim?      → 401, stop
+   └── Valid token + claims?    → load identity into SecurityContextHolder
         ↓
 SecurityConfig rules
    ├── Route requires ADMIN, user is GUEST? → 403, stop
@@ -277,8 +323,10 @@ In a traditional username/password flow, the credentials field holds the passwor
 | Thing | Analogy |
 |---|---|
 | `JwtAuthenticationFilter` | The ID checker at the venue entrance |
+| `shouldNotFilter` | The side door marked "staff free entry" — certain routes bypass the check entirely |
 | Missing header | Arriving with no ID at all — turned away immediately |
 | Invalid/expired token | Arriving with a fake or expired ID — turned away immediately |
+| Missing role claim | Arriving with a real ID that has the name blacked out — can't let you in |
 | `JwtDecoder` | The scanner that checks if the ID is genuine |
 | `SecurityContextHolder` | The wristband put on after passing the check — staff inside can see it and know who you are |
 | `filterChain.doFilter` | The ID checker waving you through — you're good to go |
@@ -288,4 +336,4 @@ In a traditional username/password flow, the credentials field holds the passwor
 
 ### Final one-liner
 
-> The filter is the gatekeeper — it runs before everything else, validates the token, stamps the request with an identity, and either lets it through or shuts it down with a clean, consistent error response.
+> The filter is the gatekeeper — it skips public routes, validates the token and its claims for everything else, stamps the request with an identity, and either lets it through or shuts it down with a clean, consistent error response.
