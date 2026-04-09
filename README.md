@@ -88,6 +88,9 @@ miniAgoda/
 │   │   │   ├── response/
 │   │   │   │   ├── SomeResponse.java
 │   │   │   │   └── SomeAnotherResponse.java
+│   │   │   ├── security/
+│   │   │   │   ├── SomeSecurity.java
+│   │   │   │   └── SomeAnotherSecurity.java
 │   │   │   └── util/
 │   │   │       ├── SomeUtil.java
 │   │   │       └── SomeAnotherUtil.java
