@@ -34,6 +34,7 @@ miniAgoda/
 │   │   │   │   ├── [x] ApiResponse.java
 │   │   │   │   └── [x] ErrorResponse.java
 │   │   │   └── util/
+│   │   │       ├── [x] SecurityErrorWriter.java
 │   │   │       └── [x] JwtUtil.java
 │   │   │
 │   │   ├── user/                                       # Build before auth. Auth depends on User.
