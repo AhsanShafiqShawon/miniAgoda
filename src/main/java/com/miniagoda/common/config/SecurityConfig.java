@@ -1,5 +1,6 @@
 package com.miniagoda.common.config;
 
+import com.miniagoda.common.filter.JwtAuthenticationFilter;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.miniagoda.common.response.ErrorResponse;
 import jakarta.servlet.http.HttpServletResponse;
