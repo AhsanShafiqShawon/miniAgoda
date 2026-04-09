@@ -33,6 +33,8 @@ miniAgoda/
 │   │   │   ├── response/
 │   │   │   │   ├── [x] ApiResponse.java
 │   │   │   │   └── [x] ErrorResponse.java
+│   │   │   ├── security/
+│   │   │   │   └── [x] PublicRoutes.java
 │   │   │   └── util/
 │   │   │       ├── [x] SecurityErrorWriter.java
 │   │   │       └── [x] JwtUtil.java
