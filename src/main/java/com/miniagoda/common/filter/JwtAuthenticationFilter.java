@@ -1,5 +1,6 @@
 package com.miniagoda.common.filter;
 
+import com.miniagoda.common.security.PublicRoutes;
 import com.miniagoda.common.util.SecurityErrorWriter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -35,9 +36,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getServletPath();
         String method = request.getMethod();
-        return (method.equals("POST") && path.startsWith("/api/auth/"))
-            || (method.equals("GET")  && path.startsWith("/api/hotels/"))
-            || (method.equals("GET")  && path.startsWith("/api/search/"));
+        for (String[] matcher : PublicRoutes.MATCHERS) {
+            if (method.equals(matcher[0]) && path.startsWith(matcher[1].replace("/**", ""))) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -84,6 +88,5 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                HttpServletRequest request,
                                String message) throws IOException {
     securityErrorWriter.write(response, request, 401, "Unauthorized", message);
-}
-
+    }
 }
