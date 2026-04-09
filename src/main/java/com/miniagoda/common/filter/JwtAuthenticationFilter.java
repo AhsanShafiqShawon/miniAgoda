@@ -2,6 +2,7 @@ package com.miniagoda.common.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.miniagoda.common.response.ErrorResponse;
+import com.miniagoda.common.util.SecurityErrorWriter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,11 +27,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private static final String BEARER_PREFIX = "Bearer ";
 
     private final JwtDecoder jwtDecoder;
-    private final ObjectMapper objectMapper;
+    private final SecurityErrorWriter securityErrorWriter;
 
-    public JwtAuthenticationFilter(JwtDecoder jwtDecoder, ObjectMapper objectMapper) {
+    public JwtAuthenticationFilter(JwtDecoder jwtDecoder, SecurityErrorWriter securityErrorWriter) {
         this.jwtDecoder = jwtDecoder;
-        this.objectMapper = objectMapper;
+        this.securityErrorWriter = securityErrorWriter;
     }
 
     @Override
@@ -83,12 +84,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     private void writeUnauthorized(HttpServletResponse response,
-                                   HttpServletRequest request,
-                                   String message) throws IOException {
-        ErrorResponse body = ErrorResponse.of(401, "Unauthorized", message, request.getRequestURI());
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        response.getWriter().write(objectMapper.writeValueAsString(body));
-    }
+                               HttpServletRequest request,
+                               String message) throws IOException {
+    securityErrorWriter.write(response, request, 401, "Unauthorized", message);
+}
 
 }
