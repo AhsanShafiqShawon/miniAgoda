@@ -79,6 +79,9 @@ miniAgoda/
 │   │   │   ├── config/
 │   │   │   │   ├── SomeConfig.java
 │   │   │   │   └── SomeAnotherConfig.java
+│   │   │   ├── filter/
+│   │   │   │   ├── SomeFilter.java
+│   │   │   │   └── SomeAnotherFilter.java
 │   │   │   ├── exception/
 │   │   │   │   ├── SomeException.java
 │   │   │   │   └── SomeAnotherException.java
