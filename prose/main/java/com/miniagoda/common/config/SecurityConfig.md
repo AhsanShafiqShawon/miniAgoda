@@ -4,23 +4,36 @@
 
 ---
 
+## Overview
+
+This class defines the HTTP security rules for the application. Spring Security calls `securityFilterChain` once at startup, and the resulting `SecurityFilterChain` becomes the gatekeeper for every incoming HTTP request.
+
+It depends on `JwtAuthenticationFilter`, which is injected through the constructor and inserted into the filter chain.
+
+---
+
 ## `securityFilterChain(HttpSecurity http)`
 
-This method is where the application's HTTP security rules are defined. Spring Security calls it once at startup, and whatever `SecurityFilterChain` it returns becomes the gatekeeper for every incoming HTTP request.
+The method configures four things in sequence.
 
-It receives an `HttpSecurity` builder — think of it as a configuration surface where you declare how the application should behave around sessions, CSRF, and access control.
+**CSRF is disabled.** This is intentional for a stateless REST API. CSRF attacks exploit session cookies, and since this application transmits JWTs in `Authorization` headers — never in cookies — there is nothing for an attacker to exploit. The protection is unnecessary overhead.
 
-The first thing it does is disable CSRF protection entirely. This is intentional for a stateless REST API: CSRF attacks exploit session cookies, and since this application won't be using session cookies, the protection is unnecessary overhead.
+**Sessions are set to `STATELESS`.** Spring Security will never create or consult an `HttpSession`. Every request must carry its own proof of identity in the form of a JWT. This is the standard posture for a JWT-based API and allows the application to scale horizontally without shared session state.
 
-Next it sets the session creation policy to `STATELESS`. This tells Spring Security never to create or consult an `HttpSession` for any request. Every request must be self-contained — authenticated by whatever is on the wire, not by a server-side session. This is the standard posture for a JWT-based API.
+**Authorization rules are configured by route.** Public routes — auth endpoints, hotel reads, and search reads — are open to all. Host-only and admin-only routes are gated by role. Everything else requires an authenticated user.
 
-Then it configures request authorization. Right now, every request is permitted without any authentication check — `anyRequest().permitAll()`. This is a temporary placeholder. The TODO comments spell out the intended end state clearly: public routes for auth and search, role-gated routes for hosts and admins, and everything else requiring a valid authenticated user.
+| Pattern | Access |
+|---------|--------|
+| `POST /api/auth/**` | Public |
+| `GET /api/hotels/**` | Public |
+| `GET /api/search/**` | Public |
+| `/api/host/**` | `ROLE_HOST` |
+| `/api/admin/**` | `ROLE_ADMIN` |
+| Everything else | Authenticated |
 
-The reason it's open right now is that the authorization rules depend on `JwtAuthFilter` — a filter that will intercept each request, extract the JWT from the `Authorization` header, validate it, and load the user into the security context. That filter doesn't exist yet. Until it does, locking down routes would lock out everyone, including developers, so `permitAll()` acts as a safe default during early development.
+**`JwtAuthenticationFilter` is inserted before `UsernamePasswordAuthenticationFilter`.** This ensures the JWT is extracted and validated early in the filter chain, before Spring attempts any other form of authentication. If the token is missing or invalid, the filter writes a `401 ErrorResponse` directly to the response and the request never reaches the controller.
 
-The commented-out block at the bottom shows exactly where `JwtAuthFilter` will be inserted once it's ready: just before `UsernamePasswordAuthenticationFilter` in the filter chain, which is the standard position for custom token-based authentication filters in Spring Security.
-
-Finally, `http.build()` assembles everything into a `SecurityFilterChain` and returns it to Spring, which registers it as the active security policy for the application.
+Finally, `http.build()` assembles everything into a `SecurityFilterChain` and returns it to Spring as the active security policy.
 
 # SecurityConfig — Plain English Breakdown
 
