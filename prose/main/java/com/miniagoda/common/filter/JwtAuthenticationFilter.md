@@ -18,7 +18,7 @@ It is annotated with `@Component`, registering it as a Spring-managed bean. It d
 
 Before `doFilterInternal` is even called, Spring checks `shouldNotFilter`. If it returns `true`, the filter skips the request entirely and passes it straight to the next filter in the chain.
 
-The method bypasses the filter for the three public route groups: `POST /api/auth/**`, `GET /api/hotels/**`, and `GET /api/search/**`. These routes are intentionally unauthenticated — no token should be required to log in, register, or browse public listings. Skipping the filter here rather than inside `doFilterInternal` keeps the main logic clean and avoids performing any header reads on requests that will never carry a token.
+The method iterates over `PublicRoutes.MATCHERS` — the same shared constant `SecurityConfig` uses — and returns `true` if the request's method and path match any entry. The path comparison strips the `/**` wildcard suffix before calling `startsWith`, so a path like `/api/auth/login` correctly matches the `/api/auth/**` pattern. These routes are intentionally unauthenticated — no token should be required to log in, register, or browse public listings. Skipping the filter here rather than inside `doFilterInternal` keeps the main logic clean and avoids performing any header reads on requests that will never carry a token. Using `PublicRoutes.MATCHERS` also means the set of skipped routes stays in sync with what `SecurityConfig` permits — there is no separate list to maintain.
 
 ---
 
@@ -87,23 +87,22 @@ Spring's filter chain can sometimes call a filter more than once per request in 
 protected boolean shouldNotFilter(HttpServletRequest request) {
     String path = request.getServletPath();
     String method = request.getMethod();
-    return (method.equals("POST") && path.startsWith("/api/auth/"))
-        || (method.equals("GET")  && path.startsWith("/api/hotels/"))
-        || (method.equals("GET")  && path.startsWith("/api/search/"));
+    for (String[] matcher : PublicRoutes.MATCHERS) {
+        if (method.equals(matcher[0]) && path.startsWith(matcher[1].replace("/**", ""))) {
+            return true;
+        }
+    }
+    return false;
 }
 ```
 
 Before the main logic even runs, Spring checks `shouldNotFilter`. If it returns `true`, the filter is skipped for that request — `doFilterInternal` is never called.
 
-The three public route groups are excluded here:
+Rather than hardcoding path strings here, the method loops over `PublicRoutes.MATCHERS` — the same constant `SecurityConfig` uses to register `permitAll` rules. For each entry it checks whether the request method and path prefix match. The `/**` wildcard is stripped before `startsWith` so that a concrete path like `/api/auth/login` correctly matches the `/api/auth/**` pattern.
 
-| Method | Path | Why |
-|---|---|---|
-| `POST` | `/api/auth/**` | Login and register — no token yet |
-| `GET` | `/api/hotels/**` | Public listings — no login needed |
-| `GET` | `/api/search/**` | Public search — no login needed |
+**Why the loop instead of hardcoded conditions?**
 
-This keeps the main filter logic clean. These routes will never carry a token, so there's no point reading their headers.
+The list of public routes needs to be consistent in two places: `SecurityConfig` (what to allow) and `JwtAuthenticationFilter` (what to skip). A separate hardcoded list in each class is a maintenance trap — add a new public route in one place and forget the other, and the filter will reject requests that Spring would have permitted. `PublicRoutes.MATCHERS` is the single source of truth. Update it once and both places stay in sync automatically.
 
 ---
 
