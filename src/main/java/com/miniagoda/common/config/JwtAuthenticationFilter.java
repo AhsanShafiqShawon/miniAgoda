@@ -34,6 +34,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String path = request.getServletPath();
+        String method = request.getMethod();
+        return (method.equals("POST") && path.startsWith("/api/auth/"))
+            || (method.equals("GET")  && path.startsWith("/api/hotels/"))
+            || (method.equals("GET")  && path.startsWith("/api/search/"));
+    }
+
+    @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
@@ -58,6 +67,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String userId = jwt.getSubject();
         String role = jwt.getClaimAsString("role");
 
+        if (role == null) {
+            writeUnauthorized(response, request, "Token is missing required claims.");
+            return;
+        }
+
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                 userId,
                 null,
@@ -76,4 +90,5 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
         response.getWriter().write(objectMapper.writeValueAsString(body));
     }
+
 }

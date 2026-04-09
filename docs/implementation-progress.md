@@ -19,6 +19,7 @@ miniAgoda/
 │   │   │   ├── config/
 │   │   │   │   ├── [x] AppConfig.java
 │   │   │   │   ├── [x] SecurityConfig.java
+│   │   │   │   ├── [x] JwtBeanConfig.java
 │   │   │   │   ├── [x] JwtAuthenticationFilter.java
 │   │   │   │   └── [x] JwtConfig.java
 │   │   │   ├── exception/
