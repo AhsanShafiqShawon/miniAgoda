@@ -8,7 +8,7 @@
 
 This class defines the HTTP security rules for the application. Spring Security calls `securityFilterChain` once at startup, and the resulting `SecurityFilterChain` becomes the gatekeeper for every incoming HTTP request.
 
-It depends on `JwtAuthenticationFilter` and `ObjectMapper`, both injected through the constructor. The filter is inserted into the chain, and the mapper is used to write structured JSON error responses.
+It depends on `JwtAuthenticationFilter` and `SecurityErrorWriter`, both injected through the constructor. The filter is inserted into the chain, and the error writer is used to write structured JSON error responses.
 
 ---
 
@@ -41,7 +41,7 @@ Finally, `http.build()` assembles everything into a `SecurityFilterChain` and re
 
 ## `writeError(...)`
 
-A private helper called by both exception handlers. It constructs an `ErrorResponse` via its factory method, sets the HTTP status code and `Content-Type: application/json` on the response, and writes the serialised body directly to the output stream. This ensures every security-layer rejection — whether due to a missing token or an insufficient role — returns a consistent, machine-readable error envelope.
+A private helper called by both exception handlers. It delegates directly to `SecurityErrorWriter`, passing through the response, request, HTTP status code, error label, and message. `SecurityErrorWriter` owns the responsibility of setting headers and writing the JSON body. This ensures every security-layer rejection — whether due to a missing token or an insufficient role — returns a consistent, machine-readable error envelope, while keeping `SecurityConfig` free of serialisation concerns.
 
 ---
 

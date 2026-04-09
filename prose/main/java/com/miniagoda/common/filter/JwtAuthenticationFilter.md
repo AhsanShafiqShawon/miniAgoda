@@ -10,7 +10,7 @@ This class is the gatekeeper that runs before every request, inspecting it for a
 
 It extends `OncePerRequestFilter`, a Spring base class that guarantees the filter executes exactly once per request regardless of how many times the request is dispatched internally. This matters for security filters: running authentication logic more than once per request would be wasteful at best and inconsistent at worst.
 
-It is annotated with `@Component`, registering it as a Spring-managed bean. It depends on two collaborators injected through the constructor. `JwtDecoder` handles the cryptographic work of verifying and parsing a token — it knows the signing key, validates the signature, and checks the expiry. `ObjectMapper` is Jackson's JSON serialiser, used here to write error responses directly to the HTTP response body when authentication fails. The filter cannot delegate to `GlobalExceptionHandler` in these cases because filters run outside the dispatcher servlet layer where Spring's exception handling machinery operates; it must write the response itself.
+It is annotated with `@Component`, registering it as a Spring-managed bean. It depends on two collaborators injected through the constructor. `JwtDecoder` handles the cryptographic work of verifying and parsing a token — it knows the signing key, validates the signature, and checks the expiry. `SecurityErrorWriter` writes structured JSON error responses directly to the HTTP response body when authentication fails. The filter cannot delegate to `GlobalExceptionHandler` in these cases because filters run outside the dispatcher servlet layer where Spring's exception handling machinery operates; it must write the response itself, and `SecurityErrorWriter` encapsulates exactly that responsibility.
 
 ---
 
@@ -42,11 +42,9 @@ This token is placed into the `SecurityContextHolder`, which is the thread-local
 
 ## `writeUnauthorized`
 
-This private method handles the mechanics of writing a `401` response directly to the HTTP output stream.
+This private helper exists solely to keep the rejection calls inside `doFilterInternal` readable. It delegates directly to `securityErrorWriter.write`, passing the response, request, `401` status, the `"Unauthorized"` label, and the caller-supplied message. `SecurityErrorWriter` owns the mechanics of setting headers and serialising the body — this method contributes nothing beyond routing to it.
 
-It constructs an `ErrorResponse` using the `of` factory, sets the response status and content type, then serialises the body to JSON using `ObjectMapper` and writes it to the response writer. The content type is set explicitly to `application/json` so the client knows how to interpret the body.
-
-The method exists because error handling at the filter level bypasses the normal Spring MVC machinery. `GlobalExceptionHandler` only intercepts exceptions that reach the dispatcher servlet; a request rejected here never gets that far. This method is the filter's own fallback, producing the same `ErrorResponse` shape the rest of the application uses so that authentication failures are indistinguishable in structure from any other error a client might receive.
+The method exists because error handling at the filter level bypasses the normal Spring MVC machinery. `GlobalExceptionHandler` only intercepts exceptions that reach the dispatcher servlet; a request rejected here never gets that far. `SecurityErrorWriter` is the filter's own fallback, producing the same `ErrorResponse` shape the rest of the application uses so that authentication failures are indistinguishable in structure from any other error a client might receive.
 
 # JwtAuthenticationFilter — Plain English Breakdown
 
@@ -79,7 +77,7 @@ Spring's filter chain can sometimes call a filter more than once per request in 
 
 **`JwtDecoder`** — this is the token validator. You hand it a raw token string and it either returns a decoded `Jwt` object or throws a `JwtException`. It verifies the signature, checks the expiry, and unpacks the claims all in one call.
 
-**`ObjectMapper`** — Jackson's JSON serializer. The filter needs this because it sits below the `GlobalExceptionHandler`. When this filter rejects a request, the exception handler is never involved — the filter writes the response directly. `ObjectMapper` turns the `ErrorResponse` into a JSON string so it can be written to the response body manually.
+**`SecurityErrorWriter`** — the dedicated error response writer. The filter needs this because it sits below the `GlobalExceptionHandler`. When this filter rejects a request, the exception handler is never involved — the filter writes the response directly. `SecurityErrorWriter` owns the mechanics of setting the status, content type, and JSON body, so the filter can reject a request in one call without caring about serialisation details.
 
 ---
 
@@ -236,10 +234,7 @@ Identity confirmed, context loaded. The request is allowed to continue. `filterC
 private void writeUnauthorized(HttpServletResponse response,
                                HttpServletRequest request,
                                String message) throws IOException {
-    ErrorResponse body = ErrorResponse.of(401, "Unauthorized", message, request.getRequestURI());
-    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-    response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-    response.getWriter().write(objectMapper.writeValueAsString(body));
+    securityErrorWriter.write(response, request, 401, "Unauthorized", message);
 }
 ```
 
@@ -247,7 +242,7 @@ This method exists because the filter operates outside the reach of `GlobalExcep
 
 `GlobalExceptionHandler` intercepts exceptions that escape from controllers. But this filter runs before any controller is involved. If it throws an exception, the exception handler never sees it — Spring's filter error handling kicks in instead, and the response ends up malformed or inconsistent.
 
-So instead of throwing, the filter writes the response itself. It sets the status to `401`, sets the content type to JSON, serializes an `ErrorResponse` using `ObjectMapper`, and writes it directly to the response body. The same `ErrorResponse` shape the rest of the app uses — consistent, clean, no surprises for the frontend.
+So instead of throwing, the filter rejects the request by delegating to `SecurityErrorWriter`, which owns the mechanics of setting the status, content type, and writing the JSON body. The same `ErrorResponse` shape the rest of the app uses — consistent, clean, no surprises for the frontend. `writeUnauthorized` itself is just a thin wrapper that keeps the three rejection call sites inside `doFilterInternal` readable.
 
 ---
 
@@ -330,7 +325,7 @@ In a traditional username/password flow, the credentials field holds the passwor
 | `JwtDecoder` | The scanner that checks if the ID is genuine |
 | `SecurityContextHolder` | The wristband put on after passing the check — staff inside can see it and know who you are |
 | `filterChain.doFilter` | The ID checker waving you through — you're good to go |
-| `writeUnauthorized` | The ID checker handing you a printed rejection slip rather than just pointing vaguely at the exit |
+| `writeUnauthorized` | The ID checker handing you off to a dedicated rejection desk — one place handles all turnaways with the same printed slip |
 
 ---
 
