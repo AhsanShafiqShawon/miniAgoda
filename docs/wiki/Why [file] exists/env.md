@@ -35,6 +35,10 @@ Common things stored in a `.env` file:
 | External service URLs | `PAYMENT_API_URL=https://pay.example.com` |
 | App mode | `APP_ENV=development` |
 
+### Mental Model
+
+`API key = “Hello server, I am this app”`
+`JWT     = “Hello server, I am this user and here’s proof”`
 ---
 
 ## Why Not Hardcode Values?
@@ -302,20 +306,20 @@ public class AppConfig {
 
 **On your laptop** (no `APP_ENV` set → defaults to dev):
 ```
-Loading config: .env
-Environment : development
-DB Host     : localhost
-DB Name     : myapp_dev
-Log Level   : DEBUG
+Loading config  : .env
+Environment     : development
+DB Host         : localhost
+DB Name         : myapp_dev
+Log Level       : DEBUG
 ```
 
 **On the production server** (`APP_ENV=production` set on the server):
 ```
-Loading config: .env.production
-Environment : production
-DB Host     : prod.db.mycompany.com
-DB Name     : myapp_production
-Log Level   : ERROR
+Loading config  : .env.production
+Environment     : production
+DB Host         : prod.db.mycompany.com
+DB Name         : myapp_production
+Log Level       : ERROR
 ```
 
 > **Same Java code. Different config. Zero hardcoding.** ✅
