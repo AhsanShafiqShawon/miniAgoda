@@ -1,8 +1,6 @@
 # miniAgoda
 
-A Java/Spring Boot hotel booking system modeled after Agoda, built as a
-structured learning project with an explicit goal of evolving into a
-distributed microservices architecture.
+A Java/Spring Boot hotel booking system modeled after Agoda, built with an explicit goal of evolving into a distributed microservices architecture.
 
 ## What it does
 
@@ -17,7 +15,7 @@ view operational data. Admins can moderate content and manage the platform.
 
 | Milestone | Status | Covers |
 |---|---|---|
-| MVP - Core Search | 🔄 Starting | Hotels, rooms, availability, search, users, auth |
+| MVP - Core Search | ⌛ In Progress | Hotels, rooms, availability, search, users, auth |
 | MVP - Core Booking | ⬜ Planned | Bookings, reviews, notifications, promotions |
 | MVP - Admin | ⬜ Planned | Admin operations, moderation, system stats |
 | MVP - Payment | ⬜ Planned | Payment gateway integration, refunds |
@@ -39,7 +37,7 @@ Client
         │     ├── value/            (value objects)
         │     ├── exception/        (feature-scoped exceptions)
         │     └── gateway/          (external service abstractions, if needed)
-        └── Common                  (shared config, exceptions, responses, utils)
+        └── Common                  (shared config, exceptions, responses, utils, fitler, security)
 ```
 
 See [Architecture Overview](docs/architecture/overview.md) for the full picture.
@@ -175,5 +173,3 @@ miniAgoda/
 | JWT Authentication Filter | [ADR-015](docs/architecture/decisions/ADR-015-jwt-authentication-filter.md) |
 
 ---
-
-*A personal learning project toward distributed systems and microservice architecture.*
