@@ -35,10 +35,12 @@ Common things stored in a `.env` file:
 | External service URLs | `PAYMENT_API_URL=https://pay.example.com` |
 | App mode | `APP_ENV=development` |
 
-### Mental Model
+### 🧩 Mental Model
 
-`API key = “Hello server, I am this app”`
-`JWT     = “Hello server, I am this user and here’s proof”`
+```java
+API key = “Hello server, I am this app”
+JWT     = “Hello server, I am this user and here’s proof”
+```
 ---
 
 ## Why Not Hardcode Values?
