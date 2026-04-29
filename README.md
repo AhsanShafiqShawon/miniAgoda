@@ -27,7 +27,7 @@ miniAgoda/
 │   │   │   │   ├── [ ] AddRatePolicyRequest.java       ← record
 │   │   │   │   └── [ ] EditRatePolicyRequest.java      ← record
 │   │   │   ├── entity/
-│   │   │   │   ├── [ ] Hotel.java                      ← @Entity class
+│   │   │   │   ├── [x] Hotel.java                      ← @Entity class
 │   │   │   │   ├── [ ] HotelStatus.java                ← enum
 │   │   │   │   ├── [ ] RoomType.java                   ← @Entity class
 │   │   │   │   ├── [ ] RoomTypeStatus.java             ← enum
