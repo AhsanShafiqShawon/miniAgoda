@@ -26,8 +26,10 @@ public class DataSeeder implements CommandLineRunner {
     public void run(String... args) throws Exception {
         if(hotelRepository.count() > 0) return;
 
-        InputStream stream = DataSeeder.class.getResourceAsStream("/data/hotels.json");
-        List<Hotel> hotels = mapper.readValue(stream, new TypeReference<List<Hotel>>() {});
-        hotelRepository.saveAll(hotels);
+        try (InputStream stream = DataSeeder.class.getResourceAsStream("/data/hotels.json")) {
+            if (stream == null) throw new RuntimeException("hotels.json not found");
+            List<Hotel> hotels = mapper.readValue(stream, new TypeReference<List<Hotel>>() {});
+            hotelRepository.saveAll(hotels);
+        }
     }
 }
