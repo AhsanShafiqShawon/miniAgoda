@@ -1,9 +1,12 @@
 package com.miniagoda.hotel.entity;
 
+import java.util.List;
+
 import com.miniagoda.common.entity.BaseEntity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,4 +29,7 @@ public class Hotel extends BaseEntity {
     
     @Column(length = 1000)
     private String description;
+
+    @OneToMany(mappedBy = "hotel")
+    private List<RoomType> roomTypes;
 }
