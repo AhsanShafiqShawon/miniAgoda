@@ -5,8 +5,8 @@ miniAgoda/
 ├── src/
 │   ├── main/java/com/miniagoda/
 │   │   ├── common/
-│   │   │   └── entity/
-│   │   │       └── [x] BaseEntity.java
+│   │   │   ├── entity/
+│   │   │   │   └── [x] BaseEntity.java
 │   │   │   └── seed/
 │   │   │       └── [x] DataSeeder.java
 │   │   │
