@@ -8,16 +8,9 @@ miniAgoda/
 │   │   │   └── entity/
 │   │   │       └── [x] BaseEntity.java
 │   │   │
-│   │   ├── hotel/                                      
-│   │   │   ├── [ ] HotelController.java
-│   │   │   ├── [ ] HotelManagementController.java
-│   │   │   ├── [ ] HotelService.java
-│   │   │   ├── [ ] HotelManagementService.java
-│   │   │   ├── [ ] RoomTypeService.java
-│   │   │   ├── [ ] HotelRepository.java
-│   │   │   ├── [ ] RoomTypeRepository.java
-│   │   │   ├── [ ] HotelMapper.java
-│   │   │   ├── [ ] RoomTypeMapper.java
+│   │   ├── hotel/
+│   │   │   ├── controller/
+│   │   │   │   └── [x] HotelController.java                         
 │   │   │   ├── dto/
 │   │   │   │   ├── [ ] HotelSummary.java               ← record
 │   │   │   │   ├── [ ] AddHotelRequest.java            ← record
