@@ -7,10 +7,14 @@ miniAgoda/
 │   │   ├── common/
 │   │   │   └── entity/
 │   │   │       └── [x] BaseEntity.java
+│   │   │   └── seed/
+│   │   │       └── [x] DataSeeder.java
 │   │   │
 │   │   ├── hotel/
 │   │   │   ├── controller/
-│   │   │   │   └── [x] HotelController.java                         
+│   │   │   │   └── [ ] HotelController.java
+│   │   │   ├── repository/
+│   │   │   │   └── [x] HotelRepository.java
 │   │   │   ├── dto/
 │   │   │   │   ├── [ ] HotelSummary.java               ← record
 │   │   │   │   ├── [ ] AddHotelRequest.java            ← record
