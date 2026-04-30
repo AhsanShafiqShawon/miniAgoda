@@ -45,7 +45,9 @@ miniAgoda/
 │   │   └── [ ] hotel/
 │   │
 │   └── main/resources/
-│       ├── [ ] application.yml
+│       ├── [x] application.yml
+│       ├── data/
+│       │   └── [x] hotels.java
 │       └── db/migration/                               # Run in this order. Never skip a version.
 │           ├── [ ] V1__create_countries.sql
 │           ├── [ ] V2__create_cities.sql
