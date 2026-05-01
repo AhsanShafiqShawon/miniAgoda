@@ -1,0 +1,2508 @@
+[
+  {
+    "name": "Family Room",
+    "capacity": 5,
+    "price": 497.09,
+    "totalUnits": 8,
+    "hotelCode": "BAN-GPH-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 675.81,
+    "totalUnits": 7,
+    "hotelCode": "BAN-GPH-01"
+  },
+  {
+    "name": "Standard Room",
+    "capacity": 2,
+    "price": 96.12,
+    "totalUnits": 25,
+    "hotelCode": "BAN-GPH-01"
+  },
+  {
+    "name": "Superior Room",
+    "capacity": 3,
+    "price": 225.26,
+    "totalUnits": 11,
+    "hotelCode": "BAN-RR-01"
+  },
+  {
+    "name": "Family Room",
+    "capacity": 5,
+    "price": 322.79,
+    "totalUnits": 8,
+    "hotelCode": "BAN-RR-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 454.56,
+    "totalUnits": 7,
+    "hotelCode": "BAN-RR-01"
+  },
+  {
+    "name": "Standard Room",
+    "capacity": 2,
+    "price": 53.98,
+    "totalUnits": 32,
+    "hotelCode": "BAN-CI-01"
+  },
+  {
+    "name": "Deluxe Room",
+    "capacity": 2,
+    "price": 179.59,
+    "totalUnits": 18,
+    "hotelCode": "BAN-CI-01"
+  },
+  {
+    "name": "Family Room",
+    "capacity": 5,
+    "price": 318.89,
+    "totalUnits": 8,
+    "hotelCode": "BAN-CI-01"
+  },
+  {
+    "name": "Superior Room",
+    "capacity": 3,
+    "price": 176.7,
+    "totalUnits": 10,
+    "hotelCode": "BAN-CI-01"
+  },
+  {
+    "name": "Superior Room",
+    "capacity": 3,
+    "price": 222.93,
+    "totalUnits": 11,
+    "hotelCode": "BAN-SS-01"
+  },
+  {
+    "name": "Standard Room",
+    "capacity": 2,
+    "price": 124.99,
+    "totalUnits": 32,
+    "hotelCode": "BAN-SS-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 336.24,
+    "totalUnits": 8,
+    "hotelCode": "BAN-SS-01"
+  },
+  {
+    "name": "Deluxe Room",
+    "capacity": 2,
+    "price": 199.13,
+    "totalUnits": 16,
+    "hotelCode": "BAN-SS-01"
+  },
+  {
+    "name": "Deluxe Room",
+    "capacity": 2,
+    "price": 299.32,
+    "totalUnits": 20,
+    "hotelCode": "BAN-ES-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 722.94,
+    "totalUnits": 10,
+    "hotelCode": "BAN-ES-01"
+  },
+  {
+    "name": "Superior Room",
+    "capacity": 3,
+    "price": 315.92,
+    "totalUnits": 19,
+    "hotelCode": "BAN-ES-01"
+  },
+  {
+    "name": "Deluxe Room",
+    "capacity": 2,
+    "price": 232.65,
+    "totalUnits": 20,
+    "hotelCode": "BAN-BH-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 409.23,
+    "totalUnits": 9,
+    "hotelCode": "BAN-BH-01"
+  },
+  {
+    "name": "Standard Room",
+    "capacity": 2,
+    "price": 89.27,
+    "totalUnits": 37,
+    "hotelCode": "BAN-BH-01"
+  },
+  {
+    "name": "Superior Room",
+    "capacity": 3,
+    "price": 242.8,
+    "totalUnits": 10,
+    "hotelCode": "BAN-UR-01"
+  },
+  {
+    "name": "Standard Room",
+    "capacity": 2,
+    "price": 104.25,
+    "totalUnits": 39,
+    "hotelCode": "BAN-UR-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 457.42,
+    "totalUnits": 7,
+    "hotelCode": "BAN-UR-01"
+  },
+  {
+    "name": "Deluxe Room",
+    "capacity": 2,
+    "price": 166.45,
+    "totalUnits": 28,
+    "hotelCode": "BAN-UR-01"
+  },
+  {
+    "name": "Family Room",
+    "capacity": 5,
+    "price": 241.61,
+    "totalUnits": 10,
+    "hotelCode": "BAN-UR-01"
+  },
+  {
+    "name": "Standard Room",
+    "capacity": 2,
+    "price": 94.13,
+    "totalUnits": 22,
+    "hotelCode": "BAN-CL-01"
+  },
+  {
+    "name": "Deluxe Room",
+    "capacity": 2,
+    "price": 108.85,
+    "totalUnits": 21,
+    "hotelCode": "BAN-CL-01"
+  },
+  {
+    "name": "Superior Room",
+    "capacity": 3,
+    "price": 143.91,
+    "totalUnits": 18,
+    "hotelCode": "BAN-CL-01"
+  },
+  {
+    "name": "Family Room",
+    "capacity": 5,
+    "price": 323.37,
+    "totalUnits": 6,
+    "hotelCode": "BAN-CL-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 363.25,
+    "totalUnits": 8,
+    "hotelCode": "BAN-CL-01"
+  },
+  {
+    "name": "Family Room",
+    "capacity": 5,
+    "price": 556.44,
+    "totalUnits": 7,
+    "hotelCode": "BAN-RS-01"
+  },
+  {
+    "name": "Standard Room",
+    "capacity": 2,
+    "price": 132.67,
+    "totalUnits": 40,
+    "hotelCode": "BAN-RS-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 665.22,
+    "totalUnits": 13,
+    "hotelCode": "BAN-RS-01"
+  },
+  {
+    "name": "Deluxe Room",
+    "capacity": 2,
+    "price": 273.66,
+    "totalUnits": 15,
+    "hotelCode": "BAN-RS-01"
+  },
+  {
+    "name": "Superior Room",
+    "capacity": 3,
+    "price": 344.81,
+    "totalUnits": 18,
+    "hotelCode": "BAN-RS-01"
+  },
+  {
+    "name": "Deluxe Room",
+    "capacity": 2,
+    "price": 135.32,
+    "totalUnits": 30,
+    "hotelCode": "BAN-MH-01"
+  },
+  {
+    "name": "Standard Room",
+    "capacity": 2,
+    "price": 75.2,
+    "totalUnits": 38,
+    "hotelCode": "BAN-MH-01"
+  },
+  {
+    "name": "Superior Room",
+    "capacity": 3,
+    "price": 188.69,
+    "totalUnits": 17,
+    "hotelCode": "BAN-MH-01"
+  },
+  {
+    "name": "Deluxe Room",
+    "capacity": 2,
+    "price": 103.73,
+    "totalUnits": 25,
+    "hotelCode": "CHI-MV-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 232.54,
+    "totalUnits": 7,
+    "hotelCode": "CHI-MV-01"
+  },
+  {
+    "name": "Family Room",
+    "capacity": 5,
+    "price": 252.14,
+    "totalUnits": 10,
+    "hotelCode": "CHI-MV-01"
+  },
+  {
+    "name": "Family Room",
+    "capacity": 5,
+    "price": 324.05,
+    "totalUnits": 6,
+    "hotelCode": "CHI-HI-01"
+  },
+  {
+    "name": "Standard Room",
+    "capacity": 2,
+    "price": 69.8,
+    "totalUnits": 32,
+    "hotelCode": "CHI-HI-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 309.28,
+    "totalUnits": 6,
+    "hotelCode": "CHI-HI-01"
+  },
+  {
+    "name": "Deluxe Room",
+    "capacity": 2,
+    "price": 85.07,
+    "totalUnits": 26,
+    "hotelCode": "CHI-HI-01"
+  },
+  {
+    "name": "Deluxe Room",
+    "capacity": 2,
+    "price": 142.23,
+    "totalUnits": 19,
+    "hotelCode": "CHI-RH-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 277.27,
+    "totalUnits": 15,
+    "hotelCode": "CHI-RH-01"
+  },
+  {
+    "name": "Superior Room",
+    "capacity": 3,
+    "price": 216.93,
+    "totalUnits": 20,
+    "hotelCode": "CHI-RH-01"
+  },
+  {
+    "name": "Family Room",
+    "capacity": 5,
+    "price": 325.6,
+    "totalUnits": 7,
+    "hotelCode": "CHI-RH-01"
+  },
+  {
+    "name": "Standard Room",
+    "capacity": 2,
+    "price": 54.9,
+    "totalUnits": 20,
+    "hotelCode": "CHI-RH-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 400.79,
+    "totalUnits": 6,
+    "hotelCode": "CHI-BS-01"
+  },
+  {
+    "name": "Standard Room",
+    "capacity": 2,
+    "price": 92.53,
+    "totalUnits": 20,
+    "hotelCode": "CHI-BS-01"
+  },
+  {
+    "name": "Deluxe Room",
+    "capacity": 2,
+    "price": 157.13,
+    "totalUnits": 17,
+    "hotelCode": "CHI-BS-01"
+  },
+  {
+    "name": "Superior Room",
+    "capacity": 3,
+    "price": 194.57,
+    "totalUnits": 17,
+    "hotelCode": "CHI-BS-01"
+  },
+  {
+    "name": "Family Room",
+    "capacity": 5,
+    "price": 403.03,
+    "totalUnits": 5,
+    "hotelCode": "CHI-BS-01"
+  },
+  {
+    "name": "Superior Room",
+    "capacity": 3,
+    "price": 164.6,
+    "totalUnits": 18,
+    "hotelCode": "CHI-GR-01"
+  },
+  {
+    "name": "Family Room",
+    "capacity": 5,
+    "price": 224.98,
+    "totalUnits": 8,
+    "hotelCode": "CHI-GR-01"
+  },
+  {
+    "name": "Standard Room",
+    "capacity": 2,
+    "price": 94.56,
+    "totalUnits": 25,
+    "hotelCode": "CHI-GR-01"
+  },
+  {
+    "name": "Superior Room",
+    "capacity": 3,
+    "price": 161.37,
+    "totalUnits": 11,
+    "hotelCode": "CHI-CL-01"
+  },
+  {
+    "name": "Deluxe Room",
+    "capacity": 2,
+    "price": 174.81,
+    "totalUnits": 17,
+    "hotelCode": "CHI-CL-01"
+  },
+  {
+    "name": "Family Room",
+    "capacity": 5,
+    "price": 243.79,
+    "totalUnits": 8,
+    "hotelCode": "CHI-CL-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 354.91,
+    "totalUnits": 12,
+    "hotelCode": "CHI-CL-01"
+  },
+  {
+    "name": "Standard Room",
+    "capacity": 2,
+    "price": 74.1,
+    "totalUnits": 40,
+    "hotelCode": "CHI-CL-01"
+  },
+  {
+    "name": "Deluxe Room",
+    "capacity": 2,
+    "price": 160.6,
+    "totalUnits": 21,
+    "hotelCode": "CHI-CH-01"
+  },
+  {
+    "name": "Superior Room",
+    "capacity": 3,
+    "price": 236.43,
+    "totalUnits": 16,
+    "hotelCode": "CHI-CH-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 418.6,
+    "totalUnits": 5,
+    "hotelCode": "CHI-CH-01"
+  },
+  {
+    "name": "Family Room",
+    "capacity": 5,
+    "price": 324.43,
+    "totalUnits": 9,
+    "hotelCode": "CHI-CH-01"
+  },
+  {
+    "name": "Standard Room",
+    "capacity": 2,
+    "price": 110.26,
+    "totalUnits": 20,
+    "hotelCode": "CHI-CH-01"
+  },
+  {
+    "name": "Superior Room",
+    "capacity": 3,
+    "price": 221.21,
+    "totalUnits": 14,
+    "hotelCode": "CHI-RI-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 384.83,
+    "totalUnits": 9,
+    "hotelCode": "CHI-RI-01"
+  },
+  {
+    "name": "Family Room",
+    "capacity": 5,
+    "price": 223.59,
+    "totalUnits": 5,
+    "hotelCode": "CHI-RI-01"
+  },
+  {
+    "name": "Deluxe Room",
+    "capacity": 2,
+    "price": 155.47,
+    "totalUnits": 15,
+    "hotelCode": "CHI-RI-01"
+  },
+  {
+    "name": "Standard Room",
+    "capacity": 2,
+    "price": 120.88,
+    "totalUnits": 34,
+    "hotelCode": "CHI-ER-01"
+  },
+  {
+    "name": "Deluxe Room",
+    "capacity": 2,
+    "price": 199.53,
+    "totalUnits": 29,
+    "hotelCode": "CHI-ER-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 352.55,
+    "totalUnits": 14,
+    "hotelCode": "CHI-ER-01"
+  },
+  {
+    "name": "Family Room",
+    "capacity": 5,
+    "price": 520.88,
+    "totalUnits": 8,
+    "hotelCode": "CHI-ER-01"
+  },
+  {
+    "name": "Superior Room",
+    "capacity": 3,
+    "price": 242.13,
+    "totalUnits": 15,
+    "hotelCode": "CHI-ER-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 246.8,
+    "totalUnits": 13,
+    "hotelCode": "CHI-US-01"
+  },
+  {
+    "name": "Standard Room",
+    "capacity": 2,
+    "price": 106.92,
+    "totalUnits": 31,
+    "hotelCode": "CHI-US-01"
+  },
+  {
+    "name": "Deluxe Room",
+    "capacity": 2,
+    "price": 158.4,
+    "totalUnits": 21,
+    "hotelCode": "CHI-US-01"
+  },
+  {
+    "name": "Deluxe Room",
+    "capacity": 2,
+    "price": 106.44,
+    "totalUnits": 22,
+    "hotelCode": "PHU-BR-01"
+  },
+  {
+    "name": "Family Room",
+    "capacity": 5,
+    "price": 293.59,
+    "totalUnits": 7,
+    "hotelCode": "PHU-BR-01"
+  },
+  {
+    "name": "Superior Room",
+    "capacity": 3,
+    "price": 164.96,
+    "totalUnits": 20,
+    "hotelCode": "PHU-BR-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 303.38,
+    "totalUnits": 6,
+    "hotelCode": "PHU-BR-01"
+  },
+  {
+    "name": "Standard Room",
+    "capacity": 2,
+    "price": 109.72,
+    "totalUnits": 25,
+    "hotelCode": "PHU-BR-01"
+  },
+  {
+    "name": "Family Room",
+    "capacity": 5,
+    "price": 268.47,
+    "totalUnits": 10,
+    "hotelCode": "PHU-OVH-01"
+  },
+  {
+    "name": "Deluxe Room",
+    "capacity": 2,
+    "price": 207.92,
+    "totalUnits": 25,
+    "hotelCode": "PHU-OVH-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 487.15,
+    "totalUnits": 10,
+    "hotelCode": "PHU-OVH-01"
+  },
+  {
+    "name": "Standard Room",
+    "capacity": 2,
+    "price": 86.24,
+    "totalUnits": 28,
+    "hotelCode": "PHU-OVH-01"
+  },
+  {
+    "name": "Family Room",
+    "capacity": 5,
+    "price": 344.73,
+    "totalUnits": 5,
+    "hotelCode": "PHU-PI-01"
+  },
+  {
+    "name": "Deluxe Room",
+    "capacity": 2,
+    "price": 183.85,
+    "totalUnits": 29,
+    "hotelCode": "PHU-PI-01"
+  },
+  {
+    "name": "Superior Room",
+    "capacity": 3,
+    "price": 190.72,
+    "totalUnits": 20,
+    "hotelCode": "PHU-PI-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 454.96,
+    "totalUnits": 15,
+    "hotelCode": "PHU-LV-01"
+  },
+  {
+    "name": "Family Room",
+    "capacity": 5,
+    "price": 526.11,
+    "totalUnits": 8,
+    "hotelCode": "PHU-LV-01"
+  },
+  {
+    "name": "Deluxe Room",
+    "capacity": 2,
+    "price": 261.95,
+    "totalUnits": 22,
+    "hotelCode": "PHU-LV-01"
+  },
+  {
+    "name": "Family Room",
+    "capacity": 5,
+    "price": 288.66,
+    "totalUnits": 9,
+    "hotelCode": "PHU-IH-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 320.13,
+    "totalUnits": 6,
+    "hotelCode": "PHU-IH-01"
+  },
+  {
+    "name": "Superior Room",
+    "capacity": 3,
+    "price": 163.42,
+    "totalUnits": 13,
+    "hotelCode": "PHU-IH-01"
+  },
+  {
+    "name": "Deluxe Room",
+    "capacity": 2,
+    "price": 115.11,
+    "totalUnits": 15,
+    "hotelCode": "PHU-SR-01"
+  },
+  {
+    "name": "Superior Room",
+    "capacity": 3,
+    "price": 245.79,
+    "totalUnits": 12,
+    "hotelCode": "PHU-SR-01"
+  },
+  {
+    "name": "Family Room",
+    "capacity": 5,
+    "price": 417.53,
+    "totalUnits": 8,
+    "hotelCode": "PHU-SR-01"
+  },
+  {
+    "name": "Standard Room",
+    "capacity": 2,
+    "price": 67.42,
+    "totalUnits": 37,
+    "hotelCode": "PHU-BS-01"
+  },
+  {
+    "name": "Family Room",
+    "capacity": 5,
+    "price": 405.04,
+    "totalUnits": 7,
+    "hotelCode": "PHU-BS-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 574.76,
+    "totalUnits": 9,
+    "hotelCode": "PHU-BS-01"
+  },
+  {
+    "name": "Deluxe Room",
+    "capacity": 2,
+    "price": 194.07,
+    "totalUnits": 17,
+    "hotelCode": "PHU-RL-01"
+  },
+  {
+    "name": "Superior Room",
+    "capacity": 3,
+    "price": 230.08,
+    "totalUnits": 14,
+    "hotelCode": "PHU-RL-01"
+  },
+  {
+    "name": "Family Room",
+    "capacity": 5,
+    "price": 381.26,
+    "totalUnits": 7,
+    "hotelCode": "PHU-RL-01"
+  },
+  {
+    "name": "Standard Room",
+    "capacity": 2,
+    "price": 84.96,
+    "totalUnits": 28,
+    "hotelCode": "PHU-RL-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 375.52,
+    "totalUnits": 9,
+    "hotelCode": "PHU-RL-01"
+  },
+  {
+    "name": "Superior Room",
+    "capacity": 3,
+    "price": 385.3,
+    "totalUnits": 20,
+    "hotelCode": "PHU-GH-01"
+  },
+  {
+    "name": "Deluxe Room",
+    "capacity": 2,
+    "price": 171.07,
+    "totalUnits": 22,
+    "hotelCode": "PHU-GH-01"
+  },
+  {
+    "name": "Family Room",
+    "capacity": 5,
+    "price": 451.92,
+    "totalUnits": 5,
+    "hotelCode": "PHU-GH-01"
+  },
+  {
+    "name": "Family Room",
+    "capacity": 5,
+    "price": 236.54,
+    "totalUnits": 7,
+    "hotelCode": "PHU-BS-02"
+  },
+  {
+    "name": "Deluxe Room",
+    "capacity": 2,
+    "price": 156.85,
+    "totalUnits": 21,
+    "hotelCode": "PHU-BS-02"
+  },
+  {
+    "name": "Standard Room",
+    "capacity": 2,
+    "price": 105.73,
+    "totalUnits": 34,
+    "hotelCode": "PHU-BS-02"
+  },
+  {
+    "name": "Superior Room",
+    "capacity": 3,
+    "price": 186.55,
+    "totalUnits": 12,
+    "hotelCode": "PHU-BS-02"
+  },
+  {
+    "name": "Superior Room",
+    "capacity": 3,
+    "price": 230.55,
+    "totalUnits": 20,
+    "hotelCode": "PAT-BH-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 414.92,
+    "totalUnits": 5,
+    "hotelCode": "PAT-BH-01"
+  },
+  {
+    "name": "Family Room",
+    "capacity": 5,
+    "price": 232.0,
+    "totalUnits": 6,
+    "hotelCode": "PAT-BH-01"
+  },
+  {
+    "name": "Deluxe Room",
+    "capacity": 2,
+    "price": 209.67,
+    "totalUnits": 16,
+    "hotelCode": "PAT-BH-01"
+  },
+  {
+    "name": "Standard Room",
+    "capacity": 2,
+    "price": 121.81,
+    "totalUnits": 21,
+    "hotelCode": "PAT-BH-01"
+  },
+  {
+    "name": "Deluxe Room",
+    "capacity": 2,
+    "price": 118.4,
+    "totalUnits": 20,
+    "hotelCode": "PAT-CI-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 290.24,
+    "totalUnits": 5,
+    "hotelCode": "PAT-CI-01"
+  },
+  {
+    "name": "Superior Room",
+    "capacity": 3,
+    "price": 148.84,
+    "totalUnits": 16,
+    "hotelCode": "PAT-CI-01"
+  },
+  {
+    "name": "Family Room",
+    "capacity": 5,
+    "price": 265.96,
+    "totalUnits": 10,
+    "hotelCode": "PAT-CI-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 395.05,
+    "totalUnits": 5,
+    "hotelCode": "PAT-OR-01"
+  },
+  {
+    "name": "Superior Room",
+    "capacity": 3,
+    "price": 211.58,
+    "totalUnits": 20,
+    "hotelCode": "PAT-OR-01"
+  },
+  {
+    "name": "Standard Room",
+    "capacity": 2,
+    "price": 114.21,
+    "totalUnits": 24,
+    "hotelCode": "PAT-OR-01"
+  },
+  {
+    "name": "Deluxe Room",
+    "capacity": 2,
+    "price": 112.87,
+    "totalUnits": 28,
+    "hotelCode": "PAT-OR-01"
+  },
+  {
+    "name": "Family Room",
+    "capacity": 5,
+    "price": 435.74,
+    "totalUnits": 10,
+    "hotelCode": "PAT-OR-01"
+  },
+  {
+    "name": "Family Room",
+    "capacity": 5,
+    "price": 317.54,
+    "totalUnits": 9,
+    "hotelCode": "PAT-LS-01"
+  },
+  {
+    "name": "Standard Room",
+    "capacity": 2,
+    "price": 138.98,
+    "totalUnits": 30,
+    "hotelCode": "PAT-LS-01"
+  },
+  {
+    "name": "Superior Room",
+    "capacity": 3,
+    "price": 285.74,
+    "totalUnits": 20,
+    "hotelCode": "PAT-LS-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 670.67,
+    "totalUnits": 9,
+    "hotelCode": "PAT-LS-01"
+  },
+  {
+    "name": "Deluxe Room",
+    "capacity": 2,
+    "price": 205.04,
+    "totalUnits": 29,
+    "hotelCode": "PAT-LS-01"
+  },
+  {
+    "name": "Family Room",
+    "capacity": 5,
+    "price": 245.25,
+    "totalUnits": 7,
+    "hotelCode": "PAT-CH-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 432.06,
+    "totalUnits": 12,
+    "hotelCode": "PAT-CH-01"
+  },
+  {
+    "name": "Standard Room",
+    "capacity": 2,
+    "price": 84.07,
+    "totalUnits": 28,
+    "hotelCode": "PAT-CH-01"
+  },
+  {
+    "name": "Deluxe Room",
+    "capacity": 2,
+    "price": 107.41,
+    "totalUnits": 30,
+    "hotelCode": "PAT-CH-01"
+  },
+  {
+    "name": "Superior Room",
+    "capacity": 3,
+    "price": 211.53,
+    "totalUnits": 13,
+    "hotelCode": "PAT-BI-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 529.31,
+    "totalUnits": 11,
+    "hotelCode": "PAT-BI-01"
+  },
+  {
+    "name": "Standard Room",
+    "capacity": 2,
+    "price": 116.26,
+    "totalUnits": 38,
+    "hotelCode": "PAT-BI-01"
+  },
+  {
+    "name": "Deluxe Room",
+    "capacity": 2,
+    "price": 202.11,
+    "totalUnits": 19,
+    "hotelCode": "PAT-BI-01"
+  },
+  {
+    "name": "Family Room",
+    "capacity": 5,
+    "price": 287.34,
+    "totalUnits": 7,
+    "hotelCode": "PAT-RR-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 438.19,
+    "totalUnits": 8,
+    "hotelCode": "PAT-RR-01"
+  },
+  {
+    "name": "Deluxe Room",
+    "capacity": 2,
+    "price": 199.22,
+    "totalUnits": 19,
+    "hotelCode": "PAT-RR-01"
+  },
+  {
+    "name": "Superior Room",
+    "capacity": 3,
+    "price": 244.69,
+    "totalUnits": 20,
+    "hotelCode": "PAT-RR-01"
+  },
+  {
+    "name": "Family Room",
+    "capacity": 5,
+    "price": 290.78,
+    "totalUnits": 6,
+    "hotelCode": "PAT-UL-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 339.64,
+    "totalUnits": 10,
+    "hotelCode": "PAT-UL-01"
+  },
+  {
+    "name": "Standard Room",
+    "capacity": 2,
+    "price": 57.11,
+    "totalUnits": 34,
+    "hotelCode": "PAT-UL-01"
+  },
+  {
+    "name": "Superior Room",
+    "capacity": 3,
+    "price": 241.52,
+    "totalUnits": 13,
+    "hotelCode": "PAT-GH-01"
+  },
+  {
+    "name": "Deluxe Room",
+    "capacity": 2,
+    "price": 133.17,
+    "totalUnits": 22,
+    "hotelCode": "PAT-GH-01"
+  },
+  {
+    "name": "Standard Room",
+    "capacity": 2,
+    "price": 97.28,
+    "totalUnits": 37,
+    "hotelCode": "PAT-GH-01"
+  },
+  {
+    "name": "Family Room",
+    "capacity": 5,
+    "price": 256.02,
+    "totalUnits": 10,
+    "hotelCode": "PAT-BR-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 274.68,
+    "totalUnits": 9,
+    "hotelCode": "PAT-BR-01"
+  },
+  {
+    "name": "Standard Room",
+    "capacity": 2,
+    "price": 52.82,
+    "totalUnits": 40,
+    "hotelCode": "PAT-BR-01"
+  },
+  {
+    "name": "Deluxe Room",
+    "capacity": 2,
+    "price": 106.87,
+    "totalUnits": 17,
+    "hotelCode": "KRA-BR-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 362.34,
+    "totalUnits": 6,
+    "hotelCode": "KRA-BR-01"
+  },
+  {
+    "name": "Standard Room",
+    "capacity": 2,
+    "price": 103.44,
+    "totalUnits": 28,
+    "hotelCode": "KRA-BR-01"
+  },
+  {
+    "name": "Superior Room",
+    "capacity": 3,
+    "price": 162.15,
+    "totalUnits": 15,
+    "hotelCode": "KRA-OV-01"
+  },
+  {
+    "name": "Standard Room",
+    "capacity": 2,
+    "price": 64.54,
+    "totalUnits": 36,
+    "hotelCode": "KRA-OV-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 310.61,
+    "totalUnits": 8,
+    "hotelCode": "KRA-OV-01"
+  },
+  {
+    "name": "Deluxe Room",
+    "capacity": 2,
+    "price": 133.32,
+    "totalUnits": 27,
+    "hotelCode": "KRA-OV-01"
+  },
+  {
+    "name": "Family Room",
+    "capacity": 5,
+    "price": 402.54,
+    "totalUnits": 8,
+    "hotelCode": "KRA-OV-01"
+  },
+  {
+    "name": "Standard Room",
+    "capacity": 2,
+    "price": 97.2,
+    "totalUnits": 31,
+    "hotelCode": "KRA-PI-01"
+  },
+  {
+    "name": "Superior Room",
+    "capacity": 3,
+    "price": 189.77,
+    "totalUnits": 19,
+    "hotelCode": "KRA-PI-01"
+  },
+  {
+    "name": "Deluxe Room",
+    "capacity": 2,
+    "price": 125.67,
+    "totalUnits": 28,
+    "hotelCode": "KRA-PI-01"
+  },
+  {
+    "name": "Deluxe Room",
+    "capacity": 2,
+    "price": 128.43,
+    "totalUnits": 30,
+    "hotelCode": "KRA-BH-01"
+  },
+  {
+    "name": "Standard Room",
+    "capacity": 2,
+    "price": 100.49,
+    "totalUnits": 37,
+    "hotelCode": "KRA-BH-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 432.14,
+    "totalUnits": 14,
+    "hotelCode": "KRA-BH-01"
+  },
+  {
+    "name": "Superior Room",
+    "capacity": 3,
+    "price": 232.82,
+    "totalUnits": 19,
+    "hotelCode": "KRA-BH-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 462.96,
+    "totalUnits": 8,
+    "hotelCode": "KRA-NR-01"
+  },
+  {
+    "name": "Deluxe Room",
+    "capacity": 2,
+    "price": 219.42,
+    "totalUnits": 26,
+    "hotelCode": "KRA-NR-01"
+  },
+  {
+    "name": "Standard Room",
+    "capacity": 2,
+    "price": 77.0,
+    "totalUnits": 28,
+    "hotelCode": "KRA-NR-01"
+  },
+  {
+    "name": "Superior Room",
+    "capacity": 3,
+    "price": 253.9,
+    "totalUnits": 17,
+    "hotelCode": "KRA-NR-01"
+  },
+  {
+    "name": "Standard Room",
+    "capacity": 2,
+    "price": 53.87,
+    "totalUnits": 37,
+    "hotelCode": "KRA-CL-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 487.5,
+    "totalUnits": 15,
+    "hotelCode": "KRA-CL-01"
+  },
+  {
+    "name": "Deluxe Room",
+    "capacity": 2,
+    "price": 177.47,
+    "totalUnits": 25,
+    "hotelCode": "KRA-CL-01"
+  },
+  {
+    "name": "Superior Room",
+    "capacity": 3,
+    "price": 224.86,
+    "totalUnits": 18,
+    "hotelCode": "KRA-CL-01"
+  },
+  {
+    "name": "Family Room",
+    "capacity": 5,
+    "price": 224.72,
+    "totalUnits": 9,
+    "hotelCode": "KRA-CL-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 397.72,
+    "totalUnits": 7,
+    "hotelCode": "KRA-SI-01"
+  },
+  {
+    "name": "Family Room",
+    "capacity": 5,
+    "price": 228.22,
+    "totalUnits": 6,
+    "hotelCode": "KRA-SI-01"
+  },
+  {
+    "name": "Standard Room",
+    "capacity": 2,
+    "price": 91.04,
+    "totalUnits": 33,
+    "hotelCode": "KRA-SI-01"
+  },
+  {
+    "name": "Deluxe Room",
+    "capacity": 2,
+    "price": 111.99,
+    "totalUnits": 30,
+    "hotelCode": "KRA-SI-01"
+  },
+  {
+    "name": "Deluxe Room",
+    "capacity": 2,
+    "price": 207.74,
+    "totalUnits": 25,
+    "hotelCode": "KRA-ER-01"
+  },
+  {
+    "name": "Superior Room",
+    "capacity": 3,
+    "price": 258.77,
+    "totalUnits": 13,
+    "hotelCode": "KRA-ER-01"
+  },
+  {
+    "name": "Standard Room",
+    "capacity": 2,
+    "price": 142.01,
+    "totalUnits": 33,
+    "hotelCode": "KRA-ER-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 576.33,
+    "totalUnits": 6,
+    "hotelCode": "KRA-ER-01"
+  },
+  {
+    "name": "Family Room",
+    "capacity": 5,
+    "price": 405.09,
+    "totalUnits": 8,
+    "hotelCode": "KRA-ER-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 366.73,
+    "totalUnits": 15,
+    "hotelCode": "KRA-BH-02"
+  },
+  {
+    "name": "Deluxe Room",
+    "capacity": 2,
+    "price": 186.75,
+    "totalUnits": 16,
+    "hotelCode": "KRA-BH-02"
+  },
+  {
+    "name": "Family Room",
+    "capacity": 5,
+    "price": 378.91,
+    "totalUnits": 10,
+    "hotelCode": "KRA-BH-02"
+  },
+  {
+    "name": "Standard Room",
+    "capacity": 2,
+    "price": 89.74,
+    "totalUnits": 20,
+    "hotelCode": "KRA-BH-02"
+  },
+  {
+    "name": "Superior Room",
+    "capacity": 3,
+    "price": 345.89,
+    "totalUnits": 20,
+    "hotelCode": "KRA-GS-01"
+  },
+  {
+    "name": "Deluxe Room",
+    "capacity": 2,
+    "price": 153.84,
+    "totalUnits": 29,
+    "hotelCode": "KRA-GS-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 376.42,
+    "totalUnits": 5,
+    "hotelCode": "KRA-GS-01"
+  },
+  {
+    "name": "Family Room",
+    "capacity": 5,
+    "price": 560.88,
+    "totalUnits": 9,
+    "hotelCode": "KRA-GS-01"
+  },
+  {
+    "name": "Standard Room",
+    "capacity": 2,
+    "price": 162.74,
+    "totalUnits": 33,
+    "hotelCode": "KRA-GS-01"
+  },
+  {
+    "name": "Deluxe Room",
+    "capacity": 2,
+    "price": 157.93,
+    "totalUnits": 30,
+    "hotelCode": "AYU-HH-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 405.8,
+    "totalUnits": 5,
+    "hotelCode": "AYU-HH-01"
+  },
+  {
+    "name": "Family Room",
+    "capacity": 5,
+    "price": 217.1,
+    "totalUnits": 7,
+    "hotelCode": "AYU-HH-01"
+  },
+  {
+    "name": "Standard Room",
+    "capacity": 2,
+    "price": 108.12,
+    "totalUnits": 22,
+    "hotelCode": "AYU-RV-01"
+  },
+  {
+    "name": "Family Room",
+    "capacity": 5,
+    "price": 336.86,
+    "totalUnits": 10,
+    "hotelCode": "AYU-RV-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 330.35,
+    "totalUnits": 14,
+    "hotelCode": "AYU-RV-01"
+  },
+  {
+    "name": "Superior Room",
+    "capacity": 3,
+    "price": 215.31,
+    "totalUnits": 16,
+    "hotelCode": "AYU-RV-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 395.89,
+    "totalUnits": 5,
+    "hotelCode": "AYU-BI-01"
+  },
+  {
+    "name": "Superior Room",
+    "capacity": 3,
+    "price": 190.04,
+    "totalUnits": 11,
+    "hotelCode": "AYU-BI-01"
+  },
+  {
+    "name": "Deluxe Room",
+    "capacity": 2,
+    "price": 128.23,
+    "totalUnits": 21,
+    "hotelCode": "AYU-BI-01"
+  },
+  {
+    "name": "Standard Room",
+    "capacity": 2,
+    "price": 72.77,
+    "totalUnits": 23,
+    "hotelCode": "AYU-BI-01"
+  },
+  {
+    "name": "Family Room",
+    "capacity": 5,
+    "price": 262.61,
+    "totalUnits": 8,
+    "hotelCode": "AYU-BI-01"
+  },
+  {
+    "name": "Standard Room",
+    "capacity": 2,
+    "price": 170.98,
+    "totalUnits": 23,
+    "hotelCode": "AYU-GH-01"
+  },
+  {
+    "name": "Deluxe Room",
+    "capacity": 2,
+    "price": 354.65,
+    "totalUnits": 28,
+    "hotelCode": "AYU-GH-01"
+  },
+  {
+    "name": "Superior Room",
+    "capacity": 3,
+    "price": 400.72,
+    "totalUnits": 16,
+    "hotelCode": "AYU-GH-01"
+  },
+  {
+    "name": "Family Room",
+    "capacity": 5,
+    "price": 533.97,
+    "totalUnits": 9,
+    "hotelCode": "AYU-GH-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 881.63,
+    "totalUnits": 5,
+    "hotelCode": "AYU-GH-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 276.42,
+    "totalUnits": 7,
+    "hotelCode": "AYU-CS-01"
+  },
+  {
+    "name": "Standard Room",
+    "capacity": 2,
+    "price": 48.75,
+    "totalUnits": 39,
+    "hotelCode": "AYU-CS-01"
+  },
+  {
+    "name": "Family Room",
+    "capacity": 5,
+    "price": 234.65,
+    "totalUnits": 7,
+    "hotelCode": "AYU-CS-01"
+  },
+  {
+    "name": "Deluxe Room",
+    "capacity": 2,
+    "price": 161.6,
+    "totalUnits": 17,
+    "hotelCode": "AYU-RR-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 408.5,
+    "totalUnits": 6,
+    "hotelCode": "AYU-RR-01"
+  },
+  {
+    "name": "Superior Room",
+    "capacity": 3,
+    "price": 218.67,
+    "totalUnits": 16,
+    "hotelCode": "AYU-RR-01"
+  },
+  {
+    "name": "Superior Room",
+    "capacity": 3,
+    "price": 268.33,
+    "totalUnits": 19,
+    "hotelCode": "AYU-UL-01"
+  },
+  {
+    "name": "Deluxe Room",
+    "capacity": 2,
+    "price": 232.77,
+    "totalUnits": 25,
+    "hotelCode": "AYU-UL-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 321.02,
+    "totalUnits": 10,
+    "hotelCode": "AYU-UL-01"
+  },
+  {
+    "name": "Family Room",
+    "capacity": 5,
+    "price": 248.88,
+    "totalUnits": 8,
+    "hotelCode": "AYU-UL-01"
+  },
+  {
+    "name": "Superior Room",
+    "capacity": 3,
+    "price": 172.25,
+    "totalUnits": 17,
+    "hotelCode": "AYU-CI-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 417.21,
+    "totalUnits": 6,
+    "hotelCode": "AYU-CI-01"
+  },
+  {
+    "name": "Deluxe Room",
+    "capacity": 2,
+    "price": 192.48,
+    "totalUnits": 15,
+    "hotelCode": "AYU-CI-01"
+  },
+  {
+    "name": "Family Room",
+    "capacity": 5,
+    "price": 216.96,
+    "totalUnits": 9,
+    "hotelCode": "AYU-CI-01"
+  },
+  {
+    "name": "Standard Room",
+    "capacity": 2,
+    "price": 117.72,
+    "totalUnits": 36,
+    "hotelCode": "AYU-CI-01"
+  },
+  {
+    "name": "Family Room",
+    "capacity": 5,
+    "price": 319.42,
+    "totalUnits": 6,
+    "hotelCode": "AYU-ES-01"
+  },
+  {
+    "name": "Deluxe Room",
+    "capacity": 2,
+    "price": 160.5,
+    "totalUnits": 23,
+    "hotelCode": "AYU-ES-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 723.31,
+    "totalUnits": 6,
+    "hotelCode": "AYU-ES-01"
+  },
+  {
+    "name": "Standard Room",
+    "capacity": 2,
+    "price": 121.39,
+    "totalUnits": 36,
+    "hotelCode": "AYU-ES-01"
+  },
+  {
+    "name": "Superior Room",
+    "capacity": 3,
+    "price": 341.34,
+    "totalUnits": 18,
+    "hotelCode": "AYU-ES-01"
+  },
+  {
+    "name": "Standard Room",
+    "capacity": 2,
+    "price": 93.69,
+    "totalUnits": 29,
+    "hotelCode": "AYU-GH-02"
+  },
+  {
+    "name": "Superior Room",
+    "capacity": 3,
+    "price": 228.57,
+    "totalUnits": 10,
+    "hotelCode": "AYU-GH-02"
+  },
+  {
+    "name": "Family Room",
+    "capacity": 5,
+    "price": 350.94,
+    "totalUnits": 5,
+    "hotelCode": "AYU-GH-02"
+  },
+  {
+    "name": "Standard Room",
+    "capacity": 2,
+    "price": 66.59,
+    "totalUnits": 29,
+    "hotelCode": "HUA-BR-01"
+  },
+  {
+    "name": "Deluxe Room",
+    "capacity": 2,
+    "price": 186.15,
+    "totalUnits": 27,
+    "hotelCode": "HUA-BR-01"
+  },
+  {
+    "name": "Superior Room",
+    "capacity": 3,
+    "price": 209.75,
+    "totalUnits": 18,
+    "hotelCode": "HUA-BR-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 562.27,
+    "totalUnits": 13,
+    "hotelCode": "HUA-LH-01"
+  },
+  {
+    "name": "Superior Room",
+    "capacity": 3,
+    "price": 289.05,
+    "totalUnits": 16,
+    "hotelCode": "HUA-LH-01"
+  },
+  {
+    "name": "Deluxe Room",
+    "capacity": 2,
+    "price": 190.87,
+    "totalUnits": 20,
+    "hotelCode": "HUA-LH-01"
+  },
+  {
+    "name": "Family Room",
+    "capacity": 5,
+    "price": 403.17,
+    "totalUnits": 10,
+    "hotelCode": "HUA-LH-01"
+  },
+  {
+    "name": "Standard Room",
+    "capacity": 2,
+    "price": 88.18,
+    "totalUnits": 26,
+    "hotelCode": "HUA-LH-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 435.17,
+    "totalUnits": 15,
+    "hotelCode": "HUA-BI-01"
+  },
+  {
+    "name": "Deluxe Room",
+    "capacity": 2,
+    "price": 203.07,
+    "totalUnits": 17,
+    "hotelCode": "HUA-BI-01"
+  },
+  {
+    "name": "Standard Room",
+    "capacity": 2,
+    "price": 117.69,
+    "totalUnits": 34,
+    "hotelCode": "HUA-BI-01"
+  },
+  {
+    "name": "Superior Room",
+    "capacity": 3,
+    "price": 154.24,
+    "totalUnits": 14,
+    "hotelCode": "HUA-OV-01"
+  },
+  {
+    "name": "Standard Room",
+    "capacity": 2,
+    "price": 93.33,
+    "totalUnits": 21,
+    "hotelCode": "HUA-OV-01"
+  },
+  {
+    "name": "Deluxe Room",
+    "capacity": 2,
+    "price": 90.86,
+    "totalUnits": 20,
+    "hotelCode": "HUA-OV-01"
+  },
+  {
+    "name": "Family Room",
+    "capacity": 5,
+    "price": 202.83,
+    "totalUnits": 9,
+    "hotelCode": "HUA-OV-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 339.22,
+    "totalUnits": 7,
+    "hotelCode": "HUA-OV-01"
+  },
+  {
+    "name": "Standard Room",
+    "capacity": 2,
+    "price": 44.46,
+    "totalUnits": 31,
+    "hotelCode": "HUA-CL-01"
+  },
+  {
+    "name": "Superior Room",
+    "capacity": 3,
+    "price": 181.46,
+    "totalUnits": 18,
+    "hotelCode": "HUA-CL-01"
+  },
+  {
+    "name": "Family Room",
+    "capacity": 5,
+    "price": 255.22,
+    "totalUnits": 5,
+    "hotelCode": "HUA-CL-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 309.83,
+    "totalUnits": 7,
+    "hotelCode": "HUA-CL-01"
+  },
+  {
+    "name": "Deluxe Room",
+    "capacity": 2,
+    "price": 104.02,
+    "totalUnits": 29,
+    "hotelCode": "HUA-CL-01"
+  },
+  {
+    "name": "Family Room",
+    "capacity": 5,
+    "price": 468.46,
+    "totalUnits": 9,
+    "hotelCode": "HUA-GH-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 733.94,
+    "totalUnits": 9,
+    "hotelCode": "HUA-GH-01"
+  },
+  {
+    "name": "Standard Room",
+    "capacity": 2,
+    "price": 176.07,
+    "totalUnits": 22,
+    "hotelCode": "HUA-GH-01"
+  },
+  {
+    "name": "Superior Room",
+    "capacity": 3,
+    "price": 335.15,
+    "totalUnits": 13,
+    "hotelCode": "HUA-GH-01"
+  },
+  {
+    "name": "Family Room",
+    "capacity": 5,
+    "price": 308.35,
+    "totalUnits": 6,
+    "hotelCode": "HUA-GR-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 378.45,
+    "totalUnits": 7,
+    "hotelCode": "HUA-GR-01"
+  },
+  {
+    "name": "Deluxe Room",
+    "capacity": 2,
+    "price": 117.75,
+    "totalUnits": 17,
+    "hotelCode": "HUA-GR-01"
+  },
+  {
+    "name": "Superior Room",
+    "capacity": 3,
+    "price": 296.08,
+    "totalUnits": 18,
+    "hotelCode": "HUA-ES-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 452.72,
+    "totalUnits": 13,
+    "hotelCode": "HUA-ES-01"
+  },
+  {
+    "name": "Standard Room",
+    "capacity": 2,
+    "price": 99.98,
+    "totalUnits": 34,
+    "hotelCode": "HUA-ES-01"
+  },
+  {
+    "name": "Family Room",
+    "capacity": 5,
+    "price": 522.43,
+    "totalUnits": 10,
+    "hotelCode": "HUA-ES-01"
+  },
+  {
+    "name": "Deluxe Room",
+    "capacity": 2,
+    "price": 253.93,
+    "totalUnits": 23,
+    "hotelCode": "HUA-ES-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 294.92,
+    "totalUnits": 5,
+    "hotelCode": "HUA-UH-01"
+  },
+  {
+    "name": "Family Room",
+    "capacity": 5,
+    "price": 343.6,
+    "totalUnits": 10,
+    "hotelCode": "HUA-UH-01"
+  },
+  {
+    "name": "Standard Room",
+    "capacity": 2,
+    "price": 53.28,
+    "totalUnits": 29,
+    "hotelCode": "HUA-UH-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 352.85,
+    "totalUnits": 11,
+    "hotelCode": "HUA-RI-01"
+  },
+  {
+    "name": "Standard Room",
+    "capacity": 2,
+    "price": 116.9,
+    "totalUnits": 36,
+    "hotelCode": "HUA-RI-01"
+  },
+  {
+    "name": "Superior Room",
+    "capacity": 3,
+    "price": 187.25,
+    "totalUnits": 18,
+    "hotelCode": "HUA-RI-01"
+  },
+  {
+    "name": "Family Room",
+    "capacity": 5,
+    "price": 318.62,
+    "totalUnits": 6,
+    "hotelCode": "CHI-MI-01"
+  },
+  {
+    "name": "Deluxe Room",
+    "capacity": 2,
+    "price": 186.17,
+    "totalUnits": 20,
+    "hotelCode": "CHI-MI-01"
+  },
+  {
+    "name": "Standard Room",
+    "capacity": 2,
+    "price": 72.32,
+    "totalUnits": 25,
+    "hotelCode": "CHI-MI-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 376.11,
+    "totalUnits": 11,
+    "hotelCode": "CHI-BH-01"
+  },
+  {
+    "name": "Deluxe Room",
+    "capacity": 2,
+    "price": 175.86,
+    "totalUnits": 28,
+    "hotelCode": "CHI-BH-01"
+  },
+  {
+    "name": "Standard Room",
+    "capacity": 2,
+    "price": 69.37,
+    "totalUnits": 27,
+    "hotelCode": "CHI-BH-01"
+  },
+  {
+    "name": "Superior Room",
+    "capacity": 3,
+    "price": 182.94,
+    "totalUnits": 14,
+    "hotelCode": "CHI-BH-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 272.23,
+    "totalUnits": 15,
+    "hotelCode": "CHI-RR-01"
+  },
+  {
+    "name": "Superior Room",
+    "capacity": 3,
+    "price": 224.2,
+    "totalUnits": 11,
+    "hotelCode": "CHI-RR-01"
+  },
+  {
+    "name": "Deluxe Room",
+    "capacity": 2,
+    "price": 156.69,
+    "totalUnits": 27,
+    "hotelCode": "CHI-RR-01"
+  },
+  {
+    "name": "Standard Room",
+    "capacity": 2,
+    "price": 100.77,
+    "totalUnits": 31,
+    "hotelCode": "CHI-RR-01"
+  },
+  {
+    "name": "Family Room",
+    "capacity": 5,
+    "price": 188.41,
+    "totalUnits": 5,
+    "hotelCode": "CHI-RR-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 266.44,
+    "totalUnits": 14,
+    "hotelCode": "CHI-CL-02"
+  },
+  {
+    "name": "Standard Room",
+    "capacity": 2,
+    "price": 97.93,
+    "totalUnits": 30,
+    "hotelCode": "CHI-CL-02"
+  },
+  {
+    "name": "Deluxe Room",
+    "capacity": 2,
+    "price": 146.74,
+    "totalUnits": 25,
+    "hotelCode": "CHI-CL-02"
+  },
+  {
+    "name": "Family Room",
+    "capacity": 5,
+    "price": 196.17,
+    "totalUnits": 10,
+    "hotelCode": "CHI-CL-02"
+  },
+  {
+    "name": "Deluxe Room",
+    "capacity": 2,
+    "price": 237.94,
+    "totalUnits": 20,
+    "hotelCode": "CHI-GH-01"
+  },
+  {
+    "name": "Superior Room",
+    "capacity": 3,
+    "price": 328.1,
+    "totalUnits": 18,
+    "hotelCode": "CHI-GH-01"
+  },
+  {
+    "name": "Family Room",
+    "capacity": 5,
+    "price": 326.65,
+    "totalUnits": 6,
+    "hotelCode": "CHI-GH-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 671.69,
+    "totalUnits": 5,
+    "hotelCode": "CHI-GH-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 442.18,
+    "totalUnits": 10,
+    "hotelCode": "CHI-GI-01"
+  },
+  {
+    "name": "Family Room",
+    "capacity": 5,
+    "price": 290.69,
+    "totalUnits": 8,
+    "hotelCode": "CHI-GI-01"
+  },
+  {
+    "name": "Deluxe Room",
+    "capacity": 2,
+    "price": 145.95,
+    "totalUnits": 17,
+    "hotelCode": "CHI-GI-01"
+  },
+  {
+    "name": "Superior Room",
+    "capacity": 3,
+    "price": 162.76,
+    "totalUnits": 17,
+    "hotelCode": "CHI-GI-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 692.29,
+    "totalUnits": 13,
+    "hotelCode": "CHI-ES-01"
+  },
+  {
+    "name": "Deluxe Room",
+    "capacity": 2,
+    "price": 315.41,
+    "totalUnits": 26,
+    "hotelCode": "CHI-ES-01"
+  },
+  {
+    "name": "Standard Room",
+    "capacity": 2,
+    "price": 166.99,
+    "totalUnits": 38,
+    "hotelCode": "CHI-ES-01"
+  },
+  {
+    "name": "Superior Room",
+    "capacity": 3,
+    "price": 335.56,
+    "totalUnits": 18,
+    "hotelCode": "CHI-ES-01"
+  },
+  {
+    "name": "Family Room",
+    "capacity": 5,
+    "price": 600.76,
+    "totalUnits": 8,
+    "hotelCode": "CHI-ES-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 308.35,
+    "totalUnits": 11,
+    "hotelCode": "CHI-UH-01"
+  },
+  {
+    "name": "Superior Room",
+    "capacity": 3,
+    "price": 185.93,
+    "totalUnits": 16,
+    "hotelCode": "CHI-UH-01"
+  },
+  {
+    "name": "Standard Room",
+    "capacity": 2,
+    "price": 72.61,
+    "totalUnits": 36,
+    "hotelCode": "CHI-UH-01"
+  },
+  {
+    "name": "Superior Room",
+    "capacity": 3,
+    "price": 197.73,
+    "totalUnits": 19,
+    "hotelCode": "CHI-RR-02"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 452.12,
+    "totalUnits": 8,
+    "hotelCode": "CHI-RR-02"
+  },
+  {
+    "name": "Standard Room",
+    "capacity": 2,
+    "price": 62.09,
+    "totalUnits": 36,
+    "hotelCode": "CHI-RR-02"
+  },
+  {
+    "name": "Deluxe Room",
+    "capacity": 2,
+    "price": 121.59,
+    "totalUnits": 22,
+    "hotelCode": "CHI-RR-02"
+  },
+  {
+    "name": "Family Room",
+    "capacity": 5,
+    "price": 231.5,
+    "totalUnits": 5,
+    "hotelCode": "CHI-RR-02"
+  },
+  {
+    "name": "Standard Room",
+    "capacity": 2,
+    "price": 117.08,
+    "totalUnits": 23,
+    "hotelCode": "CHI-CI-01"
+  },
+  {
+    "name": "Superior Room",
+    "capacity": 3,
+    "price": 176.14,
+    "totalUnits": 16,
+    "hotelCode": "CHI-CI-01"
+  },
+  {
+    "name": "Family Room",
+    "capacity": 5,
+    "price": 405.06,
+    "totalUnits": 10,
+    "hotelCode": "CHI-CI-01"
+  },
+  {
+    "name": "Deluxe Room",
+    "capacity": 2,
+    "price": 208.28,
+    "totalUnits": 23,
+    "hotelCode": "CHI-CI-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 330.78,
+    "totalUnits": 5,
+    "hotelCode": "CHI-CI-01"
+  },
+  {
+    "name": "Deluxe Room",
+    "capacity": 2,
+    "price": 114.15,
+    "totalUnits": 19,
+    "hotelCode": "SUR-CH-01"
+  },
+  {
+    "name": "Superior Room",
+    "capacity": 3,
+    "price": 212.4,
+    "totalUnits": 18,
+    "hotelCode": "SUR-CH-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 378.89,
+    "totalUnits": 7,
+    "hotelCode": "SUR-CH-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 333.91,
+    "totalUnits": 12,
+    "hotelCode": "SUR-RV-01"
+  },
+  {
+    "name": "Deluxe Room",
+    "capacity": 2,
+    "price": 185.93,
+    "totalUnits": 23,
+    "hotelCode": "SUR-RV-01"
+  },
+  {
+    "name": "Superior Room",
+    "capacity": 3,
+    "price": 174.26,
+    "totalUnits": 14,
+    "hotelCode": "SUR-RV-01"
+  },
+  {
+    "name": "Family Room",
+    "capacity": 5,
+    "price": 431.01,
+    "totalUnits": 7,
+    "hotelCode": "SUR-RV-01"
+  },
+  {
+    "name": "Standard Room",
+    "capacity": 2,
+    "price": 57.56,
+    "totalUnits": 33,
+    "hotelCode": "SUR-RV-01"
+  },
+  {
+    "name": "Superior Room",
+    "capacity": 3,
+    "price": 220.91,
+    "totalUnits": 11,
+    "hotelCode": "SUR-BI-01"
+  },
+  {
+    "name": "Deluxe Room",
+    "capacity": 2,
+    "price": 123.26,
+    "totalUnits": 17,
+    "hotelCode": "SUR-BI-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 282.41,
+    "totalUnits": 11,
+    "hotelCode": "SUR-BI-01"
+  },
+  {
+    "name": "Standard Room",
+    "capacity": 2,
+    "price": 115.05,
+    "totalUnits": 20,
+    "hotelCode": "SUR-BI-01"
+  },
+  {
+    "name": "Standard Room",
+    "capacity": 2,
+    "price": 127.06,
+    "totalUnits": 20,
+    "hotelCode": "SUR-GH-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 376.21,
+    "totalUnits": 8,
+    "hotelCode": "SUR-GH-01"
+  },
+  {
+    "name": "Deluxe Room",
+    "capacity": 2,
+    "price": 232.21,
+    "totalUnits": 29,
+    "hotelCode": "SUR-GH-01"
+  },
+  {
+    "name": "Superior Room",
+    "capacity": 3,
+    "price": 237.55,
+    "totalUnits": 20,
+    "hotelCode": "SUR-GH-01"
+  },
+  {
+    "name": "Family Room",
+    "capacity": 5,
+    "price": 563.74,
+    "totalUnits": 9,
+    "hotelCode": "SUR-GH-01"
+  },
+  {
+    "name": "Standard Room",
+    "capacity": 2,
+    "price": 131.02,
+    "totalUnits": 28,
+    "hotelCode": "SUR-CL-01"
+  },
+  {
+    "name": "Family Room",
+    "capacity": 5,
+    "price": 381.64,
+    "totalUnits": 7,
+    "hotelCode": "SUR-CL-01"
+  },
+  {
+    "name": "Superior Room",
+    "capacity": 3,
+    "price": 218.47,
+    "totalUnits": 20,
+    "hotelCode": "SUR-CL-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 486.7,
+    "totalUnits": 12,
+    "hotelCode": "SUR-CL-01"
+  },
+  {
+    "name": "Deluxe Room",
+    "capacity": 2,
+    "price": 264.6,
+    "totalUnits": 19,
+    "hotelCode": "SUR-ES-01"
+  },
+  {
+    "name": "Superior Room",
+    "capacity": 3,
+    "price": 238.94,
+    "totalUnits": 16,
+    "hotelCode": "SUR-ES-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 450.0,
+    "totalUnits": 15,
+    "hotelCode": "SUR-ES-01"
+  },
+  {
+    "name": "Standard Room",
+    "capacity": 2,
+    "price": 138.67,
+    "totalUnits": 35,
+    "hotelCode": "SUR-ES-01"
+  },
+  {
+    "name": "Family Room",
+    "capacity": 5,
+    "price": 405.42,
+    "totalUnits": 6,
+    "hotelCode": "SUR-ES-01"
+  },
+  {
+    "name": "Family Room",
+    "capacity": 5,
+    "price": 251.75,
+    "totalUnits": 10,
+    "hotelCode": "SUR-GR-01"
+  },
+  {
+    "name": "Deluxe Room",
+    "capacity": 2,
+    "price": 132.39,
+    "totalUnits": 29,
+    "hotelCode": "SUR-GR-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 481.11,
+    "totalUnits": 13,
+    "hotelCode": "SUR-GR-01"
+  },
+  {
+    "name": "Superior Room",
+    "capacity": 3,
+    "price": 201.54,
+    "totalUnits": 10,
+    "hotelCode": "SUR-RI-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 475.04,
+    "totalUnits": 9,
+    "hotelCode": "SUR-RI-01"
+  },
+  {
+    "name": "Standard Room",
+    "capacity": 2,
+    "price": 112.96,
+    "totalUnits": 28,
+    "hotelCode": "SUR-RI-01"
+  },
+  {
+    "name": "Superior Room",
+    "capacity": 3,
+    "price": 262.53,
+    "totalUnits": 13,
+    "hotelCode": "SUR-UH-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 315.63,
+    "totalUnits": 13,
+    "hotelCode": "SUR-UH-01"
+  },
+  {
+    "name": "Standard Room",
+    "capacity": 2,
+    "price": 90.8,
+    "totalUnits": 22,
+    "hotelCode": "SUR-UH-01"
+  },
+  {
+    "name": "Standard Room",
+    "capacity": 2,
+    "price": 90.75,
+    "totalUnits": 22,
+    "hotelCode": "SUR-BH-01"
+  },
+  {
+    "name": "Family Room",
+    "capacity": 5,
+    "price": 240.56,
+    "totalUnits": 9,
+    "hotelCode": "SUR-BH-01"
+  },
+  {
+    "name": "Superior Room",
+    "capacity": 3,
+    "price": 213.34,
+    "totalUnits": 13,
+    "hotelCode": "SUR-BH-01"
+  },
+  {
+    "name": "Suite",
+    "capacity": 4,
+    "price": 380.11,
+    "totalUnits": 12,
+    "hotelCode": "SUR-BH-01"
+  }
+]
