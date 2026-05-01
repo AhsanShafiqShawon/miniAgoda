@@ -18,6 +18,8 @@ miniAgoda/
 │   │   ├── common/
 │   │   │   ├── entity/
 │   │   │   │   └── [x] BaseEntity.java
+│   │   │   ├── config/
+│   │   │   │   └── [x] JacksonConfig.java
 │   │   │   └── seed/
 │   │   │       ├── [x] DataSeeder.java
 │   │   │       └── [x] RoomTypeSeed.java
