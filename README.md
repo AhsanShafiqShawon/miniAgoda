@@ -19,13 +19,14 @@ miniAgoda/
 │   │   │   ├── entity/
 │   │   │   │   └── [x] BaseEntity.java
 │   │   │   └── seed/
-│   │   │       └── [x] DataSeeder.java
-│   │   │
+│   │   │       ├── [x] DataSeeder.java
+│   │   │       └── [x] RoomTypeSeed.java
 │   │   ├── hotel/
 │   │   │   ├── controller/
 │   │   │   │   └── [ ] HotelController.java
 │   │   │   ├── repository/
-│   │   │   │   └── [x] HotelRepository.java
+│   │   │   │   ├── [x] HotelRepository.java
+│   │   │   │   └── [x] RoomTypeRepository.java
 │   │   │   ├── dto/
 │   │   │   │   ├── [ ] HotelSummary.java               ← record
 │   │   │   │   ├── [ ] AddHotelRequest.java            ← record
@@ -58,7 +59,8 @@ miniAgoda/
 │   └── main/resources/
 │       ├── [x] application.yml
 │       ├── data/
-│       │   └── [x] hotels.java
+│       │   ├── [x] hotels.json
+│       │   └── [x] room_types.json
 │       └── db/migration/
 │           ├── [ ] V1__create_countries.sql
 │           ├── [ ] V2__create_cities.sql
