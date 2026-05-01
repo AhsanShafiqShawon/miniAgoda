@@ -30,6 +30,9 @@ public class Hotel extends BaseEntity {
     @Column(length = 1000)
     private String description;
 
+    @Column(unique = true, nullable = false)
+    private String code;
+
     @OneToMany(mappedBy = "hotel")
     private List<RoomType> roomTypes;
 }
