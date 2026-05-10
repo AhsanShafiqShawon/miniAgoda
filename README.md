@@ -36,12 +36,12 @@ miniAgoda/
 │   │   └── MiniAgodaApplication.java
 │   │
 │   ├── test/java/com/miniagoda/
-│   │   └──
+│   │   └── 
 │   │
 │   └── main/resources/
 │       ├── application.yml
 │       └── db/migration/
-│           └──
+│           └── V1__init_schema.sql
 ├── .env
 ├── pom.xml
 └── README.md
