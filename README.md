@@ -30,6 +30,9 @@ miniAgoda/
 │   │   │   └── entity/
 │   │   │       ├── Hotel.java
 │   │   │       └── RoomType.java
+│   │   ├── inventory/
+│   │   │   └── entity/
+│   │   │       └── Inventory.java
 │   │   └── MiniAgodaApplication.java
 │   │
 │   ├── test/java/com/miniagoda/
