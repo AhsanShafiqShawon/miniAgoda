@@ -15,6 +15,9 @@ view operational data. Admins can moderate content and manage the platform.
 miniAgoda/
 ├── src/
 │   ├── main/java/com/miniagoda/
+│   │   ├── common/
+│   │   │   └── entity/
+│   │   │       └── BaseEntity.java
 │   │   ├── search/
 │   │   │   ├── controller/
 │   │   │   │   └── SearchController.java
@@ -23,6 +26,10 @@ miniAgoda/
 │   │   │   └── dto/
 │   │   │       ├── SearchRequest.java
 │   │   │       └── SearchResponse.java
+│   │   ├── hotel/
+│   │   │   └── entity/
+│   │   │       ├── Hotel.java
+│   │   │       └── RoomType.java
 │   │   └── MiniAgodaApplication.java
 │   │
 │   ├── test/java/com/miniagoda/
