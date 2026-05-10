@@ -13,20 +13,6 @@ public class SearchService {
     public List<SearchResponse> search(SearchRequest searchRequest) {
         List<SearchResponse> result = new ArrayList<>();
         
-        result.add(SearchResponse.builder()
-        .hotelName("Picnic Hotel")
-        .hotelAddress("Rangnam Alley")
-        .rating(4.9)
-        .price(1200.0)
-        .build());
-
-        result.add(SearchResponse.builder()
-        .hotelName("Hotel Palladium")
-        .hotelAddress("Pratunam Area")
-        .rating(4.8)
-        .price(1500.0)
-        .build());
-
         return result;
     }
 }
