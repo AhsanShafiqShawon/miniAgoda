@@ -17,7 +17,9 @@ miniAgoda/
 │   ├── main/java/com/miniagoda/
 │   │   ├── search/
 │   │   │   ├── controller/
-│   │   │   │   └── searchController.java
+│   │   │   │   └── SearchController.java
+│   │   │   ├── service/
+│   │   │   │   └── SearchService.java
 │   │   │   └── dto/
 │   │   │       ├── SearchRequest.java
 │   │   │       └── SearchResponse.java
