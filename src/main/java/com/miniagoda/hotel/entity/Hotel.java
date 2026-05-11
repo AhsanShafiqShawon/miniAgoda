@@ -1,5 +1,6 @@
 package com.miniagoda.hotel.entity;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import com.miniagoda.common.entity.BaseEntity;
@@ -24,6 +25,12 @@ public class Hotel extends BaseEntity {
 
     @Column(nullable = false)
     private String address;
+
+    @Column(nullable = true, precision = 3, scale = 1)
+    private BigDecimal rating;
+
+    @Column(name = "hotel_code", nullable = false, unique = true)
+    private String hotelCode;
 
     @OneToMany(mappedBy = "hotel")
     List<RoomType> roomTypes;
