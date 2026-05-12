@@ -29,8 +29,8 @@ public class Hotel extends BaseEntity {
     @Column(nullable = true, precision = 3, scale = 1)
     private BigDecimal rating;
 
-    @Column(name = "hotel_code", nullable = false, unique = true)
-    private String hotelCode;
+    @Column(nullable = false, unique = true)
+    private String code;
 
     @OneToMany(mappedBy = "hotel")
     List<RoomType> roomTypes;
