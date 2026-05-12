@@ -1,0 +1,1 @@
+alter table hotels rename hotel_code to code;
