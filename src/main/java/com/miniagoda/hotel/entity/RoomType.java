@@ -27,7 +27,10 @@ public class RoomType extends BaseEntity {
     private String name;
 
     @Column(nullable = false)
-    private Integer totalRooms;
+    private Integer capacity;
+
+    @Column(nullable = false)
+    private Integer totalUnits;
     
     @Column(nullable = false)
     private BigDecimal price;
