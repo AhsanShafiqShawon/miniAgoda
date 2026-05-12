@@ -38,6 +38,8 @@ miniAgoda/
 │   │   │   └── dto/
 │   │   │       └── RoomTypeSeed.java
 │   │   ├── inventory/
+│   │   │   ├── repository/
+│   │   │   │   └── InventoryRepository.java
 │   │   │   └── entity/
 │   │   │       └── Inventory.java
 │   │   └── MiniAgodaApplication.java
