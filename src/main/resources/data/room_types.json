@@ -1,0 +1,41 @@
+[
+  { "name": "Deluxe River View",      "capacity": 2, "price": 18000.00, "totalUnits": 20, "hotelCode": "BKK-PEN-001" },
+  { "name": "Premier Suite",          "capacity": 3, "price": 35000.00, "totalUnits": 10, "hotelCode": "BKK-PEN-001" },
+  { "name": "Peninsula Suite",        "capacity": 4, "price": 65000.00, "totalUnits": 5,  "hotelCode": "BKK-PEN-001" },
+
+  { "name": "Superior Room",          "capacity": 2, "price": 16000.00, "totalUnits": 25, "hotelCode": "BKK-MAN-002" },
+  { "name": "Deluxe Room",            "capacity": 2, "price": 22000.00, "totalUnits": 15, "hotelCode": "BKK-MAN-002" },
+  { "name": "Oriental Suite",         "capacity": 4, "price": 55000.00, "totalUnits": 5,  "hotelCode": "BKK-MAN-002" },
+
+  { "name": "River View Room",        "capacity": 2, "price": 20000.00, "totalUnits": 20, "hotelCode": "BKK-CAP-003" },
+  { "name": "Capella Suite",          "capacity": 3, "price": 45000.00, "totalUnits": 8,  "hotelCode": "BKK-CAP-003" },
+  { "name": "Grand Residence",        "capacity": 4, "price": 80000.00, "totalUnits": 3,  "hotelCode": "BKK-CAP-003" },
+
+  { "name": "Deluxe Garden View",     "capacity": 2, "price": 8000.00,  "totalUnits": 30, "hotelCode": "BKK-ANA-004" },
+  { "name": "Junior Suite",           "capacity": 3, "price": 15000.00, "totalUnits": 12, "hotelCode": "BKK-ANA-004" },
+  { "name": "Anantara Suite",         "capacity": 4, "price": 30000.00, "totalUnits": 5,  "hotelCode": "BKK-ANA-004" },
+
+  { "name": "Superior City View",     "capacity": 2, "price": 6500.00,  "totalUnits": 40, "hotelCode": "BKK-CEN-005" },
+  { "name": "Deluxe City View",       "capacity": 2, "price": 9000.00,  "totalUnits": 25, "hotelCode": "BKK-CEN-005" },
+  { "name": "Grand Suite",            "capacity": 4, "price": 22000.00, "totalUnits": 8,  "hotelCode": "BKK-CEN-005" },
+
+  { "name": "Superior River View",    "capacity": 2, "price": 5500.00,  "totalUnits": 35, "hotelCode": "BKK-CHA-006" },
+  { "name": "Deluxe Room",            "capacity": 2, "price": 7500.00,  "totalUnits": 20, "hotelCode": "BKK-CHA-006" },
+  { "name": "Chatrium Suite",         "capacity": 3, "price": 18000.00, "totalUnits": 6,  "hotelCode": "BKK-CHA-006" },
+
+  { "name": "Standard Room",          "capacity": 2, "price": 2200.00,  "totalUnits": 50, "hotelCode": "BKK-IBI-007" },
+  { "name": "Standard Twin",          "capacity": 2, "price": 2200.00,  "totalUnits": 30, "hotelCode": "BKK-IBI-007" },
+  { "name": "Family Room",            "capacity": 4, "price": 3800.00,  "totalUnits": 10, "hotelCode": "BKK-IBI-007" },
+
+  { "name": "Superior Room",          "capacity": 2, "price": 4500.00,  "totalUnits": 40, "hotelCode": "BKK-NOV-008" },
+  { "name": "Deluxe Room",            "capacity": 2, "price": 6000.00,  "totalUnits": 20, "hotelCode": "BKK-NOV-008" },
+  { "name": "Executive Suite",        "capacity": 3, "price": 12000.00, "totalUnits": 8,  "hotelCode": "BKK-NOV-008" },
+
+  { "name": "SO Cosy Room",           "capacity": 2, "price": 7000.00,  "totalUnits": 30, "hotelCode": "BKK-SOB-009" },
+  { "name": "SO Comfy Room",          "capacity": 2, "price": 9500.00,  "totalUnits": 20, "hotelCode": "BKK-SOB-009" },
+  { "name": "SO Suite",               "capacity": 4, "price": 25000.00, "totalUnits": 6,  "hotelCode": "BKK-SOB-009" },
+
+  { "name": "Classic Room",           "capacity": 2, "price": 5800.00,  "totalUnits": 30, "hotelCode": "BKK-IND-010" },
+  { "name": "Deluxe Room",            "capacity": 2, "price": 8200.00,  "totalUnits": 18, "hotelCode": "BKK-IND-010" },
+  { "name": "Indigo Suite",           "capacity": 3, "price": 18000.00, "totalUnits": 6,  "hotelCode": "BKK-IND-010" }
+]
