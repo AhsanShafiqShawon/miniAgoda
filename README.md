@@ -16,6 +16,8 @@ miniAgoda/
 ├── src/
 │   ├── main/java/com/miniagoda/
 │   │   ├── common/
+│   │   │   ├── seed/
+│   │   │   │   └── DataSeeder.java
 │   │   │   └── entity/
 │   │   │       └── BaseEntity.java
 │   │   ├── search/
@@ -27,6 +29,9 @@ miniAgoda/
 │   │   │       ├── SearchRequest.java
 │   │   │       └── SearchResponse.java
 │   │   ├── hotel/
+│   │   │   ├── repository/
+│   │   │   │   ├── HotelRepository.java
+│   │   │   │   └── RoomTypeRepository.java
 │   │   │   ├── entity/
 │   │   │   │   ├── Hotel.java
 │   │   │   │   └── RoomType.java
@@ -48,7 +53,8 @@ miniAgoda/
 │           ├── V1__init_schema.sql
 │           ├── V2__add_rating_and_hotel_code_to_hotels.sql
 │           ├── V3__seed_bangkok_hotels.sql
-│           └── V4__alter_room_type_rename_total_rooms_to_capacity_add_total_units.sql
+│           ├── V4__alter_room_type_rename_total_rooms_to_capacity_add_total_units.sql
+│           └── V5__alter_hotel_rename_hotel_code_to_code.sql
 ├── .env
 ├── pom.xml
 └── README.md
