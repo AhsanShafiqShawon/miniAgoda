@@ -27,9 +27,11 @@ miniAgoda/
 │   │   │       ├── SearchRequest.java
 │   │   │       └── SearchResponse.java
 │   │   ├── hotel/
-│   │   │   └── entity/
-│   │   │       ├── Hotel.java
-│   │   │       └── RoomType.java
+│   │   │   ├── entity/
+│   │   │   │   ├── Hotel.java
+│   │   │   │   └── RoomType.java
+│   │   │   └── dto/
+│   │   │       └── RoomTypeSeed.java
 │   │   ├── inventory/
 │   │   │   └── entity/
 │   │   │       └── Inventory.java
@@ -40,8 +42,13 @@ miniAgoda/
 │   │
 │   └── main/resources/
 │       ├── application.yml
+│       ├── data/
+│       │   └── room_types.json
 │       └── db/migration/
-│           └── V1__init_schema.sql
+│           ├── V1__init_schema.sql
+│           ├── V2__add_rating_and_hotel_code_to_hotels.sql
+│           ├── V3__seed_bangkok_hotels.sql
+│           └── V4__alter_room_type_rename_total_rooms_to_capacity_add_total_units.sql
 ├── .env
 ├── pom.xml
 └── README.md
