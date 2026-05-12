@@ -10,6 +10,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,11 +19,16 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name = "inventories")
+@Table(
+    name = "inventories", 
+    uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"room_type_id", "date"})
+    }
+)
 public class Inventory extends BaseEntity {
     
     @Column(nullable = false)
-    private Integer roomsAvailable;
+    private Integer availableUnits;
 
     @Column(nullable = false)
     private LocalDate date;
