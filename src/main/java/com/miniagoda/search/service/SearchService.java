@@ -34,13 +34,16 @@ public class SearchService {
             boolean hasAvailableRoom = false;
             BigDecimal minPrice = null;
             for(RoomType roomType : roomTypes) {
-                if(inventoryService.isAvailable(
+                if(roomType.getCapacity() >= searchRequest.getGuests() &&
+                    inventoryService.isAvailable(
                     roomType.getId(),
                     searchRequest.getCheckIn(),
                     searchRequest.getCheckOut(),
                     searchRequest.getGuests(),
                     searchRequest.getRooms())) {
-                    minPrice = (minPrice == null) ? roomType.getPrice() : minPrice.min(roomType.getPrice());
+                    minPrice =  (minPrice == null) ?
+                                roomType.getPrice() :
+                                minPrice.min(roomType.getPrice());
                     hasAvailableRoom = true;
                 }
             }
