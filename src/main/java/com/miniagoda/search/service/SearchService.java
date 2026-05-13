@@ -48,7 +48,8 @@ public class SearchService {
                 }
             }
             if(hasAvailableRoom) {
-                result.add(new SearchResponse(hotel.getName(),
+                result.add(new SearchResponse(hotel.getId(),
+                hotel.getName(),
                 hotel.getAddress(),
                 hotel.getRating(),
                 minPrice));
