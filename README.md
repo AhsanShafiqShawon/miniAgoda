@@ -40,6 +40,8 @@ miniAgoda/
 │   │   ├── inventory/
 │   │   │   ├── repository/
 │   │   │   │   └── InventoryRepository.java
+│   │   │   ├── service/
+│   │   │   │   └── InventoryService.java
 │   │   │   └── entity/
 │   │   │       └── Inventory.java
 │   │   └── MiniAgodaApplication.java
