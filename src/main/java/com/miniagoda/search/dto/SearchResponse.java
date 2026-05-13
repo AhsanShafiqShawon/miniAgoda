@@ -1,5 +1,7 @@
 package com.miniagoda.search.dto;
 
+import java.math.BigDecimal;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import lombok.Value;
@@ -9,6 +11,6 @@ import lombok.Value;
 public class SearchResponse {
     String hotelName;
     String hotelAddress;
-    Double rating;
-    Double price;
+    BigDecimal rating;
+    BigDecimal price;
 }
