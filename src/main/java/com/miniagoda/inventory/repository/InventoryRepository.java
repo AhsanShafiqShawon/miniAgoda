@@ -9,7 +9,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.miniagoda.inventory.entity.Inventory;
 
 public interface InventoryRepository extends JpaRepository<Inventory, UUID> {
-    List<Inventory> findByRoomTypeAndDateBetween(UUID roomTypeId,
+    List<Inventory> findByRoomTypeIdAndDateBetween(UUID roomTypeId,
         LocalDate checkIn,
         LocalDate checOut);
 }
