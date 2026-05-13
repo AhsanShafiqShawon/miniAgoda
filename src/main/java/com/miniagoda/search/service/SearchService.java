@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.miniagoda.hotel.entity.Hotel;
 import com.miniagoda.hotel.entity.RoomType;
@@ -23,6 +24,7 @@ public class SearchService {
         this.inventoryService = inventoryService;
     }
 
+    @Transactional(readOnly = true)
     public List<SearchResponse> search(SearchRequest searchRequest) {
         List<SearchResponse> result = new ArrayList<>();
         
@@ -33,6 +35,7 @@ public class SearchService {
             BigDecimal minPrice = null;
             for(RoomType roomType : roomTypes) {
                 if(inventoryService.isAvailable(
+                    roomType.getId(),
                     searchRequest.getCheckIn(),
                     searchRequest.getCheckOut(),
                     searchRequest.getGuests(),
