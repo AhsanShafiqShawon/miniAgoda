@@ -9,6 +9,65 @@ guest count, and room preferences, make bookings, write reviews, and manage
 their account. Hotel owners can manage properties, room types, pricing, and
 view operational data. Admins can moderate content and manage the platform.
 
+## Project Status
+
+**Current phase:** Design complete — implementation starting.
+
+| Feature | Status | Covers |
+|---|---|---|
+| Search | ✅ Done | Hotels, Room type, Availability, Search |
+| Booking | ⌛ In Progress | Bookings, Inventory update |
+| Payment | ⬜ Planned | Payment gateway integration |
+| Notification | ⬜ Planned | Notification after payment and refund |
+| User | ⬜ Planned | User, Register |
+| Auth | ⬜ Planned | Authentication, Authorization |
+| Refund | ⬜ Planned | Refund integration |
+
+## Architecture
+
+miniAgoda is a modular monolith — all features run in a single JVM, but each feature module is self-contained and mirrors how the system would be split into microservices. The design is intentionally microservices-ready from day one.
+
+```
+Client
+  └── Spring Boot Application
+        ├── Feature Modules         (hotel/, booking/, user/, review/, ...)
+        │     ├── controller/       (HTTP layer — routes requests in, sends responses out)
+        │     ├── service/          (business logic)
+        │     ├── repository/       (data access)
+        │     ├── mapper/           (entity ↔ DTO conversion)
+        │     ├── dto/              (request & response records)
+        │     ├── entity/           (JPA entities & enums)
+        │     ├── value/            (value objects)
+        │     ├── exception/        (feature-scoped exceptions)
+        │     └── gateway/          (external service abstractions, if needed)
+        └── Common                  (shared config, exceptions, responses, utils, fitler, security)
+```
+
+## Quick Start
+
+### Prerequisites
+
+| Tool | Version |
+|---|---|
+| Java | 21+ |
+| Maven | 3.8+ |
+| Spring Boot | 3.x |
+
+### Build & Run
+
+```bash
+git clone https://github.com/AhsanShafiqShawon/miniAgoda.git
+cd miniAgoda
+mvn clean install
+mvn spring-boot:run
+```
+
+### Run Tests
+
+```bash
+mvn test
+```
+
 ## Implementation Progress
 
 ```
