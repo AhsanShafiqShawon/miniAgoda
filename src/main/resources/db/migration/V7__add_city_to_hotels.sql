@@ -1,0 +1,1 @@
+alter table hotels add column city varchar(100) not null default 'Bangkok';
