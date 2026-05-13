@@ -13,13 +13,13 @@ view operational data. Admins can moderate content and manage the platform.
 
 | Feature | Status | Covers |
 |---|---|---|
-| Search | ✅ Done | Hotels, Room type, Availability, Search |
-| Booking | ⌛ In Progress | Bookings, Inventory update |
-| Payment | ⬜ Planned | Payment gateway integration |
-| Notification | ⬜ Planned | Notification after payment and refund |
-| User | ⬜ Planned | User, Register |
-| Auth | ⬜ Planned | Authentication, Authorization |
-| Refund | ⬜ Planned | Refund integration |
+| Search | ✅ Done | Hotel discovery, room types, availability |
+| Booking | ⌛ In Progress | Reservation creation, inventory management |
+| Payment | ⬜ Planned | Payment gateway, transaction handling |
+| Notification | ⬜ Planned | Booking confirmations, refund alerts |
+| User | ⬜ Planned | Registration, profile management |
+| Auth | ⬜ Planned | Authentication, role-based authorization |
+| Refund | ⬜ Planned | Refund requests, gateway integration |
 
 ## Architecture
 
