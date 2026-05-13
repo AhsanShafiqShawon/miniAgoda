@@ -11,8 +11,6 @@ view operational data. Admins can moderate content and manage the platform.
 
 ## Project Status
 
-**Current phase:** Design complete — implementation starting.
-
 | Feature | Status | Covers |
 |---|---|---|
 | Search | ✅ Done | Hotels, Room type, Availability, Search |
