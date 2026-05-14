@@ -128,7 +128,8 @@ miniAgoda/
 │           ├── V4__alter_room_type_rename_total_rooms_to_capacity_add_total_units.sql
 │           ├── V5__alter_hotel_rename_hotel_code_to_code.sql
 │           ├── V6__update_inventory_table.sql
-│           └── V7__add_city_to_hotels.sql
+│           ├── V7__add_city_to_hotels.sql
+│           └── V8__create_bookings_table.sql
 ├── .env
 ├── pom.xml
 └── README.md
