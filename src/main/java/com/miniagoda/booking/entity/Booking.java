@@ -2,7 +2,6 @@ package com.miniagoda.booking.entity;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.UUID;
 
 import com.miniagoda.common.entity.BaseEntity;
 import com.miniagoda.hotel.entity.RoomType;
