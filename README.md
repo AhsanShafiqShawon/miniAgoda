@@ -91,11 +91,14 @@ miniAgoda/
 │   │   │   ├── repository/
 │   │   │   │   ├── HotelRepository.java
 │   │   │   │   └── RoomTypeRepository.java
+│   │   │   ├── service/
+│   │   │   │   └── HotelService.java
 │   │   │   ├── entity/
 │   │   │   │   ├── Hotel.java
 │   │   │   │   └── RoomType.java
 │   │   │   └── dto/
 │   │   │       ├── RoomTypeSeed.java
+│   │   │       ├── HotelDetailRequest.java
 │   │   │       ├── HotelDetailResponse.java
 │   │   │       └── RoomTypeResponse.java
 │   │   ├── inventory/
