@@ -2,6 +2,7 @@ package com.miniagoda.booking.entity;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import com.miniagoda.common.entity.BaseEntity;
 import com.miniagoda.hotel.entity.RoomType;
@@ -36,6 +37,9 @@ public class Booking extends BaseEntity {
 
     @Column(nullable = false)
     private BigDecimal totalPrice;
+
+    @Column(nullable = false)
+    private LocalDateTime expiredAt;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
