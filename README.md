@@ -86,6 +86,8 @@ miniAgoda/
 │   │   │       ├── SearchRequest.java
 │   │   │       └── SearchResponse.java
 │   │   ├── hotel/
+│   │   │   ├── controller/
+│   │   │   │   └── HotelController.java
 │   │   │   ├── repository/
 │   │   │   │   ├── HotelRepository.java
 │   │   │   │   └── RoomTypeRepository.java
@@ -93,7 +95,9 @@ miniAgoda/
 │   │   │   │   ├── Hotel.java
 │   │   │   │   └── RoomType.java
 │   │   │   └── dto/
-│   │   │       └── RoomTypeSeed.java
+│   │   │       ├── RoomTypeSeed.java
+│   │   │       ├── HotelDetailResponse.java
+│   │   │       └── RoomTypeResponse.java
 │   │   ├── inventory/
 │   │   │   ├── repository/
 │   │   │   │   └── InventoryRepository.java
