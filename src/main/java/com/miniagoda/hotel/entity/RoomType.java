@@ -3,6 +3,7 @@ package com.miniagoda.hotel.entity;
 import java.math.BigDecimal;
 import java.util.List;
 
+import com.miniagoda.booking.entity.Booking;
 import com.miniagoda.common.entity.BaseEntity;
 import com.miniagoda.inventory.entity.Inventory;
 
@@ -41,4 +42,7 @@ public class RoomType extends BaseEntity {
 
     @OneToMany(mappedBy = "roomType")
     private List<Inventory> inventory;
+
+    @OneToMany(mappedBy = "roomType")
+    private List<Booking> bookings;
 }
