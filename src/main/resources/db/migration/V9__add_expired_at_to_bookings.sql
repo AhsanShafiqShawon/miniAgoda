@@ -1,0 +1,1 @@
+alter table bookings add column expired_at timestamp not null;
