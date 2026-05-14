@@ -108,6 +108,10 @@ miniAgoda/
 │   │   │   │   └── InventoryService.java
 │   │   │   └── entity/
 │   │   │       └── Inventory.java
+│   │   ├── booking/
+│   │   │   └── entity/
+│   │   │       ├── Booking.java
+│   │   │       └── BookingStatus.java
 │   │   └── MiniAgodaApplication.java
 │   │
 │   ├── test/java/com/miniagoda/
