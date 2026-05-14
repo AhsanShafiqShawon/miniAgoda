@@ -109,9 +109,19 @@ miniAgoda/
 │   │   │   └── entity/
 │   │   │       └── Inventory.java
 │   │   ├── booking/
+│   │   │   ├── controller/
+│   │   │   │   └── BookingController.java
+│   │   │   ├── service/
+│   │   │   │   └── BookingService.java
+│   │   │   ├── entity/
+│   │   │   │   ├── Booking.java
+│   │   │   │   └── BookingStatus.java
+│   │   │   └── dto/
+│   │   │       ├── BookingResponse.java
+│   │   │       └── BookingRequest.java
+│   │   ├── payment/
 │   │   │   └── entity/
-│   │   │       ├── Booking.java
-│   │   │       └── BookingStatus.java
+│   │   │       └── Payment.java
 │   │   └── MiniAgodaApplication.java
 │   │
 │   ├── test/java/com/miniagoda/
@@ -129,7 +139,8 @@ miniAgoda/
 │           ├── V5__alter_hotel_rename_hotel_code_to_code.sql
 │           ├── V6__update_inventory_table.sql
 │           ├── V7__add_city_to_hotels.sql
-│           └── V8__create_bookings_table.sql
+│           ├── V8__create_bookings_table.sql
+│           └── V9__add_expired_at_to_bookings.sql
 ├── .env
 ├── pom.xml
 └── README.md
