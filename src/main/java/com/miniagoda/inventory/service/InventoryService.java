@@ -31,4 +31,15 @@ public class InventoryService {
         
         return availableDays >= requestedRooms;
     }
+
+    public int getAvailableRooms(UUID roomTypeId, LocalDate checkIn, LocalDate checkOut) {
+        List<Inventory> inventories = inventoryRepository.findByRoomTypeIdAndDateBetween(roomTypeId, checkIn, checkOut.minusDays(1));
+
+        int availableDays = Integer.MAX_VALUE;
+        for(Inventory inventory : inventories) {
+            availableDays = Math.min(availableDays, inventory.getAvailableUnits());
+        }
+        
+        return availableDays;
+    }
 }
