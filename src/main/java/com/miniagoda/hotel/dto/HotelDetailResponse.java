@@ -1,5 +1,6 @@
 package com.miniagoda.hotel.dto;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -13,6 +14,6 @@ public class HotelDetailResponse {
     private UUID hotelId;
     private String hotelName;
     private String hotelAddress;
-    private double rating;
+    private BigDecimal rating;
     private List<RoomTypeResponse> roomTypes;
 }
