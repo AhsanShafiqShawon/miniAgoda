@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 
 import com.miniagoda.common.entity.BaseEntity;
 import com.miniagoda.hotel.entity.RoomType;
+import com.miniagoda.payment.entity.Payment;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,6 +15,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -48,4 +50,7 @@ public class Booking extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room_type_id", nullable = false)
     private RoomType roomType;
+
+    @OneToOne(mappedBy = "booking", fetch = FetchType.LAZY)
+    private Payment payment;
 }
