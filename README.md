@@ -113,6 +113,8 @@ miniAgoda/
 │   │   │   │   └── BookingController.java
 │   │   │   ├── service/
 │   │   │   │   └── BookingService.java
+│   │   │   ├── repository/
+│   │   │   │   └── BookingRepository.java
 │   │   │   ├── entity/
 │   │   │   │   ├── Booking.java
 │   │   │   │   └── BookingStatus.java
