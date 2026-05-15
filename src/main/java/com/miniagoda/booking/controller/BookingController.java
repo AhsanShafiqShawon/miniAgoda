@@ -22,7 +22,7 @@ public class BookingController {
     }
 
     public ResponseEntity<BookingResponse> book(@Valid @ModelAttribute BookingRequest bookingRequest) {
-        BookingResponse response = bookingService.book(bookingRequest);
+        BookingResponse response = bookingService.createBooking(bookingRequest);
         return ResponseEntity.ok(response);
     }
 }
