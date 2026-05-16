@@ -2,6 +2,7 @@ package com.miniagoda.booking.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -12,7 +13,7 @@ import com.miniagoda.booking.service.BookingService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/hotels")
+@RequestMapping("/bookings")
 public class BookingController {
 
     private final BookingService bookingService;
@@ -21,6 +22,7 @@ public class BookingController {
         this.bookingService = bookingService;
     }
 
+    @PostMapping
     public ResponseEntity<BookingResponse> book(@Valid @ModelAttribute BookingRequest bookingRequest) {
         BookingResponse response = bookingService.createBooking(bookingRequest);
         return ResponseEntity.ok(response);
