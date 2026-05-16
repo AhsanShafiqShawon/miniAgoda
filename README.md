@@ -122,6 +122,8 @@ miniAgoda/
 │   │   │       ├── BookingResponse.java
 │   │   │       └── BookingRequest.java
 │   │   ├── payment/
+│   │   │   ├── repository/
+│   │   │   │   └── PaymentRepository.java
 │   │   │   ├── service/
 │   │   │   │   ├── PaymentService.java
 │   │   │   │   └── StripeService.java
