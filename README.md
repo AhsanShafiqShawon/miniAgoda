@@ -124,9 +124,12 @@ miniAgoda/
 │   │   ├── payment/
 │   │   │   ├── service/
 │   │   │   │   └── StripeService.java
-│   │   │   └── entity/
-│   │   │       ├── Payment.java
-│   │   │       └── PaymentStatus.java
+│   │   │   ├── entity/
+│   │   │   │   ├── Payment.java
+│   │   │   │   └── PaymentStatus.java
+│   │   │   └── dto/
+│   │   │       ├── PaymentInitiateResponse.java
+│   │   │       └── PaymentInitiateRequest.java
 │   │   └── MiniAgodaApplication.java
 │   │
 │   ├── test/java/com/miniagoda/
