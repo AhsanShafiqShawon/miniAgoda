@@ -12,8 +12,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class RefundGatewayRequest {
+    
     @NotNull(message = "Payment ID is required")
     private UUID paymentId;
+    
+    @NotNull(message = "Gateway Payment ID is required")
+    private String gatewayPaymentId;
 
     @NotNull(message = "Amount is required")
     private BigDecimal amount;
