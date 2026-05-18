@@ -11,7 +11,7 @@ import lombok.Value;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class PaymentIntentResponse {
     private UUID bookingId;
-    private String clientSecret;
+    private String paymentToken;
     private BigDecimal amount;
     private String currency;
 }
