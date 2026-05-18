@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
@@ -95,5 +96,9 @@ public class BookingService {
             booking.getStatus(),
             booking.getExpiredAt()
         );
+    }
+
+    public Booking findById(UUID id) {
+        return bookingRepository.findById(id).orElseThrow(() -> new RuntimeException("Booking is not found!"));
     }
 }
