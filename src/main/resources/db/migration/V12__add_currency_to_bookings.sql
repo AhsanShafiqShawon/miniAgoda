@@ -1,0 +1,1 @@
+alter table bookings add column currency varchar(3) not null;
