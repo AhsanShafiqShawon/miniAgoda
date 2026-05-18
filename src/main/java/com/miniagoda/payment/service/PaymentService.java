@@ -34,7 +34,7 @@ public class PaymentService {
         this.paymentRepository = paymentRepository;
     }
 
-    public PaymentIntentResponse createPayment(PaymentIntentRequest request) {
+    public PaymentIntentResponse createPayment(PaymentIntentRequest request) throws Exception {
         Booking booking = bookingService.findById(request.getBookingId());
 
         PaymentGatewayRequest gatewayRequest = new PaymentGatewayRequest(
@@ -57,7 +57,7 @@ public class PaymentService {
         return response;
     }
 
-    public RefundResponse refund(RefundRequest request) {
+    public RefundResponse refund(RefundRequest request) throws Exception {
         Payment payment = paymentRepository.findById(request.getPaymentId())
         .orElseThrow(() -> new RuntimeException("Payment not found!"));
 
@@ -73,7 +73,7 @@ public class PaymentService {
         return response;
     }
 
-    public void handleWebHook(String payload, String sigHeader) {
+    public void handleWebHook(String payload, String sigHeader) throws Exception {
         PaymentEvent event = paymentGateway.parseWebhook(payload, sigHeader);
 
         switch (event.getStatus()) {
