@@ -41,6 +41,9 @@ public class Booking extends BaseEntity {
     private BigDecimal totalPrice;
 
     @Column(nullable = false)
+    private String currency;
+
+    @Column(nullable = false)
     private LocalDateTime expiredAt;
 
     @Enumerated(EnumType.STRING)
