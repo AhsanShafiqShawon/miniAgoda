@@ -62,7 +62,8 @@ public class PaymentService {
         .orElseThrow(() -> new RuntimeException("Payment not found!"));
 
         RefundGatewayRequest gatewayRequest = new RefundGatewayRequest(
-            payment.getId(),
+            request.getPaymentId(),
+            payment.getPaymentToken(),
             payment.getAmount(),
             payment.getCurrency(),
             request.getReason()
