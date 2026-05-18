@@ -24,17 +24,17 @@ public class PaymentController {
     }
 
     @PostMapping("/payments/create-intent")
-    public ResponseEntity<PaymentIntentResponse> createPayment(@RequestBody PaymentIntentRequest request) {
+    public ResponseEntity<PaymentIntentResponse> createPayment(@RequestBody PaymentIntentRequest request) throws Exception {
         return ResponseEntity.ok(paymentService.createPayment(request));
     }
 
     @PostMapping("/payments/refund")
-    public ResponseEntity<RefundResponse> refund(@RequestBody RefundRequest request) {
+    public ResponseEntity<RefundResponse> refund(@RequestBody RefundRequest request) throws Exception {
         return ResponseEntity.ok(paymentService.refund(request));
     }
 
     @PostMapping("/webhooks/stripe")
-    public ResponseEntity<String> handleWebHook(@RequestBody String payload, @RequestHeader("Stripe-Signature") String sigHeader) {
+    public ResponseEntity<String> handleWebHook(@RequestBody String payload, @RequestHeader("Stripe-Signature") String sigHeader) throws Exception {
         paymentService.handleWebHook(payload, sigHeader);
         return ResponseEntity.ok("OK");
     }
