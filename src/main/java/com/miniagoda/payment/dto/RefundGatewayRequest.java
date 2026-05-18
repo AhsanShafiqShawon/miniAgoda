@@ -18,5 +18,8 @@ public class RefundGatewayRequest {
     @NotNull(message = "Amount is required")
     private BigDecimal amount;
 
+    @NotNull(message = "Currency is required")
+    private String currency;
+
     private String reason;
 }
