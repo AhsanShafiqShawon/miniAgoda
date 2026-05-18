@@ -1,0 +1,1 @@
+alter table payments rename stripe_payment_intent_id to payment_token;
