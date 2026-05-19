@@ -1,29 +1,23 @@
 package com.miniagoda.payment.gateway;
 
-import java.math.BigDecimal;
-import java.util.UUID;
-
-import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Builder
 public class PaymentEvent {
-    
-    @NotNull(message = "Status is required")
-    private PaymentEventStatus status;
 
-    @NotNull(message = "Gateway Payment ID is required")
-    private String gatewayPaymentId;
+    public enum Type {
+        PAYMENT_SUCCEEDED,
+        PAYMENT_FAILED,
+        REFUND_SUCCEEDED,
+        UNKNOWN
+    }
 
-    @NotNull(message = "Booking ID is required")
-    private UUID bookingId;
-
-    @NotNull(message = "Amount is required")
-    private BigDecimal amount;
-    
+    private Type type;
+    private String paymentId;
+    private String bookingId;
+    private Long amount;
+    private String currency;
     private String failureMessage;
 }
