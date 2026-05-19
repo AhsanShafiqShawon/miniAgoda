@@ -77,23 +77,23 @@ public class PaymentService {
     public void handleWebHook(String payload, String sigHeader) throws Exception {
         PaymentEvent event = paymentGateway.parseWebhook(payload, sigHeader);
 
-        switch (event.getStatus()) {
+        switch (event.getType()) {
             case PAYMENT_SUCCEEDED -> {
-                Payment payment = paymentRepository.findByGatewayPaymentId(event.getGatewayPaymentId());
+                Payment payment = paymentRepository.findByGatewayPaymentId(event.getPaymentId());
                 payment.setStatus(PaymentStatus.SUCCESS);
                 
                 Booking booking = payment.getBooking();
                 booking.setStatus(BookingStatus.CONFIRMED);
             }
             case PAYMENT_FAILED -> {
-                Payment payment = paymentRepository.findByGatewayPaymentId(event.getGatewayPaymentId());
+                Payment payment = paymentRepository.findByGatewayPaymentId(event.getPaymentId());
                 payment.setStatus(PaymentStatus.FAILED);
                 
                 Booking booking = payment.getBooking();
                 booking.setStatus(BookingStatus.CANCELLED);
             }
             case REFUND_SUCCEEDED -> {
-                Payment payment = paymentRepository.findByGatewayPaymentId(event.getGatewayPaymentId());
+                Payment payment = paymentRepository.findByGatewayPaymentId(event.getPaymentId());
                 payment.setStatus(PaymentStatus.REFUNDED);
             }
             case UNKNOWN -> {
