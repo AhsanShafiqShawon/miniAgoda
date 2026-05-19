@@ -124,19 +124,30 @@ miniAgoda/
 │   │   ├── payment/
 │   │   │   ├── controller/
 │   │   │   │   ├── PaymentController.java
-│   │   │   │   └── PaymentWebhookController.java
+│   │   │   │   └── 
 │   │   │   ├── repository/
 │   │   │   │   └── PaymentRepository.java
 │   │   │   ├── service/
 │   │   │   │   ├── PaymentService.java
-│   │   │   │   ├── PaymentWebhookService.java
-│   │   │   │   └── StripeService.java
+│   │   │   │   ├── 
+│   │   │   │   └── 
 │   │   │   ├── entity/
 │   │   │   │   ├── Payment.java
 │   │   │   │   └── PaymentStatus.java
-│   │   │   └── dto/
-│   │   │       ├── PaymentInitiateResponse.java
-│   │   │       └── PaymentInitiateRequest.java
+│   │   │   ├── dto/
+│   │   │   │   ├── PaymentIntentResponse.java
+│   │   │   │   ├── PaymentIntentRequest.java
+│   │   │   │   ├── RefundRequest.java
+│   │   │   │   ├── RefundResponse.java
+│   │   │   │   ├── PaymentGatewayRequest.java
+│   │   │   │   └── RefundGatewayRequest.java
+│   │   │   ├── gateway/
+│   │   │   │   ├── PaymentGateway.java
+│   │   │   │   ├── PaymentEvent.java
+│   │   │   │   ├── PaymentEventStatus.java
+│   │   │   │   └── StripeGateway.java
+│   │   │   └── config/
+│   │   │       └── StripeConfig.java
 │   │   └── MiniAgodaApplication.java
 │   │
 │   ├── test/java/com/miniagoda/
@@ -156,7 +167,9 @@ miniAgoda/
 │           ├── V7__add_city_to_hotels.sql
 │           ├── V8__create_bookings_table.sql
 │           ├── V9__add_expired_at_to_bookings.sql
-│           └── V10__create_payments_table
+│           ├── V10__create_payments_table.sql
+│           ├── V11__alter_payments_rename_stripe_payment_intent_id_to_payment_token.sql
+│           └── V12__add_currency_to_bookings.sql
 ├── .env
 ├── pom.xml
 └── README.md
