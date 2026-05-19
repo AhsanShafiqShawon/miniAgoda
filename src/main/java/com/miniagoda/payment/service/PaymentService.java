@@ -79,21 +79,21 @@ public class PaymentService {
 
         switch (event.getType()) {
             case PAYMENT_SUCCEEDED -> {
-                Payment payment = paymentRepository.findByGatewayPaymentId(event.getPaymentId());
+                Payment payment = paymentRepository.findByPaymentToken(event.getPaymentId());
                 payment.setStatus(PaymentStatus.SUCCESS);
                 
                 Booking booking = payment.getBooking();
                 booking.setStatus(BookingStatus.CONFIRMED);
             }
             case PAYMENT_FAILED -> {
-                Payment payment = paymentRepository.findByGatewayPaymentId(event.getPaymentId());
+                Payment payment = paymentRepository.findByPaymentToken(event.getPaymentId());
                 payment.setStatus(PaymentStatus.FAILED);
                 
                 Booking booking = payment.getBooking();
                 booking.setStatus(BookingStatus.CANCELLED);
             }
             case REFUND_SUCCEEDED -> {
-                Payment payment = paymentRepository.findByGatewayPaymentId(event.getPaymentId());
+                Payment payment = paymentRepository.findByPaymentToken(event.getPaymentId());
                 payment.setStatus(PaymentStatus.REFUNDED);
             }
             case UNKNOWN -> {
