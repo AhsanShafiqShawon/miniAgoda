@@ -147,7 +147,8 @@ miniAgoda/
 │   │   │   │   └── stripe/
 │   │   │   │       └──StripeGateway.java
 │   │   │   └── config/
-│   │   │       └── StripeConfig.java
+│   │   │       ├── StripeConfig.java
+│   │   │       └── PaymentGatewayConfig.java
 │   │   └── MiniAgodaApplication.java
 │   │
 │   ├── test/java/com/miniagoda/
