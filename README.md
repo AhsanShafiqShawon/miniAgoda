@@ -144,8 +144,8 @@ miniAgoda/
 │   │   │   ├── gateway/
 │   │   │   │   ├── PaymentGateway.java
 │   │   │   │   ├── PaymentEvent.java
-│   │   │   │   ├── PaymentEventStatus.java
-│   │   │   │   └── StripeGateway.java
+│   │   │   │   └── stripe/
+│   │   │   │       └──StripeGateway.java
 │   │   │   └── config/
 │   │   │       └── StripeConfig.java
 │   │   └── MiniAgodaApplication.java
