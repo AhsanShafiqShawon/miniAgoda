@@ -174,7 +174,10 @@ miniAgoda/
 │           ├── V9__add_expired_at_to_bookings.sql
 │           ├── V10__create_payments_table.sql
 │           ├── V11__alter_payments_rename_stripe_payment_intent_id_to_payment_token.sql
-│           └── V12__add_currency_to_bookings.sql
+│           ├── V12__add_currency_to_bookings.sql
+│           ├── V13__create_users_table.sql
+│           ├── V14__add_user_id_to_bookings.sql
+│           └── V15__seed_super_admin.sql
 ├── .env
 ├── pom.xml
 └── README.md
