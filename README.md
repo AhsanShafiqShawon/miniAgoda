@@ -75,6 +75,10 @@ miniAgoda/
 │   │   ├── common/
 │   │   │   ├── seed/
 │   │   │   │   └── DataSeeder.java
+│   │   │   ├── config/
+│   │   │   │   └── AppConfig.java
+│   │   │   ├── exception/
+│   │   │   │   └── GlobalExceptionHandler.java
 │   │   │   └── entity/
 │   │   │       └── BaseEntity.java
 │   │   ├── search/
@@ -150,12 +154,27 @@ miniAgoda/
 │   │   │       ├── StripeConfig.java
 │   │   │       └── PaymentGatewayConfig.java
 │   │   ├── user/
+│   │   │   ├── repository/
+│   │   │   │   └── UserRepository.java
 │   │   │   └── entity/
 │   │   │       ├── User.java
 │   │   │       └── Role.java
 │   │   ├── auth/
-│   │   │   └── entity/
-│   │   │       └── RefreshToken.java
+│   │   │   ├── entity/
+│   │   │   │   └── RefreshToken.java
+│   │   │   ├── repository/
+│   │   │   │   └── RefreshTokenRepository.java
+│   │   │   ├── controller/
+│   │   │   │   └── AuthController.java
+│   │   │   ├── service/
+│   │   │   │   └── AuthService.java
+│   │   │   ├── util/
+│   │   │   │   └── JwtUtil.java
+│   │   │   ├── exception/
+│   │   │   │   └── EmailAlreadyExistException.java
+│   │   │   └── dto/
+│   │   │       ├── RegisterRequest.java
+│   │   │       └── RegisterResponse.java
 │   │   └── MiniAgodaApplication.java
 │   │
 │   ├── test/java/com/miniagoda/
