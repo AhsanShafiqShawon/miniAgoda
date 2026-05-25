@@ -150,9 +150,9 @@ miniAgoda/
 │   │   │       ├── StripeConfig.java
 │   │   │       └── PaymentGatewayConfig.java
 │   │   ├── user/
-│   │   │   ├── entity/
-│   │   │   │   ├── User.java
-│   │   │   │   └── Role.java
+│   │   │   └── entity/
+│   │   │       ├── User.java
+│   │   │       └── Role.java
 │   │   └── MiniAgodaApplication.java
 │   │
 │   ├── test/java/com/miniagoda/
