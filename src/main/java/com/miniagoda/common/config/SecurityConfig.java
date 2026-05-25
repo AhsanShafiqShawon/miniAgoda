@@ -19,6 +19,7 @@ public class SecurityConfig {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/auth/**").permitAll()
+                .requestMatchers("/hotels/**").permitAll()
                 // your other public endpoints here (search, availability?)
                 .anyRequest().authenticated()
             )
