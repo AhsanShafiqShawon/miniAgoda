@@ -45,7 +45,7 @@ public class JwtUtil {
     
     public String generateRefreshToken(User user) {
         
-        String token = buildToken(user, refreshTokenExpiration, null);
+        String token = buildToken(user, refreshTokenExpiration, new HashMap<>());
         
         return token;
     }
