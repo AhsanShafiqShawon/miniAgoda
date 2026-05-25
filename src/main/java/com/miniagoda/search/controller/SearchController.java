@@ -15,7 +15,7 @@ import com.miniagoda.search.service.SearchService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/hotels/search")
+@RequestMapping("/hotels")
 public class SearchController {
     private final SearchService searchService;
 
@@ -23,7 +23,7 @@ public class SearchController {
         this.searchService = searchService;
     }
 
-    @GetMapping
+    @GetMapping("/search")
     public ResponseEntity<List<SearchResponse>> search(@Valid @ModelAttribute SearchRequest searchRequest) {
         List<SearchResponse> hotels = searchService.search(searchRequest);
         return ResponseEntity.ok(hotels);
