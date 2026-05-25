@@ -76,6 +76,7 @@ miniAgoda/
 │   │   │   ├── seed/
 │   │   │   │   └── DataSeeder.java
 │   │   │   ├── config/
+│   │   │   │   ├── SecurityConfig.java
 │   │   │   │   └── AppConfig.java
 │   │   │   ├── exception/
 │   │   │   │   └── GlobalExceptionHandler.java
