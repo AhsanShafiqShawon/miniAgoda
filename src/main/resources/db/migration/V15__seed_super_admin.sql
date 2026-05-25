@@ -1,0 +1,2 @@
+insert into users (id, first_name, last_name, email, password, role, created_at, updated_at) values
+(gen_random_uuid(), 'Ahsan', 'Shafiq', 'miniagodaadmin@gmail.com', '$2a$12$sJqcjJ6uPrrbQdlzNHdzf.spm9XSPJQjgzYdEfccJHv9DlCX8RPwO', 'SUPER_ADMIN', now(), now());
