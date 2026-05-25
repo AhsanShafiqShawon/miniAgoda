@@ -40,12 +40,10 @@ public class AuthService {
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setRole(Role.CUSTOMER);
 
-        userRepository.save(user);
+        User savedUser = userRepository.save(user);
 
-        //Fake new User, it should extracted from request may be
-        User extractedUserFromRequestMaybe = new User();
-        String accessToken = jwtUtil.generateAccessToken(extractedUserFromRequestMaybe);
-        String refreshToken = jwtUtil.generateRefreshToken(extractedUserFromRequestMaybe);
+        String accessToken = jwtUtil.generateAccessToken(savedUser);
+        String refreshToken = jwtUtil.generateRefreshToken(savedUser);
 
         Cookie cookie = new Cookie("refreshToken", refreshToken);
         cookie.setHttpOnly(true);
