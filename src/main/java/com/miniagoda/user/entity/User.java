@@ -2,6 +2,7 @@ package com.miniagoda.user.entity;
 
 import java.util.List;
 
+import com.miniagoda.auth.entity.RefreshToken;
 import com.miniagoda.booking.entity.Booking;
 import com.miniagoda.common.entity.BaseEntity;
 
@@ -41,4 +42,7 @@ public class User extends BaseEntity {
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Booking> bookings;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    private List<RefreshToken> refreshTokens;
 }
