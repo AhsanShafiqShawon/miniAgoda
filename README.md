@@ -153,6 +153,9 @@ miniAgoda/
 │   │   │   └── entity/
 │   │   │       ├── User.java
 │   │   │       └── Role.java
+│   │   ├── auth/
+│   │   │   └── entity/
+│   │   │       └── RefreshToken.java
 │   │   └── MiniAgodaApplication.java
 │   │
 │   ├── test/java/com/miniagoda/
@@ -177,7 +180,8 @@ miniAgoda/
 │           ├── V12__add_currency_to_bookings.sql
 │           ├── V13__create_users_table.sql
 │           ├── V14__add_user_id_to_bookings.sql
-│           └── V15__seed_super_admin.sql
+│           ├── V15__seed_super_admin.sql
+│           └── V16__create_refresh_tokens_table.sql
 ├── .env
 ├── pom.xml
 └── README.md
