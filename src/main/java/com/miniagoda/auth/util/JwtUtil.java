@@ -17,6 +17,7 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
 
 @Component
 public class JwtUtil {
@@ -64,6 +65,7 @@ public class JwtUtil {
         }
     }
 
+    @PostConstruct
     private SecretKey getSigningKey() {
         if (signingKey == null) {
             byte[] keyBytes = Decoders.BASE64.decode(secret);
