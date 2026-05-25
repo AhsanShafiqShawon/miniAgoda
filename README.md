@@ -168,7 +168,12 @@ miniAgoda/
 │   │   │   ├── controller/
 │   │   │   │   └── AuthController.java
 │   │   │   ├── service/
-│   │   │   │   └── AuthService.java
+│   │   │   │   ├── AuthService.java
+│   │   │   │   └── UserDetailsServiceImpl.java
+│   │   │   ├── security/
+│   │   │   │   ├── JwtAuthFilter.java
+│   │   │   │   ├── UserDetailsImpl.java
+│   │   │   │   └── UserDetailsServiceImpl.java
 │   │   │   ├── util/
 │   │   │   │   └── JwtUtil.java
 │   │   │   ├── exception/
