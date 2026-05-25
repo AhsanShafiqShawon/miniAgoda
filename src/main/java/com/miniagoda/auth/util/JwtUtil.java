@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.crypto.SecretKey;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import com.miniagoda.user.entity.User;
@@ -19,6 +20,8 @@ import io.jsonwebtoken.security.Keys;
 
 @Component
 public class JwtUtil {
+
+    private SecretKey signingKey;
 
     @Value("${jwt.secret}")
     private String secret;
@@ -41,9 +44,7 @@ public class JwtUtil {
     
     public String generateRefreshToken(User user) {
         
-        Map<String, Object> claims = new HashMap<String, Object>();
-        
-        String token = buildToken(user, refreshTokenExpiration, claims);
+        String token = buildToken(user, refreshTokenExpiration, null);
         
         return token;
     }
@@ -52,13 +53,23 @@ public class JwtUtil {
         return extractAllClaims(token).getSubject();
     }
     
-    public boolean isTokenValid(String token) {
+    public boolean isTokenValid(String token, UserDetails userDetails) {
         try {
             Claims claims = extractAllClaims(token);
-            return claims.getExpiration().after(new Date());
+            String email = claims.getSubject();
+            boolean isExpired = claims.getExpiration().before(new Date());
+            return email.equals(userDetails.getUsername()) && !isExpired;
         } catch (JwtException e) {
             return false;
         }
+    }
+
+    private SecretKey getSigningKey() {
+        if (signingKey == null) {
+            byte[] keyBytes = Decoders.BASE64.decode(secret);
+            signingKey = Keys.hmacShaKeyFor(keyBytes);
+        }
+        return signingKey;
     }
 
     private String buildToken(User user, long expiration, Map<String, Object> extraClaims) {
@@ -69,11 +80,6 @@ public class JwtUtil {
         .expiration(new Date(System.currentTimeMillis() + expiration))
         .signWith(getSigningKey())
         .compact();
-    }
-
-    private SecretKey getSigningKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(secret);
-        return Keys.hmacShaKeyFor(keyBytes);
     }
     
     private Claims extractAllClaims(String token) {
