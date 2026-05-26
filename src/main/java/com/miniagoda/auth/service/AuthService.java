@@ -7,9 +7,12 @@ import java.time.LocalDateTime;
 import java.util.HexFormat;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.miniagoda.auth.dto.LoginRequest;
+import com.miniagoda.auth.dto.LoginResponse;
 import com.miniagoda.auth.dto.RegisterRequest;
 import com.miniagoda.auth.dto.RegisterResponse;
 import com.miniagoda.auth.entity.RefreshToken;
@@ -64,24 +67,26 @@ public class AuthService {
         User savedUser = userRepository.save(user);
 
         String accessToken = jwtUtil.generateAccessToken(savedUser);
-        String refreshToken = jwtUtil.generateRefreshToken(savedUser);
-
-        RefreshToken refreshTokenEntity = new RefreshToken();
-        refreshTokenEntity.setToken(hashToken(refreshToken));
-        refreshTokenEntity.setExpiresAt(LocalDateTime.now().plusSeconds(refreshTokenExpiration / 1000));
-        refreshTokenEntity.setUser(savedUser);
-
-        refreshTokenRepository.save(refreshTokenEntity);
-
-        Cookie cookie = new Cookie("refreshToken", refreshToken);
-        cookie.setHttpOnly(true);
-        cookie.setSecure(true);
-        cookie.setPath("/auth/refresh");
-        cookie.setMaxAge((int) (refreshTokenExpiration / 1000));
         
-        response.addCookie(cookie);
+        handleRefreshToken(savedUser, response);
 
         return new RegisterResponse(accessToken);
+    }
+
+    @Transactional
+    public LoginResponse login(LoginRequest request, HttpServletResponse response) {
+        User user = userRepository.findByEmail(request.getEmail())
+        .orElseThrow(() -> new BadCredentialsException("Invalid email or password"));
+
+        if(!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            throw new BadCredentialsException("Invalid email or password");
+        }
+
+        String accessToken = jwtUtil.generateAccessToken(user);
+        
+        handleRefreshToken(user, response);
+        
+        return new LoginResponse(accessToken);
     }
 
     private String hashToken(String token) {
@@ -92,5 +97,25 @@ public class AuthService {
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException("SHA-256 not available", e);
         }
+    }
+
+    private void handleRefreshToken(User user, HttpServletResponse response) {
+        String refreshToken = jwtUtil.generateRefreshToken(user);
+
+        RefreshToken refreshTokenEntity = new RefreshToken();
+        refreshTokenEntity.setToken(hashToken(refreshToken));
+        refreshTokenEntity.setExpiresAt(LocalDateTime.now().plusSeconds(refreshTokenExpiration / 1000));
+        refreshTokenEntity.setUser(user);
+
+        refreshTokenRepository.revokeAllByUser(user);
+        refreshTokenRepository.save(refreshTokenEntity);
+
+        Cookie cookie = new Cookie("refreshToken", refreshToken);
+        cookie.setHttpOnly(true);
+        cookie.setSecure(true);
+        cookie.setPath("/auth/refresh");
+        cookie.setMaxAge((int) (refreshTokenExpiration / 1000));
+
+        response.addCookie(cookie);
     }
 }
