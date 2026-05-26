@@ -1,5 +1,6 @@
 package com.miniagoda.auth.security;
 
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,10 +24,16 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
     private final UserDetailsService userDetailsService;
+    private final RedisTemplate<String, String> redisTemplate;
 
-    public JwtAuthFilter(JwtUtil jwtUtil, UserDetailsService userDetailsService) {
+    public JwtAuthFilter(
+        JwtUtil jwtUtil,
+        UserDetailsService userDetailsService,
+        RedisTemplate<String, String> redisTemplate
+    ) {
         this.jwtUtil = jwtUtil;
         this.userDetailsService = userDetailsService;
+        this.redisTemplate = redisTemplate;
     }
 
     @Override
@@ -51,6 +58,13 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                     u.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(u);
                 }
+            }
+
+            String jti = jwtUtil.extractJti(token);
+            Boolean isBlocklisted = redisTemplate.hasKey("blocklist:" + jti);
+            if (Boolean.TRUE.equals(isBlocklisted)) {
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token invalidated");
+                return;
             }
         } catch(JwtException e) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
