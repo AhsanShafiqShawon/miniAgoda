@@ -177,7 +177,8 @@ miniAgoda/
 │   │   │   ├── util/
 │   │   │   │   └── JwtUtil.java
 │   │   │   ├── exception/
-│   │   │   │   └── EmailAlreadyExistException.java
+│   │   │   │   ├── EmailAlreadyExistException.java
+│   │   │   │   └── InvalidRefreshTokenException.java
 │   │   │   └── dto/
 │   │   │       ├── RegisterRequest.java
 │   │   │       ├── RegisterResponse.java
