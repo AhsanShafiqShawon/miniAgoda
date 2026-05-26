@@ -26,6 +26,7 @@ import com.miniagoda.user.entity.Role;
 import com.miniagoda.user.entity.User;
 import com.miniagoda.user.repository.UserRepository;
 
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -109,18 +110,22 @@ public class AuthService {
                 String authHeader = request.getHeader("Authorization");
                 if (authHeader != null && authHeader.startsWith("Bearer ")) {
                     String token = authHeader.substring(7);
-                    String jti = jwtUtil.extractJti(token);
-                    Date expiration = jwtUtil.extractExpiration(token);
-                    long ttl = expiration.getTime() - System.currentTimeMillis();
 
-                    if(ttl > 0) {
-                        redisTemplate.opsForValue().set(
-                            "blocklist:" + jti,
-                            "1",
-                            ttl,
-                            TimeUnit.MILLISECONDS
-                        );
+                    try {
+                        String jti = jwtUtil.extractJti(token);
+                        Date expiration = jwtUtil.extractExpiration(token);
+                        long ttl = expiration.getTime() - System.currentTimeMillis();
+                        
+                        if(ttl > 0) {
+                            redisTemplate.opsForValue().set(
+                                "blocklist:" + jti,
+                                "1",
+                                ttl,
+                                TimeUnit.MILLISECONDS
+                            );
+                        }
                     }
+                    catch(JwtException e) {}
                 }
                 
                 Cookie c = new Cookie("refreshToken", "");
