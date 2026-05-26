@@ -12,8 +12,7 @@ import com.miniagoda.auth.entity.RefreshToken;
 import com.miniagoda.user.entity.User;
 
 public interface RefreshTokenRepository extends JpaRepository<RefreshToken, UUID> {
-    Optional<RefreshToken> findByToken(String hashedToken);
-    void deleteByToken(String token);
+    void deleteByTokenHash(String tokenHash);
     Optional<RefreshToken> findByTokenHash(String tokenHash);
     
     @Modifying
