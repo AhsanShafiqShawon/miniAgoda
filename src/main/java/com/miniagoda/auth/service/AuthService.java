@@ -20,7 +20,9 @@ import com.miniagoda.auth.dto.RegisterRequest;
 import com.miniagoda.auth.dto.RegisterResponse;
 import com.miniagoda.auth.entity.RefreshToken;
 import com.miniagoda.auth.exception.EmailAlreadyExistException;
+import com.miniagoda.auth.exception.InvalidRefreshTokenException;
 import com.miniagoda.auth.repository.RefreshTokenRepository;
+import com.miniagoda.auth.security.UserDetailsImpl;
 import com.miniagoda.auth.util.JwtUtil;
 import com.miniagoda.user.entity.Role;
 import com.miniagoda.user.entity.User;
@@ -105,7 +107,7 @@ public class AuthService {
 
         for(Cookie cookie : cookies) {
             if(cookie.getName().equals("refreshToken")) {
-                refreshTokenRepository.deleteByToken(hashToken(cookie.getValue()));
+                refreshTokenRepository.deleteByTokenHash(hashToken(cookie.getValue()));
 
                 String authHeader = request.getHeader("Authorization");
                 if (authHeader != null && authHeader.startsWith("Bearer ")) {
@@ -138,6 +140,35 @@ public class AuthService {
         }
     }
 
+    @Transactional
+    public RegisterResponse refresh(HttpServletRequest request, HttpServletResponse response) {
+        Cookie[] cookies = request.getCookies();
+        String accessToken = null;
+
+        if(cookies == null) throw new InvalidRefreshTokenException();
+
+        for(Cookie cookie : cookies) {
+            if(cookie.getName().equals("refreshToken")) {
+                RefreshToken refreshToken = refreshTokenRepository
+                .findByTokenHash(hashToken(cookie.getValue()))
+                .orElseThrow(() -> new InvalidRefreshTokenException());
+
+                if(
+                    refreshToken.isRevoked() || 
+                    refreshToken.getExpiresAt().isBefore(LocalDateTime.now()) || 
+                    !jwtUtil.isTokenValid(cookie.getValue(), new UserDetailsImpl(refreshToken.getUser()))
+                ) throw new InvalidRefreshTokenException();
+
+                refreshToken.setRevoked(true);
+
+                accessToken = jwtUtil.generateAccessToken(refreshToken.getUser());
+                handleRefreshToken(refreshToken.getUser(), response);
+            }
+        }
+        if(accessToken == null) throw new InvalidRefreshTokenException();
+        return new RegisterResponse(accessToken);
+    }
+
     private String hashToken(String token) {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
@@ -152,7 +183,7 @@ public class AuthService {
         String refreshToken = jwtUtil.generateRefreshToken(user);
 
         RefreshToken refreshTokenEntity = new RefreshToken();
-        refreshTokenEntity.setToken(hashToken(refreshToken));
+        refreshTokenEntity.setTokenHash(hashToken(refreshToken));
         refreshTokenEntity.setExpiresAt(LocalDateTime.now().plusSeconds(refreshTokenExpiration / 1000));
         refreshTokenEntity.setUser(user);
 
