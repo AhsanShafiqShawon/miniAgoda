@@ -3,6 +3,7 @@ package com.miniagoda.auth.util;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import javax.crypto.SecretKey;
 
@@ -37,6 +38,7 @@ public class JwtUtil {
 
         Map<String, Object> claims = new HashMap<String, Object>();
         claims.put("role", user.getRole().name());
+        claims.put("jti", UUID.randomUUID().toString());
         
         String token = buildToken(user, accessTokenExpiration, claims);
         
@@ -52,6 +54,10 @@ public class JwtUtil {
     
     public String extractEmail(String token) {
         return extractAllClaims(token).getSubject();
+    }
+
+    public String extractJti(String token) {
+        return (String) extractAllClaims(token).get("jti");
     }
     
     public boolean isTokenValid(String token, UserDetails userDetails) {
