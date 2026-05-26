@@ -35,7 +35,7 @@ public class RefreshToken {
     private LocalDateTime createdAt;
 
     @Column(nullable = false, unique = true, length = 64)
-    private String token;
+    private String tokenHash;
 
     @Column(nullable = false)
     private LocalDateTime expiresAt;
