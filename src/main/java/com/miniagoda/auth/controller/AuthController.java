@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.miniagoda.auth.dto.LoginRequest;
+import com.miniagoda.auth.dto.LoginResponse;
 import com.miniagoda.auth.dto.RegisterRequest;
 import com.miniagoda.auth.dto.RegisterResponse;
 import com.miniagoda.auth.service.AuthService;
@@ -27,5 +29,11 @@ public class AuthController {
     public ResponseEntity<RegisterResponse> register(@Valid @RequestBody RegisterRequest request, HttpServletResponse httpServletResponse) {
         RegisterResponse registerResponse = authService.register(request, httpServletResponse);
         return ResponseEntity.ok(registerResponse);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request, HttpServletResponse httpServletResponse) {
+        LoginResponse loginResponse = authService.login(request, httpServletResponse);
+        return ResponseEntity.ok(loginResponse);
     }
 }
