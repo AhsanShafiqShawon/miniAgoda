@@ -1,0 +1,1 @@
+alter table refresh_tokens rename token to token_hash;
