@@ -208,7 +208,8 @@ miniAgoda/
 │           ├── V13__create_users_table.sql
 │           ├── V14__add_user_id_to_bookings.sql
 │           ├── V15__seed_super_admin.sql
-│           └── V16__create_refresh_tokens_table.sql
+│           ├── V16__create_refresh_tokens_table.sql
+│           └── V17__alter_refresh_tokens_rename_token_to_token_hash.sql
 ├── .env
 ├── pom.xml
 └── README.md
