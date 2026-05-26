@@ -3,6 +3,7 @@ package com.miniagoda.booking.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,7 +24,7 @@ public class BookingController {
     }
 
     @PostMapping
-    public ResponseEntity<BookingResponse> book(@Valid @ModelAttribute BookingRequest bookingRequest) {
+    public ResponseEntity<BookingResponse> book(@Valid @RequestBody BookingRequest bookingRequest) {
         BookingResponse response = bookingService.createBooking(bookingRequest);
         return ResponseEntity.status(201).body(response);
     }
