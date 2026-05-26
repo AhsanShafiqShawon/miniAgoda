@@ -81,23 +81,19 @@ public class JwtUtil {
         signingKey = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    private SecretKey getSigningKey() {
-        return signingKey;
-    }
-
     private String buildToken(User user, long expiration, Map<String, Object> extraClaims) {
         return Jwts.builder()
         .claims(extraClaims)
         .subject(user.getEmail())
         .issuedAt(new Date(System.currentTimeMillis()))
         .expiration(new Date(System.currentTimeMillis() + expiration))
-        .signWith(getSigningKey())
+        .signWith(signingKey)
         .compact();
     }
     
     private Claims extractAllClaims(String token) {
         return Jwts.parser()
-        .verifyWith(getSigningKey())
+        .verifyWith(signingKey)
         .build()
         .parseSignedClaims(token)
         .getPayload();
