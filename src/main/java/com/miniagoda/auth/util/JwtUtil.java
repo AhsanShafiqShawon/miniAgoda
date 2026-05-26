@@ -66,11 +66,12 @@ public class JwtUtil {
     }
 
     @PostConstruct
+    private void init() {
+        byte[] keyBytes = Decoders.BASE64.decode(secret);
+        signingKey = Keys.hmacShaKeyFor(keyBytes);
+    }
+
     private SecretKey getSigningKey() {
-        if (signingKey == null) {
-            byte[] keyBytes = Decoders.BASE64.decode(secret);
-            signingKey = Keys.hmacShaKeyFor(keyBytes);
-        }
         return signingKey;
     }
 
