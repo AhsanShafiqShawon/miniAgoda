@@ -12,6 +12,7 @@ import com.miniagoda.auth.dto.RegisterRequest;
 import com.miniagoda.auth.dto.RegisterResponse;
 import com.miniagoda.auth.service.AuthService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 
@@ -35,5 +36,11 @@ public class AuthController {
     public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request, HttpServletResponse httpServletResponse) {
         LoginResponse loginResponse = authService.login(request, httpServletResponse);
         return ResponseEntity.ok(loginResponse);
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(HttpServletRequest request, HttpServletResponse response) {
+        authService.logout(request, response);
+        return ResponseEntity.noContent().build();
     }
 }
