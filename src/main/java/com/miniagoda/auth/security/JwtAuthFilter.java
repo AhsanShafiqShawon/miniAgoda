@@ -51,6 +51,14 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             String email = jwtUtil.extractEmail(token);
 
             if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+
+                String jti = jwtUtil.extractJti(token);
+                Boolean isBlocklisted = redisTemplate.hasKey("blocklist:" + jti);
+                if (Boolean.TRUE.equals(isBlocklisted)) {
+                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token invalidated");
+                    return;
+                }
+
                 UserDetails userDetails = userDetailsService.loadUserByUsername(email);
 
                 if(jwtUtil.isTokenValid(token, userDetails)) {
@@ -58,13 +66,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                     u.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(u);
                 }
-            }
-
-            String jti = jwtUtil.extractJti(token);
-            Boolean isBlocklisted = redisTemplate.hasKey("blocklist:" + jti);
-            if (Boolean.TRUE.equals(isBlocklisted)) {
-                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token invalidated");
-                return;
             }
         } catch(JwtException e) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
