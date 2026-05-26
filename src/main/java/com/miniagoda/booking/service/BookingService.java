@@ -4,9 +4,11 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import com.miniagoda.booking.dto.BookingRequest;
@@ -17,6 +19,8 @@ import com.miniagoda.booking.repository.BookingRepository;
 import com.miniagoda.hotel.entity.RoomType;
 import com.miniagoda.inventory.entity.Inventory;
 import com.miniagoda.inventory.repository.InventoryRepository;
+import com.miniagoda.user.entity.User;
+import com.miniagoda.user.repository.UserRepository;
 
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,10 +29,16 @@ public class BookingService {
 
     private final InventoryRepository inventoryRepository;
     private final BookingRepository bookingRepository;
+    private final UserRepository userRepository;
 
-    public BookingService(InventoryRepository inventoryRepository, BookingRepository bookingRepository) {
+    public BookingService(
+        InventoryRepository inventoryRepository,
+        BookingRepository bookingRepository,
+        UserRepository userRepository
+    ) {
         this.inventoryRepository = inventoryRepository;
         this.bookingRepository = bookingRepository;
+        this.userRepository = userRepository;
     }
 
     @Transactional
@@ -37,14 +47,6 @@ public class BookingService {
         LocalDate checkOut = bookingRequest.getCheckOut();
         int roomsRequested = bookingRequest.getRoomsRequested();
         
-        if(checkIn == null || checkOut == null || !checkIn.isBefore(checkOut)) {
-            throw new IllegalArgumentException("Invalid date range");
-        }
-
-        if(roomsRequested <= 0) {
-            throw new IllegalArgumentException("Requested room should be > 0");
-        }
-
         List<Inventory> inventories = inventoryRepository
         .findByRoomTypeIdAndDateBetween(bookingRequest.getRoomTypeId(), checkIn, checkOut.minusDays(1));
 
@@ -83,22 +85,44 @@ public class BookingService {
         booking.setExpiredAt(LocalDateTime.now().plusMinutes(15));
         booking.setStatus(BookingStatus.PENDING);
 
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userRepository.findByEmail(email).orElseThrow();
+        booking.setUser(user);
+        booking.setCurrency("THB");
+
         bookingRepository.save(booking);
 
-        return new BookingResponse(
-            booking.getId(),
-            roomType.getId(),
-            roomType.getName(),
-            checkIn,
-            checkOut,
-            roomsRequested,
-            totalPrice,
-            booking.getStatus(),
-            booking.getExpiredAt()
-        );
+        return toResponse(booking);
     }
 
     public Booking findById(UUID id) {
         return bookingRepository.findById(id).orElseThrow(() -> new RuntimeException("Booking is not found!"));
+    }
+
+    public List<BookingResponse> getBookings() {
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userRepository.findByEmail(email).orElseThrow();
+
+        List<BookingResponse> responses = new ArrayList<BookingResponse>();
+        List<Booking> bookings = bookingRepository.findByUserId(user.getId());
+
+        for(Booking booking : bookings) responses.add(toResponse(booking));
+
+        return responses;
+    }
+
+    private BookingResponse toResponse(Booking booking) {
+        BookingResponse bookingResponse = new BookingResponse(
+            booking.getId(),
+            booking.getRoomType().getId(),
+            booking.getRoomType().getName(),
+            booking.getCheckIn(),
+            booking.getCheckOut(),
+            booking.getRoomsBooked(),
+            booking.getTotalPrice(),
+            booking.getStatus(),
+            booking.getExpiredAt()
+        );
+        return bookingResponse;
     }
 }
