@@ -4,9 +4,12 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.HexFormat;
+import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -24,6 +27,7 @@ import com.miniagoda.user.entity.User;
 import com.miniagoda.user.repository.UserRepository;
 
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,6 +38,7 @@ public class AuthService {
     private final JwtUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final RedisTemplate<String, String> redisTemplate;
 
     @Value("${jwt.refresh-token.expiration}")
     private long refreshTokenExpiration;
@@ -42,12 +47,14 @@ public class AuthService {
         UserRepository userRepository,
         JwtUtil jwtUtil,
         PasswordEncoder passwordEncoder,
-        RefreshTokenRepository refreshTokenRepository
+        RefreshTokenRepository refreshTokenRepository,
+        RedisTemplate<String, String> redisTemplate
     ) {
         this.userRepository = userRepository;
         this.jwtUtil = jwtUtil;
         this.passwordEncoder = passwordEncoder;
         this.refreshTokenRepository = refreshTokenRepository;
+        this.redisTemplate = redisTemplate;
     }
 
     @Transactional
@@ -87,6 +94,43 @@ public class AuthService {
         handleRefreshToken(user, response);
         
         return new LoginResponse(accessToken);
+    }
+
+    @Transactional
+    public void logout(HttpServletRequest request, HttpServletResponse response) {
+        Cookie[] cookies = request.getCookies();
+
+        if(cookies == null) return;
+
+        for(Cookie cookie : cookies) {
+            if(cookie.getName().equals("refreshToken")) {
+                refreshTokenRepository.deleteByToken(hashToken(cookie.getValue()));
+
+                String authHeader = request.getHeader("Authorization");
+                if (authHeader != null && authHeader.startsWith("Bearer ")) {
+                    String token = authHeader.substring(7);
+                    String jti = jwtUtil.extractJti(token);
+                    Date expiration = jwtUtil.extractExpiration(token);
+                    long ttl = expiration.getTime() - System.currentTimeMillis();
+
+                    if(ttl > 0) {
+                        redisTemplate.opsForValue().set(
+                            "blocklist:" + jti,
+                            "1",
+                            ttl,
+                            TimeUnit.MILLISECONDS
+                        );
+                    }
+                }
+                
+                Cookie c = new Cookie("refreshToken", "");
+                c.setHttpOnly(true);
+                c.setSecure(true);
+                c.setPath("/auth/refresh");
+                c.setMaxAge(0);
+                response.addCookie(c);
+            }
+        }
     }
 
     private String hashToken(String token) {
