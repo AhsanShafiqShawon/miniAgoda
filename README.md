@@ -180,7 +180,9 @@ miniAgoda/
 │   │   │   │   └── EmailAlreadyExistException.java
 │   │   │   └── dto/
 │   │   │       ├── RegisterRequest.java
-│   │   │       └── RegisterResponse.java
+│   │   │       ├── RegisterResponse.java
+│   │   │       ├── LoginRequest.java
+│   │   │       └── LoginResponse.java
 │   │   └── MiniAgodaApplication.java
 │   │
 │   ├── test/java/com/miniagoda/
