@@ -13,6 +13,7 @@ import com.miniagoda.user.entity.User;
 
 public interface RefreshTokenRepository extends JpaRepository<RefreshToken, UUID> {
     Optional<RefreshToken> findByToken(String hashedToken);
+    void deleteByToken(String token);
     
     @Modifying
     @Query("UPDATE RefreshToken r SET r.revoked = true WHERE r.user = :user")
