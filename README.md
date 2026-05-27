@@ -142,6 +142,8 @@ miniAgoda/
 │   │   │   │   ├── PaymentService.java
 │   │   │   │   ├── 
 │   │   │   │   └── 
+│   │   │   ├── exception/
+│   │   │   │   └── PaymentAlreadyExistException.java
 │   │   │   ├── entity/
 │   │   │   │   ├── Payment.java
 │   │   │   │   └── PaymentStatus.java
