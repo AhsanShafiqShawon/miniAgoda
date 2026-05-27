@@ -4,8 +4,10 @@ import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import com.miniagoda.booking.entity.Booking;
 import com.miniagoda.payment.entity.Payment;
 
 public interface PaymentRepository extends JpaRepository<Payment, UUID> {
     Payment findByPaymentToken(String id);
+    boolean existsByBooking(Booking booking);
 }
