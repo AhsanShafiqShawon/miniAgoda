@@ -22,7 +22,7 @@ public class HotelController {
         this.hotelService = hotelService;
     }
     
-    @GetMapping("/hotel/{hotelId}")
+    @GetMapping("/hotels/{hotelId}")
     public ResponseEntity<HotelDetailResponse> getHotelDetail(@Valid @ModelAttribute HotelDetailRequest hotelDetailRequest) {
         HotelDetailResponse detail = hotelService.getHotelDetail(hotelDetailRequest);
         return ResponseEntity.ok(detail);
