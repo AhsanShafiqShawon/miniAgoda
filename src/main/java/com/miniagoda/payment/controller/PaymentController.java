@@ -14,7 +14,7 @@ import com.miniagoda.payment.dto.RefundResponse;
 import com.miniagoda.payment.service.PaymentService;
 
 @RestController
-@RequestMapping("")
+@RequestMapping("/api/v1")
 public class PaymentController {
 
     private final PaymentService paymentService;

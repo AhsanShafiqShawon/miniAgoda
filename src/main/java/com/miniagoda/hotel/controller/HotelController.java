@@ -13,7 +13,7 @@ import com.miniagoda.hotel.service.HotelService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/hotels")
+@RequestMapping("/api/v1")
 public class HotelController {
 
     private final HotelService hotelService;
@@ -22,7 +22,7 @@ public class HotelController {
         this.hotelService = hotelService;
     }
     
-    @GetMapping("/{hotelId}")
+    @GetMapping("/hotel/{hotelId}")
     public ResponseEntity<HotelDetailResponse> getHotelDetail(@Valid @ModelAttribute HotelDetailRequest hotelDetailRequest) {
         HotelDetailResponse detail = hotelService.getHotelDetail(hotelDetailRequest);
         return ResponseEntity.ok(detail);

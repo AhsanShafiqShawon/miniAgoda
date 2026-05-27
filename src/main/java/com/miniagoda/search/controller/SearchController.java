@@ -15,7 +15,7 @@ import com.miniagoda.search.service.SearchService;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/hotels")
+@RequestMapping("/api/v1/hotels")
 public class SearchController {
     private final SearchService searchService;
 
