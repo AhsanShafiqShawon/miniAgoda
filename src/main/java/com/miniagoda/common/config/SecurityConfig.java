@@ -30,6 +30,7 @@ public class SecurityConfig {
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/auth/register", "/auth/login", "/auth/refresh").permitAll()
                 .requestMatchers("/auth/logout").authenticated()
+                .requestMatchers("/webhooks/stripe").permitAll()
                 .requestMatchers(HttpMethod.GET, "/hotels/**").permitAll()
                 .anyRequest().authenticated()
             )
