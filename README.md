@@ -122,6 +122,10 @@ miniAgoda/
 │   │   │   │   └── BookingService.java
 │   │   │   ├── repository/
 │   │   │   │   └── BookingRepository.java
+│   │   │   ├── exception/
+│   │   │   │   ├── NotEnoughRoomsException.java
+│   │   │   │   ├── InventoryIncompleteException.java
+│   │   │   │   └── BookingNotFoundException.java
 │   │   │   ├── entity/
 │   │   │   │   ├── Booking.java
 │   │   │   │   └── BookingStatus.java
