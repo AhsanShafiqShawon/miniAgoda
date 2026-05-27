@@ -15,11 +15,15 @@ import com.miniagoda.booking.dto.BookingRequest;
 import com.miniagoda.booking.dto.BookingResponse;
 import com.miniagoda.booking.entity.Booking;
 import com.miniagoda.booking.entity.BookingStatus;
+import com.miniagoda.booking.exception.BookingNotFoundException;
+import com.miniagoda.booking.exception.InventoryIncompleteException;
+import com.miniagoda.booking.exception.NotEnoughRoomsException;
 import com.miniagoda.booking.repository.BookingRepository;
 import com.miniagoda.hotel.entity.RoomType;
 import com.miniagoda.inventory.entity.Inventory;
 import com.miniagoda.inventory.repository.InventoryRepository;
 import com.miniagoda.user.entity.User;
+import com.miniagoda.user.exception.UserNotFoundException;
 import com.miniagoda.user.repository.UserRepository;
 
 import org.springframework.transaction.annotation.Transactional;
@@ -53,7 +57,7 @@ public class BookingService {
         long expectedDays = ChronoUnit.DAYS.between(checkIn, checkOut);
 
         if(inventories.size() != expectedDays) {
-            throw new RuntimeException("Inventory missing for some dates");
+            throw new InventoryIncompleteException();
         }
 
         int minAvailable = Integer.MAX_VALUE;
@@ -62,7 +66,7 @@ public class BookingService {
         }
 
         if(minAvailable < roomsRequested) {
-            throw new RuntimeException("Not enough rooms available");
+            throw new NotEnoughRoomsException();
         }
 
         for(Inventory inventory : inventories) {
@@ -86,7 +90,7 @@ public class BookingService {
         booking.setStatus(BookingStatus.PENDING);
 
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        User user = userRepository.findByEmail(email).orElseThrow();
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException());
         booking.setUser(user);
         booking.setCurrency("THB");
 
@@ -96,12 +100,12 @@ public class BookingService {
     }
 
     public Booking findById(UUID id) {
-        return bookingRepository.findById(id).orElseThrow(() -> new RuntimeException("Booking is not found!"));
+        return bookingRepository.findById(id).orElseThrow(() -> new BookingNotFoundException(id));
     }
 
     public List<BookingResponse> getBookings() {
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        User user = userRepository.findByEmail(email).orElseThrow();
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException());
 
         List<BookingResponse> responses = new ArrayList<BookingResponse>();
         List<Booking> bookings = bookingRepository.findByUserId(user.getId());
