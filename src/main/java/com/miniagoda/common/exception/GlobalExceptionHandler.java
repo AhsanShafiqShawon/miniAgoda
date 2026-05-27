@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.miniagoda.auth.exception.EmailAlreadyExistException;
 import com.miniagoda.auth.exception.InvalidRefreshTokenException;
+import com.miniagoda.inventory.exception.InventoryUnavailableException;
 import com.miniagoda.user.exception.UserNotFoundException;
 
 @ControllerAdvice
@@ -49,5 +50,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<String> handleUserNotFound(UserNotFoundException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+    }
+
+    @ExceptionHandler(InventoryUnavailableException.class)
+    public ResponseEntity<String> handleInventoryUnavailable(InventoryUnavailableException e) {
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(e.getMessage());
     }
 }
