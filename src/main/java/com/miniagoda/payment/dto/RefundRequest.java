@@ -16,11 +16,5 @@ public class RefundRequest {
     @NotNull(message = "Payment ID is required")
     private UUID paymentId;
 
-    @NotNull(message = "Amount is required")
-    private BigDecimal amount;
-
-    @NotNull(message = "Currency is required")
-    private String currency;
-
     private String reason;
 }
