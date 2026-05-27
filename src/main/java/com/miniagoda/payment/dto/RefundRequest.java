@@ -1,6 +1,5 @@
 package com.miniagoda.payment.dto;
 
-import java.math.BigDecimal;
 import java.util.UUID;
 
 import jakarta.validation.constraints.NotNull;
