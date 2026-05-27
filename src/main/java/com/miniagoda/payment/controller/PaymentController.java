@@ -13,6 +13,8 @@ import com.miniagoda.payment.dto.RefundRequest;
 import com.miniagoda.payment.dto.RefundResponse;
 import com.miniagoda.payment.service.PaymentService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping("/api/v1")
 public class PaymentController {
@@ -24,12 +26,12 @@ public class PaymentController {
     }
 
     @PostMapping("/payments/create-intent")
-    public ResponseEntity<PaymentIntentResponse> createPayment(@RequestBody PaymentIntentRequest request) throws Exception {
+    public ResponseEntity<PaymentIntentResponse> createPayment(@Valid @RequestBody PaymentIntentRequest request) throws Exception {
         return ResponseEntity.ok(paymentService.createPayment(request));
     }
 
     @PostMapping("/payments/refund")
-    public ResponseEntity<RefundResponse> refund(@RequestBody RefundRequest request) throws Exception {
+    public ResponseEntity<RefundResponse> refund(@Valid @RequestBody RefundRequest request) throws Exception {
         return ResponseEntity.ok(paymentService.refund(request));
     }
 
