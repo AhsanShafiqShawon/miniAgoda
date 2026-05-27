@@ -111,6 +111,8 @@ miniAgoda/
 │   │   │   │   └── InventoryRepository.java
 │   │   │   ├── service/
 │   │   │   │   └── InventoryService.java
+│   │   │   ├── exception/
+│   │   │   │   └── InventoryUnavailableException.java
 │   │   │   └── entity/
 │   │   │       └── Inventory.java
 │   │   ├── booking/
@@ -157,6 +159,8 @@ miniAgoda/
 │   │   ├── user/
 │   │   │   ├── repository/
 │   │   │   │   └── UserRepository.java
+│   │   │   ├── exception/
+│   │   │   │   └── UserNotFoundException.java
 │   │   │   └── entity/
 │   │   │       ├── User.java
 │   │   │       └── Role.java
