@@ -14,6 +14,7 @@ import com.miniagoda.auth.exception.EmailAlreadyExistException;
 import com.miniagoda.auth.exception.InvalidRefreshTokenException;
 import com.miniagoda.booking.exception.BookingNotFoundException;
 import com.miniagoda.inventory.exception.InventoryUnavailableException;
+import com.miniagoda.payment.exception.PaymentAlreadyExistException;
 import com.miniagoda.user.exception.UserNotFoundException;
 
 @ControllerAdvice
@@ -61,5 +62,10 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BookingNotFoundException.class)
     public ResponseEntity<String> handleBookingNotFound(BookingNotFoundException e) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+    }
+
+    @ExceptionHandler(PaymentAlreadyExistException.class)
+    public ResponseEntity<String> handlePaymentAlreadyExists(PaymentAlreadyExistException e) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
     }
 }
