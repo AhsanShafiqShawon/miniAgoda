@@ -158,7 +158,7 @@ miniAgoda/
 │   │   │   │   ├── PaymentGateway.java
 │   │   │   │   ├── PaymentEvent.java
 │   │   │   │   └── stripe/
-│   │   │   │       └──StripeGateway.java
+│   │   │   │       └── StripeGateway.java
 │   │   │   └── config/
 │   │   │       ├── StripeConfig.java
 │   │   │       └── PaymentGatewayConfig.java
@@ -194,6 +194,24 @@ miniAgoda/
 │   │   │       ├── RegisterResponse.java
 │   │   │       ├── LoginRequest.java
 │   │   │       └── LoginResponse.java
+│   │   ├── notification/
+│   │   │   ├── config/
+│   │   │   │   ├── NotificationProperties.java
+│   │   │   │   └── NotificationConfig.java
+│   │   │   ├── exception/
+│   │   │   │   └── NotificationException.java
+│   │   │   ├── gateway/
+│   │   │   │   ├── EmailGateway.java
+│   │   │   │   └── sendGrid/
+│   │   │   │       └── SendGridEmailGateway.java
+│   │   │   ├── service/
+│   │   │   │   ├── 
+│   │   │   │   └── 
+│   │   │   └── dto/
+│   │   │       ├── EmailMessage.java
+│   │   │       ├── 
+│   │   │       ├── 
+│   │   │       └── 
 │   │   └── MiniAgodaApplication.java
 │   │
 │   ├── test/java/com/miniagoda/
