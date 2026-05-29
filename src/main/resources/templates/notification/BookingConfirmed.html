@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Booking Confirmed – miniAgoda</title>
+</head>
+<body style="margin:0;padding:0;background:#f4f1ec;font-family:'Georgia',serif;">
+
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f1ec;padding:40px 0;">
+    <tr>
+      <td align="center">
+        <table width="600" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:4px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.08);">
+
+          <!-- Header -->
+          <tr>
+            <td style="background:#1a1a2e;padding:36px 48px;">
+              <p style="margin:0;font-family:'Georgia',serif;font-size:22px;color:#c9a84c;letter-spacing:3px;text-transform:uppercase;">miniAgoda</p>
+              <p style="margin:6px 0 0;font-size:12px;color:#8888aa;letter-spacing:1px;text-transform:uppercase;">Your stay is confirmed</p>
+            </td>
+          </tr>
+
+          <!-- Hero -->
+          <tr>
+            <td style="background:#c9a84c;padding:28px 48px;">
+              <p style="margin:0;font-size:13px;color:#1a1a2e;letter-spacing:2px;text-transform:uppercase;font-family:Arial,sans-serif;">Booking Confirmation</p>
+              <p style="margin:8px 0 0;font-size:32px;color:#1a1a2e;font-family:'Georgia',serif;">You're all set!</p>
+            </td>
+          </tr>
+
+          <!-- Body -->
+          <tr>
+            <td style="padding:40px 48px;">
+              <p style="margin:0 0 24px;font-size:16px;color:#333;line-height:1.7;">
+                Dear <span th:text="${guestName}" style="font-weight:bold;">Guest</span>,
+              </p>
+              <p style="margin:0 0 32px;font-size:15px;color:#555;line-height:1.8;">
+                Your reservation at <strong th:text="${hotelName}">Hotel Name</strong> has been confirmed.
+                We look forward to welcoming you.
+              </p>
+
+              <!-- Booking Details Card -->
+              <table width="100%" cellpadding="0" cellspacing="0" style="background:#f9f7f4;border-left:4px solid #c9a84c;border-radius:2px;margin-bottom:32px;">
+                <tr>
+                  <td style="padding:28px 32px;">
+                    <p style="margin:0 0 18px;font-size:11px;color:#999;letter-spacing:2px;text-transform:uppercase;font-family:Arial,sans-serif;">Reservation Details</p>
+
+                    <table width="100%" cellpadding="0" cellspacing="0">
+                      <tr>
+                        <td style="padding:8px 0;border-bottom:1px solid #ece9e3;">
+                          <span style="font-size:13px;color:#888;font-family:Arial,sans-serif;">Booking ID</span>
+                        </td>
+                        <td align="right" style="padding:8px 0;border-bottom:1px solid #ece9e3;">
+                          <span th:text="${bookingId}" style="font-size:13px;color:#1a1a2e;font-weight:bold;font-family:Arial,sans-serif;letter-spacing:1px;">BK-000000</span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td style="padding:8px 0;border-bottom:1px solid #ece9e3;">
+                          <span style="font-size:13px;color:#888;font-family:Arial,sans-serif;">Hotel</span>
+                        </td>
+                        <td align="right" style="padding:8px 0;border-bottom:1px solid #ece9e3;">
+                          <span th:text="${hotelName}" style="font-size:13px;color:#333;font-family:Arial,sans-serif;">Hotel Name</span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td style="padding:8px 0;border-bottom:1px solid #ece9e3;">
+                          <span style="font-size:13px;color:#888;font-family:Arial,sans-serif;">Check-in</span>
+                        </td>
+                        <td align="right" style="padding:8px 0;border-bottom:1px solid #ece9e3;">
+                          <span th:text="${#temporals.format(checkIn, 'EEE, dd MMM yyyy')}" style="font-size:13px;color:#333;font-family:Arial,sans-serif;">01 Jan 2025</span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td style="padding:8px 0;border-bottom:1px solid #ece9e3;">
+                          <span style="font-size:13px;color:#888;font-family:Arial,sans-serif;">Check-out</span>
+                        </td>
+                        <td align="right" style="padding:8px 0;border-bottom:1px solid #ece9e3;">
+                          <span th:text="${#temporals.format(checkOut, 'EEE, dd MMM yyyy')}" style="font-size:13px;color:#333;font-family:Arial,sans-serif;">05 Jan 2025</span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td style="padding:12px 0 0;">
+                          <span style="font-size:13px;color:#888;font-family:Arial,sans-serif;">Total Amount</span>
+                        </td>
+                        <td align="right" style="padding:12px 0 0;">
+                          <span th:text="${totalAmount}" style="font-size:18px;color:#c9a84c;font-weight:bold;font-family:Arial,sans-serif;">$0.00</span>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+
+              <p style="margin:0 0 8px;font-size:14px;color:#555;line-height:1.8;">
+                If you have any questions, reply to this email or contact our support team.
+              </p>
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td style="background:#1a1a2e;padding:28px 48px;">
+              <p style="margin:0;font-size:12px;color:#666;line-height:1.8;font-family:Arial,sans-serif;">
+                © miniAgoda · This is an automated message, please do not reply directly.<br/>
+                You received this because you made a booking on miniAgoda.
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+
+</body>
+</html>

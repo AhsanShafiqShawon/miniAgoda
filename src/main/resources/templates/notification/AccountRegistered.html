@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Welcome to miniAgoda</title>
+</head>
+<body style="margin:0;padding:0;background:#f4f1ec;font-family:'Georgia',serif;">
+
+  <table width="100%" cellpadding="0" cellspacing="0" style="background:#f4f1ec;padding:40px 0;">
+    <tr>
+      <td align="center">
+        <table width="600" cellpadding="0" cellspacing="0" style="background:#ffffff;border-radius:4px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.08);">
+
+          <!-- Header -->
+          <tr>
+            <td style="background:#1a1a2e;padding:36px 48px;">
+              <p style="margin:0;font-family:'Georgia',serif;font-size:22px;color:#c9a84c;letter-spacing:3px;text-transform:uppercase;">miniAgoda</p>
+              <p style="margin:6px 0 0;font-size:12px;color:#8888aa;letter-spacing:1px;text-transform:uppercase;">Welcome aboard</p>
+            </td>
+          </tr>
+
+          <!-- Hero -->
+          <tr>
+            <td style="background:#c9a84c;padding:28px 48px;">
+              <p style="margin:0;font-size:13px;color:#1a1a2e;letter-spacing:2px;text-transform:uppercase;font-family:Arial,sans-serif;">Account Created</p>
+              <p style="margin:8px 0 0;font-size:32px;color:#1a1a2e;font-family:'Georgia',serif;">Welcome, <span th:text="${userName}">Guest</span>!</p>
+            </td>
+          </tr>
+
+          <!-- Body -->
+          <tr>
+            <td style="padding:40px 48px;">
+              <p style="margin:0 0 24px;font-size:15px;color:#555;line-height:1.8;">
+                Your miniAgoda account has been created successfully.
+                Please verify your email address to activate your account and start booking.
+              </p>
+
+              <!-- CTA Button -->
+              <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:36px;">
+                <tr>
+                  <td align="center">
+                    <a th:href="${verificationLink}"
+                       href="#"
+                       style="display:inline-block;background:#1a1a2e;color:#c9a84c;text-decoration:none;padding:16px 40px;font-size:13px;letter-spacing:2px;text-transform:uppercase;font-family:Arial,sans-serif;border-radius:2px;">
+                      Verify Email Address
+                    </a>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Note -->
+              <table width="100%" cellpadding="0" cellspacing="0" style="background:#f9f7f4;border-left:4px solid #c9a84c;border-radius:2px;margin-bottom:32px;">
+                <tr>
+                  <td style="padding:20px 24px;">
+                    <p style="margin:0;font-size:13px;color:#888;line-height:1.8;font-family:Arial,sans-serif;">
+                      This verification link will expire in <strong style="color:#555;">24 hours</strong>.
+                      If you didn't create this account, you can safely ignore this email.
+                    </p>
+                  </td>
+                </tr>
+              </table>
+
+              <p style="margin:0;font-size:13px;color:#aaa;line-height:1.8;font-family:Arial,sans-serif;">
+                If the button doesn't work, paste this link into your browser:<br/>
+                <span th:text="${verificationLink}" style="color:#c9a84c;word-break:break-all;">https://miniagoda.com/verify?token=...</span>
+              </p>
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td style="background:#1a1a2e;padding:28px 48px;">
+              <p style="margin:0;font-size:12px;color:#666;line-height:1.8;font-family:Arial,sans-serif;">
+                © miniAgoda · This is an automated message, please do not reply directly.<br/>
+                You received this because an account was created with this email address.
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+
+</body>
+</html>
