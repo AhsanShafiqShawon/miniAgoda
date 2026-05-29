@@ -3,6 +3,7 @@ package com.miniagoda.notification.config;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.util.StringUtils;
 
 import com.sendgrid.SendGrid;
 
@@ -18,7 +19,10 @@ public class NotificationConfig {
 
     @Bean
     public SendGrid sendGridClient() {
-        SendGrid sendGrid = new SendGrid(properties.getSendGrid().getApiKey());
-        return sendGrid;
+        String apiKey = properties.getSendGrid().getApiKey();
+        if (!StringUtils.hasText(apiKey)) {
+            throw new IllegalStateException("SendGrid API key is not configured");
+        }
+        return new SendGrid(apiKey);
     }
 }
