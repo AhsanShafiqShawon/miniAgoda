@@ -207,11 +207,14 @@ miniAgoda/
 │   │   │   ├── service/
 │   │   │   │   ├── 
 │   │   │   │   └── 
-│   │   │   └── dto/
-│   │   │       ├── EmailMessage.java
-│   │   │       ├── 
-│   │   │       ├── 
-│   │   │       └── 
+│   │   │   ├── dto/
+│   │   │   │   └── EmailMessage.java
+│   │   │   └── event/
+│   │   │       ├── BookingConfirmed.java
+│   │   │       ├── BookingCancelled.java
+│   │   │       ├── PaymentSuccess.java
+│   │   │       ├── PaymentFailureEvent.java
+│   │   │       └── AccountRegisteredEvent.java
 │   │   └── MiniAgodaApplication.java
 │   │
 │   ├── test/java/com/miniagoda/
