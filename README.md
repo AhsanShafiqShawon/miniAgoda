@@ -189,6 +189,8 @@ miniAgoda/
 │   │   │   ├── util/
 │   │   │   │   ├── JwtUtil.java
 │   │   │   │   └── VerificationTokenUtil.java
+│   │   │   ├── listener/
+│   │   │   │   └── NotificationEventListener.java
 │   │   │   ├── exception/
 │   │   │   │   ├── EmailAlreadyExistException.java
 │   │   │   │   ├── InvalidRefreshTokenException.java
@@ -203,7 +205,8 @@ miniAgoda/
 │   │   ├── notification/
 │   │   │   ├── config/
 │   │   │   │   ├── NotificationProperties.java
-│   │   │   │   └── NotificationConfig.java
+│   │   │   │   ├── NotificationConfig.java
+│   │   │   │   └── NotificationAsyncConfig.java
 │   │   │   ├── exception/
 │   │   │   │   └── NotificationException.java
 │   │   │   ├── gateway/
