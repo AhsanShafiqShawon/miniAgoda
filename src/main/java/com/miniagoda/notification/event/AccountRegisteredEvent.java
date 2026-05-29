@@ -10,4 +10,5 @@ import lombok.Value;
 public class AccountRegisteredEvent {
     String userEmail;
     String userName;
+    String verificationLink;
 }
