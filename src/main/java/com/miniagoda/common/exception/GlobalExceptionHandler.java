@@ -6,12 +6,16 @@ import java.util.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import com.miniagoda.auth.exception.EmailAlreadyExistException;
 import com.miniagoda.auth.exception.InvalidRefreshTokenException;
+import com.miniagoda.auth.exception.TokenAlreadyUsedException;
+import com.miniagoda.auth.exception.TokenHasExpiredException;
+import com.miniagoda.auth.exception.VerificationTokenNotFoundException;
 import com.miniagoda.booking.exception.BookingNotFoundException;
 import com.miniagoda.inventory.exception.InventoryUnavailableException;
 import com.miniagoda.payment.exception.PaymentAlreadyExistException;
@@ -64,8 +68,23 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
     }
 
+    @ExceptionHandler(VerificationTokenNotFoundException.class)
+    public ResponseEntity<String> handleVerificationTokenNotFound(VerificationTokenNotFoundException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+    }
+
     @ExceptionHandler(PaymentAlreadyExistException.class)
     public ResponseEntity<String> handlePaymentAlreadyExists(PaymentAlreadyExistException e) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+    }
+
+    @ExceptionHandler(TokenAlreadyUsedException.class)
+    public ResponseEntity<String> handleTokenAlreadyUsed(TokenAlreadyUsedException e) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+    }
+
+    @ExceptionHandler(TokenHasExpiredException.class)
+    public ResponseEntity<String> handleTokenHasExpiredException(TokenHasExpiredException e) {
+        return ResponseEntity.status(HttpStatus.GONE).body(e.getMessage());
     }
 }
