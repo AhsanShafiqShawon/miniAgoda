@@ -11,7 +11,7 @@ import lombok.Value;
 @Value
 @Builder
 @AllArgsConstructor
-public class BookingConfirmedEvent {
+public class BookingCancelledEvent {
     UUID bookingId;
     String guestName;
     String guestEmail;
@@ -20,4 +20,5 @@ public class BookingConfirmedEvent {
     LocalDate checkOut;
     BigDecimal totalAmount;
     String currency;
+    String cancellationReason;
 }

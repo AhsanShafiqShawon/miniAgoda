@@ -1,7 +1,6 @@
 package com.miniagoda.notification.event;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.UUID;
 
 import lombok.AllArgsConstructor;
@@ -11,13 +10,11 @@ import lombok.Value;
 @Value
 @Builder
 @AllArgsConstructor
-public class BookingConfirmedEvent {
-    UUID bookingId;
-    String guestName;
-    String guestEmail;
-    String hotelName;
-    LocalDate checkIn;
-    LocalDate checkOut;
-    BigDecimal totalAmount;
+public class PaymentFailureEvent {
+    String payingUserEmail;
+    String payingUserName;
+    BigDecimal amount;
     String currency;
+    UUID bookingId;
+    String failureReason;
 }
