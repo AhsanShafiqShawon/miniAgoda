@@ -1,9 +1,11 @@
 package com.miniagoda.auth.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.miniagoda.auth.dto.LoginRequest;
@@ -48,5 +50,11 @@ public class AuthController {
     public ResponseEntity<RegisterResponse> refresh(HttpServletRequest request, HttpServletResponse response) {
         RegisterResponse registerResponse = authService.refresh(request, response);
         return ResponseEntity.ok(registerResponse);
+    }
+
+    @GetMapping("/verify")
+    public ResponseEntity<String> verifyEmail(@RequestParam String token) {
+        String response = authService.verifyEmail(token);
+        return ResponseEntity.ok(response);
     }
 }
