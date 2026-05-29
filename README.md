@@ -219,6 +219,7 @@ miniAgoda/
 │   │   │       ├── BookingConfirmedNotificationEvent.java
 │   │   │       ├── PaymentSuccessNotificationEvent.java
 │   │   │       ├── BookingCancelledNotificationEvent.java
+│   │   │       ├── AccountRegisteredNotificationEvent.java
 │   │   │       └── PaymentFailureNotificationEvent.java
 │   │   └── MiniAgodaApplication.java
 │   │
