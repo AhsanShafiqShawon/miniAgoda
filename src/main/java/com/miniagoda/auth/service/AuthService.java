@@ -9,6 +9,7 @@ import java.util.HexFormat;
 import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,6 +25,8 @@ import com.miniagoda.auth.exception.InvalidRefreshTokenException;
 import com.miniagoda.auth.repository.RefreshTokenRepository;
 import com.miniagoda.auth.security.UserDetailsImpl;
 import com.miniagoda.auth.util.JwtUtil;
+import com.miniagoda.notification.event.AccountRegisteredEvent;
+import com.miniagoda.notification.event.AccountRegisteredNotificationEvent;
 import com.miniagoda.user.entity.Role;
 import com.miniagoda.user.entity.User;
 import com.miniagoda.user.repository.UserRepository;
@@ -41,6 +44,7 @@ public class AuthService {
     private final JwtUtil jwtUtil;
     private final PasswordEncoder passwordEncoder;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final ApplicationEventPublisher applicationEventPublisher;
     private final RedisTemplate<String, String> redisTemplate;
 
     @Value("${jwt.refresh-token.expiration}")
@@ -51,13 +55,15 @@ public class AuthService {
         JwtUtil jwtUtil,
         PasswordEncoder passwordEncoder,
         RefreshTokenRepository refreshTokenRepository,
-        RedisTemplate<String, String> redisTemplate
+        RedisTemplate<String, String> redisTemplate,
+        ApplicationEventPublisher applicationEventPublisher
     ) {
         this.userRepository = userRepository;
         this.jwtUtil = jwtUtil;
         this.passwordEncoder = passwordEncoder;
         this.refreshTokenRepository = refreshTokenRepository;
         this.redisTemplate = redisTemplate;
+        this.applicationEventPublisher = applicationEventPublisher;
     }
 
     @Transactional
@@ -75,6 +81,14 @@ public class AuthService {
         user.setRole(Role.CUSTOMER);
 
         User savedUser = userRepository.save(user);
+
+        AccountRegisteredEvent accountRegisteredEvent = new AccountRegisteredEvent(
+            savedUser.getEmail(),
+            savedUser.getFirstName() + " " + user.getLastName(),
+            null
+        );
+
+        applicationEventPublisher.publishEvent(new AccountRegisteredNotificationEvent(this, accountRegisteredEvent));
 
         String accessToken = jwtUtil.generateAccessToken(savedUser);
         
