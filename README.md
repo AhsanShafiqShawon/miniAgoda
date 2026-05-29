@@ -172,9 +172,11 @@ miniAgoda/
 │   │   │       └── Role.java
 │   │   ├── auth/
 │   │   │   ├── entity/
-│   │   │   │   └── RefreshToken.java
+│   │   │   │   ├── RefreshToken.java
+│   │   │   │   └── EmailVerificationToken.java
 │   │   │   ├── repository/
-│   │   │   │   └── RefreshTokenRepository.java
+│   │   │   │   ├── RefreshTokenRepository.java
+│   │   │   │   └── EmailVerificationTokenRepository.java
 │   │   │   ├── controller/
 │   │   │   │   └── AuthController.java
 │   │   │   ├── service/
@@ -185,10 +187,14 @@ miniAgoda/
 │   │   │   │   ├── UserDetailsImpl.java
 │   │   │   │   └── UserDetailsServiceImpl.java
 │   │   │   ├── util/
-│   │   │   │   └── JwtUtil.java
+│   │   │   │   ├── JwtUtil.java
+│   │   │   │   └── VerificationTokenUtil.java
 │   │   │   ├── exception/
 │   │   │   │   ├── EmailAlreadyExistException.java
-│   │   │   │   └── InvalidRefreshTokenException.java
+│   │   │   │   ├── InvalidRefreshTokenException.java
+│   │   │   │   ├── VerificationTokenNotFoundException.java
+│   │   │   │   ├── TokenAlreadyUsedException.java
+│   │   │   │   └── TokenHasExpiredException.java
 │   │   │   └── dto/
 │   │   │       ├── RegisterRequest.java
 │   │   │       ├── RegisterResponse.java
@@ -247,7 +253,9 @@ miniAgoda/
 │           ├── V14__add_user_id_to_bookings.sql
 │           ├── V15__seed_super_admin.sql
 │           ├── V16__create_refresh_tokens_table.sql
-│           └── V17__alter_refresh_tokens_rename_token_to_token_hash.sql
+│           ├── V17__alter_refresh_tokens_rename_token_to_token_hash.sql
+│           ├── V18__add_verified_to_users.sql
+│           └── V19__create_email_verification_tokens_table.sql
 ├── .env
 ├── pom.xml
 └── README.md
