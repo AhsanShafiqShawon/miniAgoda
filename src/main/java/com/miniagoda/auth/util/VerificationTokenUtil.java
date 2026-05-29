@@ -30,7 +30,7 @@ public class VerificationTokenUtil {
     }
 
     public String buildVerificationLink(String token) {
-        return url + "/auth/verify?token=" + token;
+        return url + "/api/v1/auth/verify?token=" + token;
     }
     
 }
