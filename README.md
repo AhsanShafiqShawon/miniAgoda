@@ -205,10 +205,11 @@ miniAgoda/
 │   │   │   │   └── sendGrid/
 │   │   │   │       └── SendGridEmailGateway.java
 │   │   │   ├── service/
-│   │   │   │   ├── 
-│   │   │   │   └── 
+│   │   │   │   └── NotificationService.java
 │   │   │   ├── dto/
 │   │   │   │   └── EmailMessage.java
+│   │   │   ├── template/
+│   │   │   │   └── EmailTemplateRenderer.java
 │   │   │   └── event/
 │   │   │       ├── BookingConfirmed.java
 │   │   │       ├── BookingCancelled.java
