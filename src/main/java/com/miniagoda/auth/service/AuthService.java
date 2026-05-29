@@ -19,12 +19,18 @@ import com.miniagoda.auth.dto.LoginRequest;
 import com.miniagoda.auth.dto.LoginResponse;
 import com.miniagoda.auth.dto.RegisterRequest;
 import com.miniagoda.auth.dto.RegisterResponse;
+import com.miniagoda.auth.entity.EmailVerificationToken;
 import com.miniagoda.auth.entity.RefreshToken;
 import com.miniagoda.auth.exception.EmailAlreadyExistException;
 import com.miniagoda.auth.exception.InvalidRefreshTokenException;
+import com.miniagoda.auth.exception.TokenAlreadyUsedException;
+import com.miniagoda.auth.exception.TokenHasExpiredException;
+import com.miniagoda.auth.exception.VerificationTokenNotFoundException;
+import com.miniagoda.auth.repository.EmailVerificationTokenRepository;
 import com.miniagoda.auth.repository.RefreshTokenRepository;
 import com.miniagoda.auth.security.UserDetailsImpl;
 import com.miniagoda.auth.util.JwtUtil;
+import com.miniagoda.auth.util.VerificationTokenUtil;
 import com.miniagoda.notification.event.AccountRegisteredEvent;
 import com.miniagoda.notification.event.AccountRegisteredNotificationEvent;
 import com.miniagoda.user.entity.Role;
@@ -45,6 +51,8 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final RefreshTokenRepository refreshTokenRepository;
     private final ApplicationEventPublisher applicationEventPublisher;
+    private final VerificationTokenUtil verificationTokenUtil;
+    private final EmailVerificationTokenRepository emailVerificationTokenRepository;
     private final RedisTemplate<String, String> redisTemplate;
 
     @Value("${jwt.refresh-token.expiration}")
@@ -56,7 +64,9 @@ public class AuthService {
         PasswordEncoder passwordEncoder,
         RefreshTokenRepository refreshTokenRepository,
         RedisTemplate<String, String> redisTemplate,
-        ApplicationEventPublisher applicationEventPublisher
+        ApplicationEventPublisher applicationEventPublisher,
+        VerificationTokenUtil verificationTokenUtil,
+        EmailVerificationTokenRepository emailVerificationTokenRepository
     ) {
         this.userRepository = userRepository;
         this.jwtUtil = jwtUtil;
@@ -64,6 +74,8 @@ public class AuthService {
         this.refreshTokenRepository = refreshTokenRepository;
         this.redisTemplate = redisTemplate;
         this.applicationEventPublisher = applicationEventPublisher;
+        this.verificationTokenUtil = verificationTokenUtil;
+        this.emailVerificationTokenRepository = emailVerificationTokenRepository;
     }
 
     @Transactional
@@ -82,10 +94,23 @@ public class AuthService {
 
         User savedUser = userRepository.save(user);
 
+        String token = verificationTokenUtil.generateToken();
+        String hashedToken = verificationTokenUtil.hashToken(token);
+
+        EmailVerificationToken emailVerificationToken = new EmailVerificationToken();
+        emailVerificationToken.setTokenHash(hashedToken);
+        emailVerificationToken.setUser(savedUser);
+        emailVerificationToken.setExpiresAt(LocalDateTime.now().plusHours(24));
+        emailVerificationToken.setUsed(false);
+
+        emailVerificationTokenRepository.save(emailVerificationToken);
+
+        String verificationLink = verificationTokenUtil.buildVerificationLink(token);
+
         AccountRegisteredEvent accountRegisteredEvent = new AccountRegisteredEvent(
             savedUser.getEmail(),
-            savedUser.getFirstName() + " " + user.getLastName(),
-            null
+            savedUser.getFirstName() + " " + savedUser.getLastName(),
+            verificationLink
         );
 
         applicationEventPublisher.publishEvent(new AccountRegisteredNotificationEvent(this, accountRegisteredEvent));
@@ -181,6 +206,25 @@ public class AuthService {
         }
         if(accessToken == null) throw new InvalidRefreshTokenException();
         return new RegisterResponse(accessToken);
+    }
+
+    @Transactional
+    public String verifyEmail(String token) {
+        String hashedToken = verificationTokenUtil.hashToken(token);
+        
+        EmailVerificationToken emailVerificationToken = emailVerificationTokenRepository
+        .findByTokenHash(hashedToken).orElseThrow(() -> new VerificationTokenNotFoundException());
+
+        if(emailVerificationToken.getExpiresAt().isBefore(LocalDateTime.now())) throw new TokenHasExpiredException();
+        if(emailVerificationToken.isUsed()) throw new TokenAlreadyUsedException();
+
+        emailVerificationToken.setUsed(true);
+        emailVerificationToken.getUser().setVerified(true);
+
+        emailVerificationTokenRepository.save(emailVerificationToken);
+        userRepository.save(emailVerificationToken.getUser());
+
+        return "Email verified successfully";
     }
 
     private String hashToken(String token) {
