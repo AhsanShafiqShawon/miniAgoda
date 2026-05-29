@@ -31,3 +31,10 @@ jwt:
     expiration: 900000
   refresh-token:
     expiration: 604800000
+
+notification:
+  from-email: noreply@miniagoda.com
+  from-name: miniAgoda
+  provider: sendgrid
+  send-grid:
+    api-key: ${SENDGRID_API_KEY}
