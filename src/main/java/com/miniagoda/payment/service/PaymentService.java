@@ -115,6 +115,10 @@ public class PaymentService {
         switch (event.getType()) {
             case PAYMENT_SUCCEEDED -> {
                 Payment payment = paymentRepository.findByPaymentToken(event.getPaymentId());
+                if (payment == null) {
+                    log.warn("No payment found for token: {}", event.getPaymentId());
+                    return;
+                }
                 Booking booking = payment.getBooking();
 
                 payment.setStatus(PaymentStatus.SUCCESS);
