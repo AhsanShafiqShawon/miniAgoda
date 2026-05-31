@@ -24,19 +24,19 @@ public class NotificationService {
 
     private static final Logger log = LoggerFactory.getLogger(NotificationService.class);
     
-    private static final String BOOKING_CONFIRMED_TEMPLATE = "notification/booking-confirmed";
+    private static final String BOOKING_CONFIRMED_TEMPLATE = "notification/BookingConfirmed";
     private static final String BOOKING_CONFIRMED_SUBJECT = "Your Booking is Confirmed!";
 
-    private static final String BOOKING_CANCELLED_TEMPLATE = "notification/booking-cancelled";
+    private static final String BOOKING_CANCELLED_TEMPLATE = "notification/BookingCancelled";
     private static final String BOOKING_CANCELLED_SUBJECT = "Your Booking is Cancelled!";
 
-    private static final String PAYMENT_SUCCESS_TEMPLATE = "notification/payment-success";
+    private static final String PAYMENT_SUCCESS_TEMPLATE = "notification/PaymentSuccess";
     private static final String PAYMENT_SUCCESS_SUBJECT = "Your Payment is Successful!";
 
-    private static final String PAYMENT_FAILURE_TEMPLATE = "notification/payment-failure";
+    private static final String PAYMENT_FAILURE_TEMPLATE = "notification/PaymentFailure";
     private static final String PAYMENT_FAILURE_SUBJECT = "Your Payment Could Not Be Processed";
 
-    private static final String ACCOUNT_REGISTER_TEMPLATE = "notification/account-registered";
+    private static final String ACCOUNT_REGISTER_TEMPLATE = "notification/AccountRegistered";
     private static final String ACCOUNT_REGISTER_SUBJECT = "Welcome to miniAgoda – Please Verify Your Email";
 
     public NotificationService(EmailGateway emailGateway, EmailTemplateRenderer renderer) {
