@@ -33,7 +33,7 @@ jwt:
     expiration: 604800000
 
 notification:
-  from-email: noreply@miniagoda.com
+  from-email: miniagodaadmin@gmail.com
   from-name: miniAgoda
   provider: sendgrid
   send-grid:
