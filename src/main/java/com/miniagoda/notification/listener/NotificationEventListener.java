@@ -22,7 +22,7 @@ public class NotificationEventListener {
     }
     
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    @Async("notificationExecutor")
+    // @Async("notificationExecutor")
     public void handleBookingConfirmed(BookingConfirmedNotificationEvent event) {
         notificationService.sendBookingConfirmed(event.getEvent());
     }
@@ -34,7 +34,7 @@ public class NotificationEventListener {
     }
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    @Async("notificationExecutor")
+    // @Async("notificationExecutor")
     public void handlePaymentSuccess(PaymentSuccessNotificationEvent event) {
         notificationService.sendPaymentSuccess(event.getEvent());
     }
@@ -46,7 +46,7 @@ public class NotificationEventListener {
     }
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    @Async("notificationExecutor")
+    // @Async("notificationExecutor")
     public void handleAccountRegistered(AccountRegisteredNotificationEvent event) {
         notificationService.sendAccountRegistered(event.getEvent());
     }
