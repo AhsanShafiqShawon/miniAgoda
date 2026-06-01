@@ -24,12 +24,12 @@ public class InventoryService {
         Long expectedDays = ChronoUnit.DAYS.between(checkIn, checkOut);
         if(expectedDays != inventories.size()) return false;
 
-        int availableDays = Integer.MAX_VALUE;
+        int availableRooms = Integer.MAX_VALUE;
         for(Inventory inventory : inventories) {
-            availableDays = Math.min(availableDays, inventory.getAvailableUnits());
+            availableRooms = Math.min(availableRooms, inventory.getAvailableUnits());
         }
         
-        return availableDays >= requestedRooms;
+        return availableRooms >= requestedRooms;
     }
 
     public int getAvailableRooms(UUID roomTypeId, LocalDate checkIn, LocalDate checkOut) {
