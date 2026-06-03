@@ -1,0 +1,35 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb
+    username: sa
+    password:
+  data:
+    redis:
+      host: localhost
+      port: 6379
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+  flyway:
+    enabled: false
+
+stripe:
+  secret-key: sk_test_dummy
+  webhook-secret: whsec_dummy
+
+jwt:
+  secret: testsecrettestsecrettestsecrettestsecrettestsecret
+  access-token:
+    expiration: 900000
+  refresh-token:
+    expiration: 604800000
+
+notification:
+  from-email: test@test.com
+  from-name: Test
+  provider: sendgrid
+  send-grid:
+    api-key: dummy
+
+app:
+  base-url: http://localhost:8080
