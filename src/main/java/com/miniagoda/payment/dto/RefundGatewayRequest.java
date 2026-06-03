@@ -16,8 +16,8 @@ public class RefundGatewayRequest {
     @NotNull(message = "Payment ID is required")
     private UUID paymentId;
     
-    @NotNull(message = "Gateway Payment ID is required")
-    private String gatewayPaymentId;
+    @NotNull(message = "Payment token is required")
+    private String paymentToken;
 
     @NotNull(message = "Amount is required")
     private BigDecimal amount;
