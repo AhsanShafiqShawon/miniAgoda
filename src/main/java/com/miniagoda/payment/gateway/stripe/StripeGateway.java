@@ -58,11 +58,11 @@ public class StripeGateway implements PaymentGateway {
 
     @Override
     public RefundResponse refund(RefundGatewayRequest request) throws Exception {
-        PaymentIntent intent = PaymentIntent.retrieve(request.getGatewayPaymentId());
+        PaymentIntent intent = PaymentIntent.retrieve(request.getPaymentToken());
         String chargeId = intent.getLatestCharge();
 
         if(chargeId == null) {
-            throw new IllegalStateException("No charge found for GatewayPaymentId: " + request.getGatewayPaymentId());
+            throw new IllegalStateException("No charge found for GatewayPaymentId: " + request.getPaymentToken());
         }
 
         long amountInSmallestUnit = request.getAmount().movePointRight(2).longValueExact();
