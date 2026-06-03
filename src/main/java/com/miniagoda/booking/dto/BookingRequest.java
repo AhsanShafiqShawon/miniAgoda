@@ -32,10 +32,10 @@ public class BookingRequest {
     @NotNull(message = "Number of rooms is required")
     @Min(value = 1, message = "At least 1 room is required")
     @Max(value = 30, message = "Maximum 30 rooms allowed")
-    private int roomsRequested;
+    private Integer roomsRequested;
 
     @AssertTrue(message = "Check-out must be after check-in")
-    private boolean isCheckOutAfterCheckIn() {
+    public boolean isCheckOutAfterCheckIn() {
         if(checkIn == null || checkOut == null) return true;
         return checkOut.isAfter(checkIn);
     }
