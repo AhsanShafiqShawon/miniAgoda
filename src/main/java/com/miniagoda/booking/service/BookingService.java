@@ -52,7 +52,7 @@ public class BookingService {
         int roomsRequested = bookingRequest.getRoomsRequested();
         
         List<Inventory> inventories = inventoryRepository
-        .findByRoomTypeIdAndDateBetween(bookingRequest.getRoomTypeId(), checkIn, checkOut.minusDays(1));
+        .findByRoomTypeIdAndDateBetweenWithLock(bookingRequest.getRoomTypeId(), checkIn, checkOut.minusDays(1));
 
         long expectedDays = ChronoUnit.DAYS.between(checkIn, checkOut);
 
