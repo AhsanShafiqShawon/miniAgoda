@@ -1,5 +1,7 @@
 package com.miniagoda.notification.listener;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
@@ -16,15 +18,19 @@ import com.miniagoda.notification.service.NotificationService;
 public class NotificationEventListener {
 
     private final NotificationService notificationService;
+    private static final Logger log = LoggerFactory.getLogger(NotificationEventListener.class);
+
 
     public NotificationEventListener(NotificationService notificationService) {
         this.notificationService = notificationService;
     }
     
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    // @Async("notificationExecutor")
+    @Async("notificationExecutor")
     public void handleBookingConfirmed(BookingConfirmedNotificationEvent event) {
+        long start = System.currentTimeMillis();
         notificationService.sendBookingConfirmed(event.getEvent());
+        log.info("[ASYNC] Email sent in {} ms on thread: {}", System.currentTimeMillis() - start, Thread.currentThread().getName());
     }
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
@@ -34,7 +40,7 @@ public class NotificationEventListener {
     }
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    // @Async("notificationExecutor")
+    @Async("notificationExecutor")
     public void handlePaymentSuccess(PaymentSuccessNotificationEvent event) {
         notificationService.sendPaymentSuccess(event.getEvent());
     }
@@ -46,7 +52,7 @@ public class NotificationEventListener {
     }
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
-    // @Async("notificationExecutor")
+    @Async("notificationExecutor")
     public void handleAccountRegistered(AccountRegisteredNotificationEvent event) {
         notificationService.sendAccountRegistered(event.getEvent());
     }
