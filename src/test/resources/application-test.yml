@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:h2:mem:testdb
-    username: sa
-    password:
+    url: jdbc:postgresql://localhost:5432/miniagoda_test
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
   data:
     redis:
       host: localhost
@@ -33,3 +33,5 @@ notification:
 
 app:
   base-url: http://localhost:8080
+  seeder:
+    enabled: false
