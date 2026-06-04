@@ -155,7 +155,7 @@ class BookingServiceTest {
             List<Inventory> inventories = makeInventories(checkIn, checkOut, 5, roomType);
             User user = makeUser();
 
-            when(inventoryRepository.findByRoomTypeIdAndDateBetween(
+            when(inventoryRepository.findByRoomTypeIdAndDateBetweenWithLock(
                     eq(ROOM_TYPE_ID), eq(checkIn), eq(checkOut.minusDays(1))))
                 .thenReturn(inventories);
             when(userRepository.findByEmail(USER_EMAIL)).thenReturn(Optional.of(user));
@@ -199,7 +199,7 @@ class BookingServiceTest {
             // Only 2 days of inventory for a 3-night stay
             List<Inventory> partial = makeInventories(checkIn, checkOut.minusDays(1), 5, roomType);
 
-            when(inventoryRepository.findByRoomTypeIdAndDateBetween(any(), any(), any()))
+            when(inventoryRepository.findByRoomTypeIdAndDateBetweenWithLock(any(), any(), any()))
                 .thenReturn(partial);
 
             assertThatThrownBy(() ->
@@ -216,7 +216,7 @@ class BookingServiceTest {
             LocalDate checkIn  = LocalDate.now().plusDays(1);
             LocalDate checkOut = checkIn.plusDays(2);
 
-            when(inventoryRepository.findByRoomTypeIdAndDateBetween(any(), any(), any()))
+            when(inventoryRepository.findByRoomTypeIdAndDateBetweenWithLock(any(), any(), any()))
                 .thenReturn(Collections.emptyList());
 
             assertThatThrownBy(() ->
@@ -233,7 +233,7 @@ class BookingServiceTest {
             RoomType roomType = makeRoomType(new BigDecimal("500.00"));
             List<Inventory> inventories = makeInventories(checkIn, checkOut, 1, roomType);
 
-            when(inventoryRepository.findByRoomTypeIdAndDateBetween(any(), any(), any()))
+            when(inventoryRepository.findByRoomTypeIdAndDateBetweenWithLock(any(), any(), any()))
                 .thenReturn(inventories);
 
             assertThatThrownBy(() ->
@@ -255,7 +255,7 @@ class BookingServiceTest {
             // Middle day has only 1 room left
             inventories.get(1).setAvailableUnits(1);
 
-            when(inventoryRepository.findByRoomTypeIdAndDateBetween(any(), any(), any()))
+            when(inventoryRepository.findByRoomTypeIdAndDateBetweenWithLock(any(), any(), any()))
                 .thenReturn(inventories);
 
             assertThatThrownBy(() ->
@@ -273,7 +273,7 @@ class BookingServiceTest {
             List<Inventory> inventories = makeInventories(checkIn, checkOut, 3, roomType);
             User user = makeUser();
 
-            when(inventoryRepository.findByRoomTypeIdAndDateBetween(any(), any(), any()))
+            when(inventoryRepository.findByRoomTypeIdAndDateBetweenWithLock(any(), any(), any()))
                 .thenReturn(inventories);
             when(userRepository.findByEmail(USER_EMAIL)).thenReturn(Optional.of(user));
 
@@ -292,7 +292,7 @@ class BookingServiceTest {
             RoomType roomType = makeRoomType(new BigDecimal("500.00"));
             List<Inventory> inventories = makeInventories(checkIn, checkOut, 5, roomType);
 
-            when(inventoryRepository.findByRoomTypeIdAndDateBetween(any(), any(), any()))
+            when(inventoryRepository.findByRoomTypeIdAndDateBetweenWithLock(any(), any(), any()))
                 .thenReturn(inventories);
             when(userRepository.findByEmail(USER_EMAIL)).thenReturn(Optional.empty());
 
@@ -311,7 +311,7 @@ class BookingServiceTest {
             List<Inventory> inventories = makeInventories(checkIn, checkOut, 5, roomType);
             User user = makeUser();
 
-            when(inventoryRepository.findByRoomTypeIdAndDateBetween(any(), any(), any()))
+            when(inventoryRepository.findByRoomTypeIdAndDateBetweenWithLock(any(), any(), any()))
                 .thenReturn(inventories);
             when(userRepository.findByEmail(USER_EMAIL)).thenReturn(Optional.of(user));
 
@@ -334,7 +334,7 @@ class BookingServiceTest {
             List<Inventory> inventories = makeInventories(checkIn, checkOut, 10, roomType);
             User user = makeUser();
 
-            when(inventoryRepository.findByRoomTypeIdAndDateBetween(any(), any(), any()))
+            when(inventoryRepository.findByRoomTypeIdAndDateBetweenWithLock(any(), any(), any()))
                 .thenReturn(inventories);
             when(userRepository.findByEmail(USER_EMAIL)).thenReturn(Optional.of(user));
 
