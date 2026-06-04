@@ -258,7 +258,8 @@ miniAgoda/
 │           ├── V16__create_refresh_tokens_table.sql
 │           ├── V17__alter_refresh_tokens_rename_token_to_token_hash.sql
 │           ├── V18__add_verified_to_users.sql
-│           └── V19__create_email_verification_tokens_table.sql
+│           ├── V19__create_email_verification_tokens_table.sql
+│           └── V20__add_inventory_check_constraint.sql
 ├── .env
 ├── pom.xml
 └── README.md
