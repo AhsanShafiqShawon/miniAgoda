@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -18,6 +19,7 @@ import com.miniagoda.inventory.entity.Inventory;
 import com.miniagoda.inventory.repository.InventoryRepository;
 
 @Component
+@Profile("!test")
 public class DataSeeder implements CommandLineRunner {
     private final RoomTypeRepository roomTypeRepository;
     private final HotelRepository hotelRepository;
