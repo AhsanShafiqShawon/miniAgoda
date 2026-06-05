@@ -168,7 +168,7 @@ Base URL: `http://localhost:8080/api`
 Tests are organized into three layers:
 
 - **Unit tests** — Service logic in isolation, with mocked repositories and gateways.
-- **Integration tests** — Full Spring context with an in-memory H2 database, verifying HTTP contracts end-to-end.
+- **Controller tests** — `@WebMvcTest` slices with the real `SecurityConfig` and `JwtAuthFilter` loaded, verifying HTTP contracts, Bean Validation, and auth behaviour (correct `401 vs 403`, public vs protected endpoints) without spinning up the full application context.
 - **Gateway tests** — Mock Stripe and SendGrid clients verifying correct request construction and error handling.
 
 Coverage is enforced via JaCoCo at 91% service-layer line coverage. The concurrency test (`BookingConcurrencyTest`) simulates 50 simultaneous booking requests against a single inventory slot to verify pessimistic locking holds under load.
