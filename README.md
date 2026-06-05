@@ -29,6 +29,8 @@ It started as a portfolio project to deepen backend engineering skills beyond wh
 | User | ✅ Done | Registration, profile management |
 | Auth | ✅ Done | Authentication, role-based authorization |
 | Refund | ✅ Done | Refund requests, gateway integration |
+| Review | ⬜ Planned | Hotel reviews, ratings |
+| Admin | ⬜ Planned | Content moderation, user management |
 
 ---
 
